@@ -49,7 +49,9 @@ class ExperimentConfig:
     # 电路 mask 正则
     enable_learnable_masks: bool = True
     lambda_mask_l1: float = 1e-4
+    lambda_input_mask_l1: float = 1e-4
     circuit_threshold: float = 0.5
+    input_threshold: float = 0.5
     edge_ablation_topk: int = 30
 
     # 训练参数

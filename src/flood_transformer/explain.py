@@ -46,6 +46,7 @@ def _collect_preds(
     device: torch.device,
     intervention: Optional[str] = None,
     rainfall_index: Optional[int] = None,
+    input_mask_override: Optional[torch.Tensor] = None,
     head_mask_overrides: Optional[Dict[int, torch.Tensor]] = None,
     neuron_mask_overrides: Optional[Dict[int, torch.Tensor]] = None,
 ) -> Tuple[np.ndarray, np.ndarray, List[torch.Tensor]]:
@@ -74,6 +75,7 @@ def _collect_preds(
 
         out = model(
             x,
+            input_mask_override=input_mask_override,
             head_mask_overrides=head_mask_overrides,
             neuron_mask_overrides=neuron_mask_overrides,
             return_intermediates=True,
@@ -271,12 +273,52 @@ def mean_ablation(
     return records
 
 
+@torch.no_grad()
+def input_ablation_test(
+    model: ExplainableSparseTransformer,
+    data_loader: DataLoader,
+    device: torch.device,
+    feature_names: List[str],
+) -> List[Dict[str, float | str]]:
+    """输入节点均值消融：将单个输入 gate 替换为输入 gate 均值。"""
+    model.eval()
+
+    base_pred, base_y, _ = _collect_preds(model, data_loader, device)
+    base_mse = float(np.mean((base_pred - base_y) ** 2))
+
+    probs = torch.sigmoid(model.input_mask_logits).detach().to(device)
+    mean_val = float(probs.mean().item())
+
+    records: List[Dict[str, float | str]] = []
+    for i in range(len(probs)):
+        override = probs.clone()
+        override[i] = mean_val
+        preds, ys, _ = _collect_preds(
+            model,
+            data_loader,
+            device,
+            input_mask_override=override,
+        )
+        mse = float(np.mean((preds - ys) ** 2))
+        records.append(
+            {
+                "feature_idx": i,
+                "feature": feature_names[i] if i < len(feature_names) else f"feature_{i}",
+                "delta_mse": mse - base_mse,
+            }
+        )
+
+    records.sort(key=lambda d: float(d["delta_mse"]), reverse=True)
+    return records
+
+
 def prune_circuit(
     model: ExplainableSparseTransformer,
     threshold: float = 0.5,
-) -> Dict[str, List[torch.Tensor]]:
-    """提取最小电路（关键 head / neuron）。"""
-    return model.prune_circuit(threshold=threshold)
+    input_threshold: float | None = None,
+) -> Dict[str, List[torch.Tensor] | torch.Tensor]:
+    """提取最小电路（关键 input / head / neuron）。"""
+    return model.prune_circuit(threshold=threshold, input_threshold=input_threshold)
 
 
 @torch.no_grad()
@@ -441,6 +483,8 @@ def variable_interaction_test(
 
 
 def _parse_node(node_id: str) -> Optional[Tuple[str, int, int]]:
+    if node_id.startswith("IN:"):
+        return ("input", -1, -1)
     if not node_id.startswith("L") or "." not in node_id:
         return None
     left, right = node_id.split(".", 1)
@@ -465,7 +509,8 @@ def _default_binary_overrides(
     model: ExplainableSparseTransformer,
     device: torch.device,
     threshold: float = 0.5,
-) -> Tuple[Dict[int, torch.Tensor], Dict[int, torch.Tensor]]:
+) -> Tuple[torch.Tensor, Dict[int, torch.Tensor], Dict[int, torch.Tensor]]:
+    input_overrides = (torch.sigmoid(model.input_mask_logits).detach().to(device) > threshold).float()
     head_overrides: Dict[int, torch.Tensor] = {}
     neuron_overrides: Dict[int, torch.Tensor] = {}
     for l_idx, layer in enumerate(model.layers):
@@ -473,14 +518,14 @@ def _default_binary_overrides(
         np_ = (torch.sigmoid(layer.mlp.neuron_mask_logits).detach().to(device) > threshold).float()
         head_overrides[l_idx] = hp
         neuron_overrides[l_idx] = np_
-    return head_overrides, neuron_overrides
+    return input_overrides, head_overrides, neuron_overrides
 
 
 def default_binary_overrides(
     model: ExplainableSparseTransformer,
     device: torch.device,
     threshold: float = 0.5,
-) -> Tuple[Dict[int, torch.Tensor], Dict[int, torch.Tensor]]:
+) -> Tuple[torch.Tensor, Dict[int, torch.Tensor], Dict[int, torch.Tensor]]:
     return _default_binary_overrides(model, device, threshold)
 
 
@@ -488,6 +533,7 @@ def _eval_mse(
     model: ExplainableSparseTransformer,
     data_loader: DataLoader,
     device: torch.device,
+    input_override: Optional[torch.Tensor] = None,
     head_overrides: Optional[Dict[int, torch.Tensor]] = None,
     neuron_overrides: Optional[Dict[int, torch.Tensor]] = None,
 ) -> float:
@@ -495,6 +541,7 @@ def _eval_mse(
         model,
         data_loader,
         device,
+        input_mask_override=input_override,
         head_mask_overrides=head_overrides,
         neuron_mask_overrides=neuron_overrides,
     )
@@ -505,8 +552,9 @@ def build_overrides_from_active_nodes(
     model: ExplainableSparseTransformer,
     device: torch.device,
     active_node_ids: List[str],
-) -> Tuple[Dict[int, torch.Tensor], Dict[int, torch.Tensor]]:
+) -> Tuple[torch.Tensor, Dict[int, torch.Tensor], Dict[int, torch.Tensor]]:
     """从节点集合构建 hard overrides：仅保留 active_node_ids，其余置零。"""
+    input_overrides = torch.zeros_like(model.input_mask_logits, device=device)
     head_overrides: Dict[int, torch.Tensor] = {}
     neuron_overrides: Dict[int, torch.Tensor] = {}
 
@@ -515,6 +563,14 @@ def build_overrides_from_active_nodes(
         neuron_overrides[l_idx] = torch.zeros(layer.mlp.fc1.out_features, device=device)
 
     for node_id in active_node_ids:
+        if node_id.startswith("IN:"):
+            feat_name = node_id[3:]
+            if feat_name.startswith("F") and feat_name[1:].isdigit():
+                fi = int(feat_name[1:])
+                if 0 <= fi < len(input_overrides):
+                    input_overrides[fi] = 1.0
+            continue
+
         parsed = _parse_node(node_id)
         if parsed is None:
             continue
@@ -524,7 +580,7 @@ def build_overrides_from_active_nodes(
         if ntype == "neuron" and layer in neuron_overrides and idx < len(neuron_overrides[layer]):
             neuron_overrides[layer][idx] = 1.0
 
-    return head_overrides, neuron_overrides
+    return input_overrides, head_overrides, neuron_overrides
 
 
 def faithfulness_k_sweep(
@@ -548,12 +604,13 @@ def faithfulness_k_sweep(
     for k in sorted(set([max(1, int(x)) for x in k_values])):
         kk = min(k, total)
         keep = ranked_nodes[:kk]
-        h_ovr, n_ovr = build_overrides_from_active_nodes(model, device, keep)
+        in_ovr, h_ovr, n_ovr = build_overrides_from_active_nodes(model, device, keep)
 
         pred, y, _ = _collect_preds(
             model,
             data_loader,
             device,
+            input_mask_override=in_ovr,
             head_mask_overrides=h_ovr,
             neuron_mask_overrides=n_ovr,
         )
@@ -594,15 +651,25 @@ def edge_ablation_test(
     """
     model.eval()
 
-    base_heads, base_neurons = _default_binary_overrides(model, device, threshold=threshold)
+    base_inputs, base_heads, base_neurons = _default_binary_overrides(model, device, threshold=threshold)
 
     def clone_overrides():
         return (
+            base_inputs.clone(),
             {k: v.clone() for k, v in base_heads.items()},
             {k: v.clone() for k, v in base_neurons.items()},
         )
 
-    def ablate_node(node_id: str, heads: Dict[int, torch.Tensor], neurons: Dict[int, torch.Tensor]) -> bool:
+    def ablate_node(node_id: str, inputs: torch.Tensor, heads: Dict[int, torch.Tensor], neurons: Dict[int, torch.Tensor]) -> bool:
+        if node_id.startswith("IN:"):
+            feat_name = node_id[3:]
+            if feat_name.startswith("F") and feat_name[1:].isdigit():
+                fi = int(feat_name[1:])
+                if 0 <= fi < len(inputs):
+                    inputs[fi] = 0.0
+                    return True
+            return False
+
         parsed = _parse_node(node_id)
         if parsed is None:
             return False
@@ -626,11 +693,11 @@ def edge_ablation_test(
         if key in cache:
             return cache[key]
 
-        heads, neurons = clone_overrides()
+        inputs, heads, neurons = clone_overrides()
         for nid in nodes_to_ablate:
-            ablate_node(nid, heads, neurons)
+            ablate_node(nid, inputs, heads, neurons)
 
-        mse = _eval_mse(model, data_loader, device, head_overrides=heads, neuron_overrides=neurons)
+        mse = _eval_mse(model, data_loader, device, input_override=inputs, head_overrides=heads, neuron_overrides=neurons)
         cache[key] = mse
         return mse
 
@@ -638,8 +705,8 @@ def edge_ablation_test(
 
     records: List[Dict[str, float | str]] = []
     for src, dst, heuristic in candidate_edges:
-        src_ok = _parse_node(src) is not None
-        dst_ok = _parse_node(dst) is not None
+        src_ok = (src.startswith("IN:")) or (_parse_node(src) is not None)
+        dst_ok = (dst.startswith("IN:")) or (_parse_node(dst) is not None)
         if not (src_ok and dst_ok):
             continue
 
