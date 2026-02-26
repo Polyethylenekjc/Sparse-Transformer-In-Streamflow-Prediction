@@ -1,0 +1,23 @@
+file,variable,meaning,unit
+stations.csv,gauge_id,USGS 8位站点编号,-
+stations.csv,huc_02,两位 HUC 分区编号,-
+stations.csv,gauge_name,站点名称,-
+stations.csv,lat,站点纬度,degree
+stations.csv,lon,站点经度,degree
+stations.csv,drainage_area_km2,流域面积,km2
+stations.csv,forcing_source,强迫数据来源,-
+stations.csv,forcing_lat,强迫文件中记录的流域平均纬度,degree
+stations.csv,forcing_elev_m,强迫文件中记录的流域平均高程,m
+stations.csv,forcing_area_m2,强迫文件中记录的流域面积,m2
+Streamflow/*.csv,date_utc,UTC日期（按日）,YYYY-MM-DD
+Streamflow/*.csv,streamflow_cfs,实测日径流,cubic feet per second
+Streamflow/*.csv,qc_flag,USGS径流质量标记,-
+Forcing/*.csv,date_utc,UTC日期（按日）,YYYY-MM-DD
+Forcing/*.csv,dayl_s,白昼时长,s
+Forcing/*.csv,prcp_mm_day,日降水,mm/day
+Forcing/*.csv,srad_w_m2,短波辐射,W/m2
+Forcing/*.csv,swe_mm,雪水当量,mm
+Forcing/*.csv,tmax_c,日最高气温,degC
+Forcing/*.csv,tmin_c,日最低气温,degC
+Forcing/*.csv,vp_pa,水汽压,Pa
+Forcing/*.csv,streamflow_cfs,同日实测径流（并入强迫）,cubic feet per second
