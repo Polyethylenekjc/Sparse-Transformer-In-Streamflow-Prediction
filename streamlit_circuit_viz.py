@@ -88,6 +88,14 @@ def build_circuit_edges(
     display_map: Dict[str, str] = {}
     input_features = input_features or []
     input_nodes = sorted([f"IN:{_abbr_feature(f)}" for f in input_features])
+    active_inputs = circuit.get("active_inputs", [])
+    if input_features and len(active_inputs) == len(input_features):
+        kept = []
+        for i, feat in enumerate(input_features):
+            if float(active_inputs[i]) > 0:
+                kept.append(f"IN:{_abbr_feature(feat)}")
+        if kept:
+            input_nodes = sorted(kept)
     if not input_nodes:
         input_nodes = ["IN:P", "IN:T", "IN:PET"]
 

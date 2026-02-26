@@ -7,7 +7,7 @@
 - 时间序列 Transformer（多头注意力 + 残差 + MLP）
 - 权重 Top-K 稀疏与稀疏率退火 `update_sparsity`
 - MLP 输出 Top-K 激活稀疏
-- 可学习电路 mask（attention head + MLP neuron）
+- 可学习电路 mask（input feature + attention head + MLP neuron）
 - 电路提取与消融分析：
   - `prune_circuit`
   - `mean_ablation`
@@ -115,3 +115,19 @@ streamlit run streamlit_circuit_viz.py
 - 数据列名会自动匹配（`P/T/PET/Q_up/Soil/Q` 等候选名）。
 - 若真实数据不满足列名或结构要求，代码将自动回退到合成数据，以保证流程可运行。
 - 借鉴 `openai/circuit_sparsity` 思路：支持 `cosine/linear/power_law` 稀疏退火，且可启用 neuron-wise Top-K 并约束每个神经元最小存活连接数。
+
+
+### 输入变量稀疏裁剪
+
+现在输入特征也会参与可学习 mask，并可在电路提取时按阈值裁剪：
+
+- `--lambda_input_mask_l1`：输入节点稀疏正则强度（越大越稀疏）。
+- `--input_threshold`：提取最小电路时输入节点激活阈值（越大保留越少）。
+
+推荐调参（从保守到激进）：
+
+1. 先固定 `--input_threshold 0.5`，将 `--lambda_input_mask_l1` 从 `1e-5 -> 1e-4 -> 5e-4` 递增。
+2. 观察 `outputs/node_importance_ranking.csv` 里 `node_type=input` 的数量变化与 `summary.json` 的 NSE。
+3. 若性能下降明显（NSE 下降 > 0.03），减小 `--lambda_input_mask_l1` 或将 `--input_threshold` 降到 `0.4`。
+4. 若输入仍过多，保持 L1 不变，把 `--input_threshold` 提升到 `0.55~0.7` 做后处理裁剪。
+
