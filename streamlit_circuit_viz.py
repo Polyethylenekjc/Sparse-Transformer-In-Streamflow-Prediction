@@ -88,6 +88,14 @@ def build_circuit_edges(
     display_map: Dict[str, str] = {}
     input_features = input_features or []
     input_nodes = sorted([f"IN:{_abbr_feature(f)}" for f in input_features])
+    active_inputs = circuit.get("active_inputs", [])
+    if input_features and len(active_inputs) == len(input_features):
+        kept = []
+        for i, feat in enumerate(input_features):
+            if float(active_inputs[i]) > 0:
+                kept.append(f"IN:{_abbr_feature(feat)}")
+        if kept:
+            input_nodes = sorted(kept)
     if not input_nodes:
         input_nodes = ["IN:P", "IN:T", "IN:PET"]
 
@@ -762,7 +770,16 @@ def variable_mechanism_sankey(
     if not var_interaction or not isinstance(var_interaction.get("single_delta"), dict):
         return go.Figure()
 
-    single = {k: float(v) for k, v in var_interaction.get("single_delta", {}).items()}
+    # 过滤掉目标流量变量 Qtar（使用缩写判断以覆盖不同原始命名）
+    def _is_qtar_name(n: str) -> bool:
+        try:
+            return _abbr_feature(str(n)) == "Qtar"
+        except Exception:
+            return False
+
+    single_raw = {k: float(v) for k, v in var_interaction.get("single_delta", {}).items()}
+    # 删除目标流量变量 Qtar
+    single = {k: v for k, v in single_raw.items() if not _is_qtar_name(k)}
     pairs = var_interaction.get("pair_ranking", []) or []
 
     single_keys = list(single.keys())
@@ -770,36 +787,50 @@ def variable_mechanism_sankey(
     single_scaled_vals = _scale_signed_array(single_vals, scale_mode)
     single_scaled = {k: float(v) for k, v in zip(single_keys, single_scaled_vals)}
 
-    # 构建节点：变量、交互对、输出
-    var_nodes = list(single.keys())
+    # 构建节点：变量、交互对、输出，所有展示均为缩写
     pair_rows = sorted(pairs, key=lambda d: abs(float(d.get("interaction", 0.0))), reverse=True)[:top_pairs]
+    # 过滤掉包含目标流量变量 Qtar 的 pair
+    pair_rows = [r for r in pair_rows if not (_is_qtar_name(r.get("var_i")) or _is_qtar_name(r.get("var_j")))]
     pair_inter_vals = np.asarray([float(r.get("interaction", 0.0)) for r in pair_rows], dtype=float)
     pair_inter_scaled = _scale_signed_array(pair_inter_vals, scale_mode)
-    pair_nodes = [f"{r['var_i']}×{r['var_j']}" for r in pair_rows]
-    out_node = "Q (streamflow)"
+
+    # 原始变量名 -> 缩写 映射
+    abbr_map = {n: _abbr_feature(n) for n in single_keys}
+    var_nodes = [abbr_map[n] for n in single_keys]
+    pair_nodes = [f"{_abbr_feature(str(r['var_i']))}×{_abbr_feature(str(r['var_j']))}" for r in pair_rows]
+    out_node = "Q"
 
     labels = var_nodes + pair_nodes + [out_node]
-    idx = {n: i for i, n in enumerate(labels)}
+    # 建立从原始名到索引的映射（用于 src/dst 构建）
+    idx = {}
+    for i, n in enumerate(single_keys):
+        idx[n] = i
+    base_offset = len(single_keys)
+    for j, r in enumerate(pair_rows):
+        idx[f"PAIR:{j}"] = base_offset + j
+    idx[out_node] = len(labels) - 1
 
     src, dst, val, color = [], [], [], []
 
-    # 变量 -> 输出（单变量影响）
+    # 变量 -> 输出（单变量影响） — 使用更显色但更透明的连线颜色
     for vname, dv in single_scaled.items():
         src.append(idx[vname])
         dst.append(idx[out_node])
         val.append(abs(dv) + 1e-6)
-        color.append("rgba(80,80,80,0.45)")
+        color.append("rgba(100,100,180,0.45)")
 
     # 变量 -> 交互项 -> 输出
-    for row, pnode, inter_scaled in zip(pair_rows, pair_nodes, pair_inter_scaled):
+    for pair_idx, (row, pnode, inter_scaled) in enumerate(zip(pair_rows, pair_nodes, pair_inter_scaled)):
         vi = str(row["var_i"])
         vj = str(row["var_j"])
         inter = float(row.get("interaction", 0.0))
         w = abs(float(inter_scaled)) + 1e-6
-        c = "rgba(214,39,40,0.65)" if inter >= 0 else "rgba(31,119,180,0.65)"
+        # 正负交互颜色，降低透明度以避免背景过重
+        c = "rgba(214,39,40,0.45)" if inter >= 0 else "rgba(31,119,180,0.45)"
 
-        src.extend([idx[vi], idx[vj], idx[pnode]])
-        dst.extend([idx[pnode], idx[pnode], idx[out_node]])
+        # pair 节点使用 PAIR: 索引映射
+        src.extend([idx[vi], idx[vj], idx[f"PAIR:{pair_idx}"]])
+        dst.extend([idx[f"PAIR:{pair_idx}"], idx[f"PAIR:{pair_idx}"], idx[out_node]])
         val.extend([w * 0.5, w * 0.5, w])
         color.extend([c, c, c])
 
@@ -811,15 +842,20 @@ def variable_mechanism_sankey(
                     label=labels,
                     pad=16,
                     thickness=16,
-                    color=["#9467bd"] * len(var_nodes)
-                    + ["#2ca02c"] * len(pair_nodes)
-                    + ["#ff7f0e"],
+                    color=["rgba(140,107,230,0.60)"] * len(var_nodes)
+                    + ["rgba(44,192,76,0.60)"] * len(pair_nodes)
+                    + ["rgba(255,159,64,0.60)"],
                 ),
                 link=dict(source=src, target=dst, value=val, color=color),
             )
         ]
     )
-    fig.update_layout(title=f"变量→交互→流量 机制链路图（{_scale_label(scale_mode)}）", height=520)
+    # 使用更清新的字体与较浅的文字颜色
+    fig.update_layout(
+        title=f"变量→交互→流量 机制链路图（{_scale_label(scale_mode)}）",
+        height=520,
+        font=dict(family="Helvetica Neue, Arial, sans-serif", color="#444444"),
+    )
     return fig
 
 
@@ -1347,44 +1383,74 @@ def main():
         scale_mode = scale_mode_map.get(scale_label, "signed_log")
 
         if var_interaction and "interaction_matrix" in var_interaction and "feature_names" in var_interaction:
-            names = var_interaction["feature_names"]
+            names_all = list(var_interaction["feature_names"]) or []
             mat = np.asarray(var_interaction["interaction_matrix"], dtype=float)
-            mat_scaled = _scale_signed_array(mat, scale_mode)
 
-            fig = go.Figure(
-                data=go.Heatmap(
-                    z=mat_scaled,
-                    x=names,
-                    y=names,
-                    colorscale="RdBu",
-                    zmid=0.0,
-                    colorbar=dict(title=f"Interaction ({_scale_label(scale_mode)})"),
+            # 过滤掉目标流量变量 Qtar（使用缩写判断）
+            keep_idxs = [i for i, n in enumerate(names_all) if _abbr_feature(n) != "Qtar"]
+            if len(keep_idxs) == 0:
+                st.info("交互矩阵仅包含流量变量或为空，已被过滤。")
+            else:
+                names = [names_all[i] for i in keep_idxs]
+                mat_sub = mat[np.ix_(keep_idxs, keep_idxs)]
+                mat_scaled = _scale_signed_array(mat_sub, scale_mode)
+
+                abbr_labels = [_abbr_feature(n) for n in names]
+                fig = go.Figure(
+                    data=go.Heatmap(
+                        z=mat_scaled,
+                        x=abbr_labels,
+                        y=abbr_labels,
+                        colorscale="RdYlBu",
+                        zmid=0.0,
+                        colorbar=dict(title=f"Interaction ({_scale_label(scale_mode)})"),
+                    )
                 )
-            )
-            fig.update_layout(title=f"Pairwise Interaction Matrix ({_scale_label(scale_mode)})", height=520)
-            st.plotly_chart(fig, use_container_width=True)
+                fig.update_layout(
+                    title=f"Pairwise Interaction Matrix ({_scale_label(scale_mode)})",
+                    height=520,
+                    font=dict(family="Helvetica Neue, Arial, sans-serif", color="#444444"),
+                )
+                st.plotly_chart(fig, use_container_width=True)
 
             if isinstance(var_interaction.get("single_delta"), dict):
-                single_df = pd.DataFrame(
-                    [{"variable": k, "delta_single": v} for k, v in var_interaction["single_delta"].items()]
-                ).sort_values("delta_single", ascending=False)
-                single_df["delta_single_scaled"] = _scale_signed_array(single_df["delta_single"].to_numpy(dtype=float), scale_mode)
-                st.markdown("**单变量干预敏感性（Δ_i）**")
-                st.dataframe(single_df, use_container_width=True, height=220)
+                # 单变量敏感性：过滤目标流量变量 Qtar 并使用缩写
+                single_raw = var_interaction.get("single_delta", {}) or {}
+                single_items = [(k, float(v)) for k, v in single_raw.items() if _abbr_feature(k) != "Qtar"]
+                if single_items:
+                    single_df = pd.DataFrame([
+                        {"variable": k, "delta_single": v, "abbr": _abbr_feature(k)} for k, v in single_items
+                    ]).sort_values("delta_single", ascending=False)
+                    single_df["delta_single_scaled"] = _scale_signed_array(single_df["delta_single"].to_numpy(dtype=float), scale_mode)
+                    st.markdown("**单变量干预敏感性（Δ_i）**")
+                    st.dataframe(single_df, use_container_width=True, height=220)
+                else:
+                    st.info("单变量干预结果仅包含流量变量或为空，已被过滤。")
         else:
             st.info("未找到 variable_interactions.json，请重新训练后生成。")
 
         if var_interaction_rank is not None and len(var_interaction_rank) > 0:
             show = var_interaction_rank.copy()
-            show["abs_interaction"] = show["interaction"].abs()
-            show = show.sort_values("abs_interaction", ascending=False).head(20)
-            show["interaction_scaled"] = _scale_signed_array(show["interaction"].to_numpy(dtype=float), scale_mode)
-            st.markdown("**Top 变量对交互（按 |interaction|）**")
-            st.dataframe(
-                show[["var_i", "var_j", "interaction", "interaction_scaled", "delta_pair", "delta_i", "delta_j"]],
-                use_container_width=True,
-                height=280,
+            # 过滤掉包含目标流量变量 Qtar 的行（使用缩写判断）
+            mask_keep = ~(
+                show["var_i"].astype(str).map(lambda x: _abbr_feature(x) == "Qtar")
+                | show["var_j"].astype(str).map(lambda x: _abbr_feature(x) == "Qtar")
             )
+            show = show[mask_keep].copy()
+            if len(show) == 0:
+                st.info("Top 变量对中不包含非流量变量，已被过滤。")
+            else:
+                show["abs_interaction"] = show["interaction"].abs()
+                show = show.sort_values("abs_interaction", ascending=False).head(20)
+                show["interaction_scaled"] = _scale_signed_array(show["interaction"].to_numpy(dtype=float), scale_mode)
+                show["var_i_abbr"] = show["var_i"].astype(str).map(lambda x: _abbr_feature(x))
+                show["var_j_abbr"] = show["var_j"].astype(str).map(lambda x: _abbr_feature(x))
+                st.markdown("**Top 变量对交互（按 |interaction|）**")
+                st.dataframe(
+                    show[["var_i_abbr", "var_j_abbr", "interaction", "interaction_scaled", "delta_pair", "delta_i", "delta_j"]],
+                    use_container_width=True,
+                    height=280,
+                )
 
         st.markdown("**变量-交互-流量机制链路**")
         sk = variable_mechanism_sankey(var_interaction, top_pairs=8, scale_mode=scale_mode)

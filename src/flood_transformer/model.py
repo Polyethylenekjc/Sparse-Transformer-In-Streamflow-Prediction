@@ -159,7 +159,7 @@ class ExplainableSparseTransformer(nn.Module):
     - 多头注意力 + 残差 + MLP
     - 权重稀疏（训练中外部调用 apply_global_weight_sparsity）
     - 激活稀疏（MLP 输出 Top-K）
-    - head / neuron 可学习电路 mask
+    - input / head / neuron 可学习电路 mask
     - 导出 attention map 与 hidden states
     """
 
@@ -179,9 +179,12 @@ class ExplainableSparseTransformer(nn.Module):
         super().__init__()
         self.task_type = task_type
         self.num_layers = num_layers
+        self.input_dim = input_dim
+        self.enable_learnable_masks = enable_learnable_masks
 
         self.input_proj = nn.Linear(input_dim, d_model)
         self.pos_embed = nn.Parameter(torch.randn(1, 2048, d_model) * 0.02)
+        self.input_mask_logits = nn.Parameter(torch.zeros(input_dim))
 
         self.layers = nn.ModuleList(
             [
@@ -200,14 +203,24 @@ class ExplainableSparseTransformer(nn.Module):
         self.final_ln = nn.LayerNorm(d_model)
         self.head = nn.Linear(d_model, 1)
 
+    def _get_input_gate(self, override_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+        if override_mask is not None:
+            return override_mask
+        if self.enable_learnable_masks:
+            return ste_binary_mask(self.input_mask_logits)
+        return torch.ones_like(self.input_mask_logits)
+
     def forward(
         self,
         x: torch.Tensor,
+        input_mask_override: Optional[torch.Tensor] = None,
         head_mask_overrides: Optional[Dict[int, torch.Tensor]] = None,
         neuron_mask_overrides: Optional[Dict[int, torch.Tensor]] = None,
         return_intermediates: bool = True,
     ) -> ModelOutputs:
         seq_len = x.shape[1]
+        input_gate = self._get_input_gate(input_mask_override).view(1, 1, -1)
+        x = x * input_gate
         x = self.input_proj(x) + self.pos_embed[:, :seq_len, :]
 
         attention_maps: List[torch.Tensor] = []
@@ -269,25 +282,30 @@ class ExplainableSparseTransformer(nn.Module):
     def mask_regularization(self) -> torch.Tensor:
         """L1(mask) 正则项：对 head + neuron 的 sigmoid 概率求和。"""
         reg = torch.tensor(0.0, device=self.pos_embed.device)
+        reg = reg + torch.sigmoid(self.input_mask_logits).sum()
         for layer in self.layers:
             reg = reg + torch.sigmoid(layer.attn.head_mask_logits).sum()
             reg = reg + torch.sigmoid(layer.mlp.neuron_mask_logits).sum()
         return reg
 
     def get_mask_probabilities(self):
+        input_probs = torch.sigmoid(self.input_mask_logits).detach().cpu()
         head_probs = []
         neuron_probs = []
         for layer in self.layers:
             head_probs.append(torch.sigmoid(layer.attn.head_mask_logits).detach().cpu())
             neuron_probs.append(torch.sigmoid(layer.mlp.neuron_mask_logits).detach().cpu())
-        return head_probs, neuron_probs
+        return input_probs, head_probs, neuron_probs
 
-    def prune_circuit(self, threshold: float = 0.5) -> Dict[str, List[torch.Tensor]]:
+    def prune_circuit(self, threshold: float = 0.5, input_threshold: Optional[float] = None) -> Dict[str, List[torch.Tensor]]:
         """返回按阈值裁剪后的最小电路结构。"""
-        heads, neurons = self.get_mask_probabilities()
+        input_probs, heads, neurons = self.get_mask_probabilities()
+        in_th = threshold if input_threshold is None else input_threshold
+        active_inputs = (input_probs > in_th).float()
         active_heads = [(h > threshold).float() for h in heads]
         active_neurons = [(n > threshold).float() for n in neurons]
         return {
+            "active_inputs": active_inputs,
             "active_heads": active_heads,
             "active_neurons": active_neurons,
         }

@@ -46,6 +46,7 @@ def _collect_preds(
     device: torch.device,
     intervention: Optional[str] = None,
     rainfall_index: Optional[int] = None,
+    input_mask_override: Optional[torch.Tensor] = None,
     head_mask_overrides: Optional[Dict[int, torch.Tensor]] = None,
     neuron_mask_overrides: Optional[Dict[int, torch.Tensor]] = None,
 ) -> Tuple[np.ndarray, np.ndarray, List[torch.Tensor]]:
@@ -74,6 +75,7 @@ def _collect_preds(
 
         out = model(
             x,
+            input_mask_override=input_mask_override,
             head_mask_overrides=head_mask_overrides,
             neuron_mask_overrides=neuron_mask_overrides,
             return_intermediates=True,
@@ -271,12 +273,52 @@ def mean_ablation(
     return records
 
 
+@torch.no_grad()
+def input_ablation_test(
+    model: ExplainableSparseTransformer,
+    data_loader: DataLoader,
+    device: torch.device,
+    feature_names: List[str],
+) -> List[Dict[str, float | str]]:
+    """输入节点均值消融：将单个输入 gate 替换为输入 gate 均值。"""
+    model.eval()
+
+    base_pred, base_y, _ = _collect_preds(model, data_loader, device)
+    base_mse = float(np.mean((base_pred - base_y) ** 2))
+
+    probs = torch.sigmoid(model.input_mask_logits).detach().to(device)
+    mean_val = float(probs.mean().item())
+
+    records: List[Dict[str, float | str]] = []
+    for i in range(len(probs)):
+        override = probs.clone()
+        override[i] = mean_val
+        preds, ys, _ = _collect_preds(
+            model,
+            data_loader,
+            device,
+            input_mask_override=override,
+        )
+        mse = float(np.mean((preds - ys) ** 2))
+        records.append(
+            {
+                "feature_idx": i,
+                "feature": feature_names[i] if i < len(feature_names) else f"feature_{i}",
+                "delta_mse": mse - base_mse,
+            }
+        )
+
+    records.sort(key=lambda d: float(d["delta_mse"]), reverse=True)
+    return records
+
+
 def prune_circuit(
     model: ExplainableSparseTransformer,
     threshold: float = 0.5,
-) -> Dict[str, List[torch.Tensor]]:
-    """提取最小电路（关键 head / neuron）。"""
-    return model.prune_circuit(threshold=threshold)
+    input_threshold: float | None = None,
+) -> Dict[str, List[torch.Tensor] | torch.Tensor]:
+    """提取最小电路（关键 input / head / neuron）。"""
+    return model.prune_circuit(threshold=threshold, input_threshold=input_threshold)
 
 
 @torch.no_grad()
@@ -488,6 +530,7 @@ def _eval_mse(
     model: ExplainableSparseTransformer,
     data_loader: DataLoader,
     device: torch.device,
+    input_override: Optional[torch.Tensor] = None,
     head_overrides: Optional[Dict[int, torch.Tensor]] = None,
     neuron_overrides: Optional[Dict[int, torch.Tensor]] = None,
 ) -> float:
@@ -495,6 +538,7 @@ def _eval_mse(
         model,
         data_loader,
         device,
+        input_mask_override=input_override,
         head_mask_overrides=head_overrides,
         neuron_mask_overrides=neuron_overrides,
     )

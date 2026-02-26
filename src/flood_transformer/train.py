@@ -26,6 +26,7 @@ from .explain import (
     extract_hidden_states,
     get_attention_statistics,
     head_ablation_test,
+    input_ablation_test,
     linear_probe,
     mean_ablation,
     prune_circuit,
@@ -123,6 +124,7 @@ def _train_phase(
     weight_topk_mode: str,
     minimum_alive_per_neuron: int,
     lambda_mask_l1: float,
+    lambda_input_mask_l1: float,
     phase_name: str,
     epoch_idx: int,
     total_epochs: int,
@@ -161,7 +163,18 @@ def _train_phase(
         out = model(x, return_intermediates=False)
         task_loss = _task_loss(task_type, out.pred, y)
 
-        mask_loss = model.mask_regularization() * lambda_mask_l1 if lambda_mask_l1 > 0 else torch.tensor(0.0, device=device)
+        mask_loss = torch.tensor(0.0, device=device)
+        if lambda_mask_l1 > 0:
+            # head + neuron 掩码
+            hm = torch.tensor(0.0, device=device)
+            for layer in model.layers:
+                hm = hm + torch.sigmoid(layer.attn.head_mask_logits).sum()
+                hm = hm + torch.sigmoid(layer.mlp.neuron_mask_logits).sum()
+            mask_loss = mask_loss + hm * lambda_mask_l1
+        if lambda_input_mask_l1 > 0:
+            # 输入节点掩码
+            im = torch.sigmoid(model.input_mask_logits).sum()
+            mask_loss = mask_loss + im * lambda_input_mask_l1
         loss = task_loss + mask_loss
 
         optimizer.zero_grad()
@@ -253,10 +266,23 @@ def _collect_test_arrays(model: ExplainableSparseTransformer, loader, device: to
 
 
 def _build_node_ranking(
+    input_importance: List[Dict[str, float | str]],
     head_importance: List[Dict[str, float]],
     neuron_importance: List[Dict[str, float]],
 ) -> List[Dict[str, float | str]]:
     rows: List[Dict[str, float | str]] = []
+    for r in input_importance:
+        rows.append(
+            {
+                "node_id": f"IN:{r['feature']}",
+                "node_type": "input",
+                "layer": -1,
+                "index": int(r["feature_idx"]),
+                "name": str(r["feature"]),
+                "importance": float(max(0.0, r.get("delta_mse", 0.0))),
+            }
+        )
+
     for r in head_importance:
         node_id = f"L{int(r['layer'])}.H{int(r['head'])}"
         rows.append(
@@ -313,10 +339,14 @@ def _extract_cherry_samples(
 
 
 def _build_node_importance_maps(
+    input_importance: List[Dict[str, float | str]],
     head_importance: List[Dict[str, float]],
     neuron_importance: List[Dict[str, float]],
 ) -> Dict[str, float]:
     node_imp: Dict[str, float] = {}
+    for r in input_importance:
+        key = f"IN:{r['feature']}"
+        node_imp[key] = max(node_imp.get(key, 0.0), max(0.0, float(r.get("delta_mse", 0.0))))
     for r in head_importance:
         key = f"L{int(r['layer'])}.H{int(r['head'])}"
         node_imp[key] = max(node_imp.get(key, 0.0), max(0.0, float(r.get("delta_mse", 0.0))))
@@ -335,11 +365,25 @@ def _build_candidate_edges(
     circuit: Dict[str, List[torch.Tensor]],
     node_imp: Dict[str, float],
     top_k: int,
+    feature_names: List[str],
 ) -> List[Tuple[str, str, float]]:
+    active_inputs = circuit.get("active_inputs")
     active_heads = circuit["active_heads"]
     active_neurons = circuit["active_neurons"]
 
     candidates: List[Tuple[str, str, float]] = []
+
+    # 输入层: input -> head(0)
+    if active_inputs is not None and len(active_heads) > 0:
+        in_idx = np.where(np.asarray(active_inputs.cpu()) > 0)[0].tolist()
+        h0_idx = np.where(np.asarray(active_heads[0].cpu()) > 0)[0].tolist()
+        for i in in_idx:
+            name = feature_names[i] if i < len(feature_names) else f"F{i}"
+            s = f"IN:{name}"
+            for h in h0_idx:
+                t = f"L0.H{h}"
+                score = float(np.sqrt(max(0.0, node_imp.get(s, 0.0) * node_imp.get(t, 0.0))))
+                candidates.append((s, t, score))
 
     # 同层: head -> neuron
     for l_idx, (h_mask, n_mask) in enumerate(zip(active_heads, active_neurons)):
@@ -423,7 +467,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
         else:
             print(boot_msg)
 
-    def _run_epochs(phase_name: str, n_epochs: int, apply_sparse: bool, lambda_l1: float):
+    def _run_epochs(phase_name: str, n_epochs: int, apply_sparse: bool, lambda_l1: float, lambda_input_l1: float):
         nonlocal global_step, logs
         if n_epochs <= 0:
             return
@@ -455,6 +499,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
                         weight_topk_mode=config.weight_topk_mode,
                         minimum_alive_per_neuron=config.minimum_alive_per_neuron,
                         lambda_mask_l1=lambda_l1,
+                        lambda_input_mask_l1=lambda_input_l1,
                         phase_name=phase_name,
                         epoch_idx=e,
                         total_epochs=n_epochs,
@@ -484,6 +529,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
                     weight_topk_mode=config.weight_topk_mode,
                     minimum_alive_per_neuron=config.minimum_alive_per_neuron,
                     lambda_mask_l1=lambda_l1,
+                    lambda_input_mask_l1=lambda_input_l1,
                     phase_name=phase_name,
                     epoch_idx=e,
                     total_epochs=n_epochs,
@@ -495,9 +541,9 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
                 )
                 logs.extend(hist)
 
-    _run_epochs("dense", config.epochs_dense, apply_sparse=False, lambda_l1=0.0)
-    _run_epochs("sparse", config.epochs_sparse, apply_sparse=config.enable_weight_sparsity, lambda_l1=0.0)
-    _run_epochs("mask", config.epochs_mask, apply_sparse=config.enable_weight_sparsity, lambda_l1=config.lambda_mask_l1)
+    _run_epochs("dense", config.epochs_dense, apply_sparse=False, lambda_l1=0.0, lambda_input_l1=0.0)
+    _run_epochs("sparse", config.epochs_sparse, apply_sparse=config.enable_weight_sparsity, lambda_l1=0.0, lambda_input_l1=0.0)
+    _run_epochs("mask", config.epochs_mask, apply_sparse=config.enable_weight_sparsity, lambda_l1=config.lambda_mask_l1, lambda_input_l1=config.lambda_input_mask_l1)
 
     # 基础评估
     test_loss = _evaluate(model, data.test_loader, device, config.task_type)
@@ -519,15 +565,17 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
                 print(msg)
 
     # 4) 提取电路 + 消融
-    circuit = prune_circuit(model, threshold=config.circuit_threshold)
+    circuit = prune_circuit(model, threshold=config.circuit_threshold, input_threshold=config.input_threshold)
+    input_importance = input_ablation_test(model, data.test_loader, device, feature_names=data.feature_names)
     head_importance = head_ablation_test(model, data.test_loader, device)
     neuron_importance = mean_ablation(model, data.test_loader, device, ablate="neuron")
 
-    node_imp = _build_node_importance_maps(head_importance, neuron_importance)
+    node_imp = _build_node_importance_maps(input_importance, head_importance, neuron_importance)
     candidate_edges = _build_candidate_edges(
         circuit,
         node_imp=node_imp,
         top_k=config.edge_ablation_topk,
+        feature_names=data.feature_names,
     )
     edge_importance = edge_ablation_test(
         model,
@@ -537,7 +585,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
         threshold=config.circuit_threshold,
     )
 
-    node_ranking = _build_node_ranking(head_importance, neuron_importance)
+    node_ranking = _build_node_ranking(input_importance, head_importance, neuron_importance)
     k_values = [1, 2, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256]
     faithfulness = faithfulness_k_sweep(
         model,
@@ -557,6 +605,33 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
         "api": linear_probe(hidden_states[-1], phys["api"]),
         "dpdt": linear_probe(hidden_states[-1], phys["dpdt"]),
     }
+
+    # ---- 新增：持久化更多中间产物，便于后续分析无需重训 ----
+    os.makedirs(config.output_dir, exist_ok=True)
+    try:
+        # 保存隐藏态（每层为一个数组）
+        hs_path = os.path.join(config.output_dir, "hidden_states.npz")
+        # hidden_states 是 list[np.ndarray]：以 layer_0, layer_1 ... 命名
+        hs_kwargs = {f"layer_{i}": np.asarray(a) for i, a in enumerate(hidden_states)}
+        np.savez_compressed(hs_path, **hs_kwargs)
+
+        # 保存物理量原始数组（cum_rain, api, dpdt）
+        phys_path = os.path.join(config.output_dir, "physical_probe_inputs.npz")
+        np.savez_compressed(phys_path, cum_rain=np.asarray(phys["cum_rain"]), api=np.asarray(phys["api"]), dpdt=np.asarray(phys["dpdt"]))
+
+        # 保存候选边列表（用于后续快速重用）
+        cand_edges_path = os.path.join(config.output_dir, "candidate_edges.csv")
+        try:
+            import pandas as _pd
+
+            if isinstance(candidate_edges, (list, tuple)) and len(candidate_edges) > 0:
+                _pd.DataFrame(candidate_edges, columns=["src", "dst"]).to_csv(cand_edges_path, index=False)
+        except Exception:
+            pass
+    except Exception:
+        # 容错：如果保存失败，不影响主流程
+        pass
+    # ---- end 新增 ----
 
     causal = causal_intervention_test(model, data.test_loader, device, data.feature_names)
     var_interaction = variable_interaction_test(
@@ -590,6 +665,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
     with open(circuit_json_path, "w", encoding="utf-8") as f:
         json.dump(
             {
+                "active_inputs": circuit["active_inputs"].tolist() if "active_inputs" in circuit else [],
                 "active_heads": [x.tolist() for x in circuit["active_heads"]],
                 "active_neurons": [x.tolist() for x in circuit["active_neurons"]],
             },
@@ -639,6 +715,12 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
     torch.save(model.state_dict(), model_path)
 
     x_arr, y_arr, p_arr = _collect_test_arrays(model, data.test_loader, device)
+    # 保存测试集的输入/目标/预测数组以便离线分析
+    try:
+        test_arrays_path = os.path.join(config.output_dir, "test_arrays.npz")
+        np.savez_compressed(test_arrays_path, x=x_arr, y=y_arr, p=p_arr)
+    except Exception:
+        pass
     cherry = _extract_cherry_samples(x_arr, y_arr, p_arr, data.feature_names, n_each=3)
     cherry_path = os.path.join(config.output_dir, "cherry_samples.json")
     with open(cherry_path, "w", encoding="utf-8") as f:

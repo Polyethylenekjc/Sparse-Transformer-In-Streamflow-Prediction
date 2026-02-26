@@ -47,8 +47,10 @@ def build_args():
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--target_weight_sparsity", type=float, default=0.9)
     p.add_argument("--target_activation_sparsity", type=float, default=0.8)
-    p.add_argument("--lambda_mask_l1", type=float, default=1e-4)
-    p.add_argument("--circuit_threshold", type=float, default=0.5)
+    p.add_argument("--lambda_mask_l1", type=float, default=1e-4, help="head/neuron 掩码 L1 正则强度")
+    p.add_argument("--lambda_input_mask_l1", type=float, default=1e-5, help="输入节点掩码 L1 正则强度")
+    p.add_argument("--circuit_threshold", type=float, default=0.49, help="电路裁剪阈值")
+    p.add_argument("--input_threshold", type=float, default=0.5, help="输入节点裁剪阈值")
     p.add_argument("--edge_ablation_topk", type=int, default=30)
     p.add_argument("--sparsity_anneal_mode", type=str, default="cosine", choices=["cosine", "linear", "power_law"])
     p.add_argument("--sparsity_anneal_exponent", type=int, default=2)
@@ -91,7 +93,9 @@ def main():
         target_weight_sparsity=args.target_weight_sparsity,
         target_activation_sparsity=args.target_activation_sparsity,
         lambda_mask_l1=args.lambda_mask_l1,
+        lambda_input_mask_l1=args.lambda_input_mask_l1,
         circuit_threshold=args.circuit_threshold,
+        input_threshold=args.input_threshold,
         edge_ablation_topk=args.edge_ablation_topk,
         sparsity_anneal_mode=args.sparsity_anneal_mode,
         sparsity_anneal_exponent=args.sparsity_anneal_exponent,
