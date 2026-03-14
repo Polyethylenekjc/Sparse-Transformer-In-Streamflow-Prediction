@@ -1,0 +1,221 @@
+\begin{thebibliography}{29}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Gao et~al.(2026)Gao, Luo, Liu, Wang, Chen, and Li]{GAO2026103148}
+Yingying Gao, Zengliang Luo, Huan Liu, Lunche Wang, Xi~Chen, and Huan Li.
+\newblock Reconstruction of global long-term daily streamflow dataset using machine learning models for revealing streamflow changes.
+\newblock \emph{Journal of Hydrology: Regional Studies}, 64:\penalty0 103148, 2026.
+\newblock ISSN 2214-5818.
+\newblock \doi{10.1016/j.ejrh.2026.103148}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S2214581826000467}.
+
+\bibitem[Apak et~al.(2026)Apak, Kilinc, Yurtsever, Haznedar, and Ozkan]{apak2026multi}
+Sina Apak, Huseyin~Cagan Kilinc, Adem Yurtsever, Hilal Haznedar, and Furkan Ozkan.
+\newblock Multi-resolution adaptive channel fusion transformer encoder lstm for accurate streamflow prediction.
+\newblock \emph{Scientific Reports}, 2026.
+\newblock \doi{10.1038/s41467-026-70523-y}.
+\newblock URL \url{https://doi.org/10.1038/s41467-026-70523-y}.
+
+\bibitem[Zipper et~al.(2026)Zipper, Gambill, Schmitt, Kouba, Scantlebury, Harter, and Murphy]{ZIPPER2026134909}
+Sam Zipper, Ian Gambill, Monty Schmitt, Claire Kouba, Leland Scantlebury, Thomas Harter, and Nicholas~P. Murphy.
+\newblock Lagged streamflow depletion due to pumping-induced stream drying: Incorporation into analytical streamflow depletion estimation methods.
+\newblock \emph{Journal of Hydrology}, 667:\penalty0 134909, 2026.
+\newblock ISSN 0022-1694.
+\newblock \doi{https://doi.org/10.1016/j.jhydrol.2026.134909}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0022169426000065}.
+
+\bibitem[Núñez et~al.(2023)Núñez, Cortés, and Yáñez]{Núñez2023_XAI}
+Jorge Núñez, Catalina~B. Cortés, and Marjorie~A. Yáñez.
+\newblock Explainable artificial intelligence in hydrology: Interpreting black-box snowmelt-driven streamflow predictions in an arid andean basin of north-central chile.
+\newblock \emph{Water}, 15\penalty0 (19), 2023.
+\newblock ISSN 2073-4441.
+\newblock \doi{10.3390/w15193369}.
+\newblock URL \url{https://www.mdpi.com/2073-4441/15/19/3369}.
+
+\bibitem[Wang and Peng(2024)]{WangShap2024}
+Shuo Wang and Hui Peng.
+\newblock Multiple spatio-temporal scale runoff forecasting and driving mechanism exploration by k-means optimized xgboost and shap.
+\newblock \emph{Journal of Hydrology}, 630:\penalty0 130650, 2024.
+\newblock ISSN 0022-1694.
+\newblock \doi{https://doi.org/10.1016/j.jhydrol.2024.130650}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0022169424000441}.
+
+\bibitem[Mardian et~al.(2023)Mardian, Champagne, Bonsal, and Berg]{MardShap2022}
+Jacob Mardian, Catherine Champagne, Barrie Bonsal, and Aaron Berg.
+\newblock A machine learning framework for predicting and understanding the canadian drought monitor.
+\newblock \emph{Water Resources Research}, 59\penalty0 (8):\penalty0 e2022WR033847, 2023.
+\newblock \doi{https://doi.org/10.1029/2022WR033847}.
+\newblock URL \url{https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2022WR033847}.
+\newblock e2022WR033847 2022WR033847.
+
+\bibitem[Schmid et~al.(2026)Schmid, Müller, and Leandro]{SCHMID2026124819}
+Felix Schmid, Leonie Müller, and Jorge Leandro.
+\newblock A physically informed domain-independent data-driven inundation forecast model.
+\newblock \emph{Water Research}, 289:\penalty0 124819, 2026.
+\newblock ISSN 0043-1354.
+\newblock \doi{https://doi.org/10.1016/j.watres.2025.124819}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0043135425017221}.
+
+\bibitem[Shi et~al.(2025)Shi, Fang, Xie, Du, Liu, Ndayiragije, and Liu]{SHI2025_PINN}
+Mingrui Shi, Hongyuan Fang, Yangyang Xie, Huihua Du, Saiyan Liu, Jean~Marie Ndayiragije, and Nannan Liu.
+\newblock A flood forecasting method coupling the ce-qual-w2 and pinn models.
+\newblock \emph{Journal of Hydrology}, 661:\penalty0 133699, 2025.
+\newblock ISSN 0022-1694.
+\newblock \doi{https://doi.org/10.1016/j.jhydrol.2025.133699}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0022169425010376}.
+
+\bibitem[Liu et~al.(2026)Liu, Wu, Liu, Zheng, Liu, and Gao]{LIU2026_PINN}
+Wenli Liu, Qian Wu, Zihan Liu, Xu~Zheng, Tianxiang Liu, and Han Gao.
+\newblock Pinn framework for urban flood depth prediction: integrating data-driven insights with physical constraints.
+\newblock \emph{Journal of Hydrology}, 665:\penalty0 134693, 2026.
+\newblock ISSN 0022-1694.
+\newblock \doi{https://doi.org/10.1016/j.jhydrol.2025.134693}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0022169425020335}.
+
+\bibitem[Fang et~al.(2025)Fang, Qu, Li, Li, Shi, Sun, Yang, Tang, Zhang, Zhu, Wu, and Bao]{FANG2025_PINN}
+Zheng Fang, Simin Qu, Ziheng Li, Qiongfang Li, Peng Shi, Yiqun Sun, Xiaoqiang Yang, Han Tang, Junfang Zhang, Zhengxian Zhu, Hongshi Wu, and Weimin Bao.
+\newblock Soil water accounting network (swan): a novel neural network for modeling conceptual hydrological processes.
+\newblock \emph{Journal of Hydrology}, 661:\penalty0 133562, 2025.
+\newblock ISSN 0022-1694.
+\newblock \doi{https://doi.org/10.1016/j.jhydrol.2025.133562}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S002216942500900X}.
+
+\bibitem[Roscher et~al.(2020)Roscher, Bohn, Duarte, and Garcke]{Roscher2020_Explainable}
+Ribana Roscher, Bastian Bohn, Marco~F. Duarte, and Jochen Garcke.
+\newblock Explainable machine learning for scientific insights and discoveries.
+\newblock \emph{IEEE Access}, 8:\penalty0 42200--42216, 2020.
+\newblock \doi{10.1109/ACCESS.2020.2976199}.
+
+\bibitem[Krishnapriyan et~al.(2021)Krishnapriyan, Gholami, Zhe, Kirby, and Mahoney]{Krishnapriyan2021_PINN}
+Aditi Krishnapriyan, Amir Gholami, Shandian Zhe, Robert Kirby, and Michael~W Mahoney.
+\newblock Characterizing possible failure modes in physics-informed neural networks.
+\newblock In M.~Ranzato, A.~Beygelzimer, Y.~Dauphin, P.S. Liang, and J.~Wortman Vaughan, editors, \emph{Advances in Neural Information Processing Systems}, volume~34, pages 26548--26560. Curran Associates, Inc., 2021.
+\newblock URL \url{https://proceedings.neurips.cc/paper_files/paper/2021/file/df438e5206f31600e6ae4af72f2725f1-Paper.pdf}.
+
+\bibitem[Naser(2026)]{NASER2026_Inrter}
+M.Z. Naser.
+\newblock Fundamental flaws of physics-informed neural networks and explainability methods in engineering systems.
+\newblock \emph{Computers \& Industrial Engineering}, 212:\penalty0 111704, 2026.
+\newblock ISSN 0360-8352.
+\newblock \doi{https://doi.org/10.1016/j.cie.2025.111704}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0360835225008502}.
+
+\bibitem[Lundberg and Lee(2017)]{lundberg2017_Shap_Origin}
+Scott Lundberg and Su-In Lee.
+\newblock A unified approach to interpreting model predictions, 2017.
+\newblock URL \url{https://arxiv.org/abs/1705.07874}.
+
+\bibitem[Ribeiro et~al.(2016)Ribeiro, Singh, and Guestrin]{Ribeiro2016_LIME_Origin}
+Marco~Tulio Ribeiro, Sameer Singh, and Carlos Guestrin.
+\newblock "why should i trust you?": Explaining the predictions of any classifier.
+\newblock In \emph{Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining}, KDD '16, page 1135–1144, New York, NY, USA, 2016. Association for Computing Machinery.
+\newblock ISBN 9781450342322.
+\newblock \doi{10.1145/2939672.2939778}.
+\newblock URL \url{https://doi.org/10.1145/2939672.2939778}.
+
+\bibitem[Clark et~al.(2025)Clark, Fu, and Janardhanan]{Clark2025_Shap}
+Stephanie~R. Clark, Guobin Fu, and Sreekanth Janardhanan.
+\newblock Explainable ai for interpreting spatiotemporal groundwater predictions.
+\newblock \emph{Water Resources Research}, 61\penalty0 (10):\penalty0 e2025WR041303, 2025.
+\newblock \doi{https://doi.org/10.1029/2025WR041303}.
+\newblock URL \url{https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2025WR041303}.
+\newblock e2025WR041303 2025WR041303.
+
+\bibitem[Wagan and Sidra(2026)]{Wagan2026_LIME}
+Shah~Mehmood Wagan and Sidra Sidra.
+\newblock Interpreting irrigation decisions: Explainable ai using shap and lime in agricultural water management models.
+\newblock \emph{Water Resources Management}, 40\penalty0 (52), 2026.
+\newblock \doi{10.1007/s11269-025-04468-0}.
+\newblock URL \url{https://doi.org/10.1007/s11269-025-04468-0}.
+
+\bibitem[P et~al.(2022)P, V, A, K, M, and C]{Nagara2022_LIME}
+Nagaraj P, Muneeswaran V, Dharanidharan A, Balananthanan K, Arunkumar M, and Rajkumar C.
+\newblock A prediction and recommendation system for diabetes mellitus using xai-based lime explainer.
+\newblock In \emph{2022 International Conference on Sustainable Computing and Data Communication Systems (ICSCDS)}, pages 1472--1478, 2022.
+\newblock \doi{10.1109/ICSCDS53736.2022.9760847}.
+
+\bibitem[Dieber and Kirrane(2020)]{dieber2020_LIME_problem}
+Jürgen Dieber and Sabrina Kirrane.
+\newblock Why model why? assessing the strengths and limitations of lime, 2020.
+\newblock URL \url{https://arxiv.org/abs/2012.00093}.
+
+\bibitem[Zhang et~al.(2026)Zhang, Li, Li, Wei, and Zhang]{ZHANG2026_SHAP}
+Hanwen Zhang, Yiyan Li, Mengyao Li, Shan Wei, and Hongsheng Zhang.
+\newblock Explainable and causal machine learning to investigate the spatiotemporal dynamics patterns of coastal water quality in hong kong.
+\newblock \emph{Water Research}, 290:\penalty0 125026, 2026.
+\newblock ISSN 0043-1354.
+\newblock \doi{https://doi.org/10.1016/j.watres.2025.125026}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0043135425019293}.
+
+\bibitem[Lu et~al.(2026)Lu, Jian, Lin, Li, Tang, Xiao, Zhang, and Wang]{LU2026125531}
+Lunhui Lu, Xingqian Jian, Shanshan Lin, Zhe Li, Qiong Tang, Yan Xiao, Yuanyuan Zhang, and Dianchang Wang.
+\newblock The cned framework: modeling core microbial communities and metabolic functions with shap-interpretable environmental thresholds in large rivers.
+\newblock \emph{Water Research}, 294:\penalty0 125531, 2026.
+\newblock ISSN 0043-1354.
+\newblock \doi{https://doi.org/10.1016/j.watres.2026.125531}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0043135426002137}.
+
+\bibitem[Kumar et~al.(2020)Kumar, Venkatasubramanian, Scheidegger, and Friedler]{kumar2020_Shap_problem}
+I.~Elizabeth Kumar, Suresh Venkatasubramanian, Carlos Scheidegger, and Sorelle Friedler.
+\newblock Problems with shapley-value-based explanations as feature importance measures, 2020.
+\newblock URL \url{https://arxiv.org/abs/2002.11097}.
+
+\bibitem[Takefuji(2026)]{TAKEFUJI2026_Shap_problem}
+Yoshiyasu Takefuji.
+\newblock Limitations of shap-based interpretations in environmental and membrane filtration applications.
+\newblock \emph{Water Research}, 288:\penalty0 124766, 2026.
+\newblock ISSN 0043-1354.
+\newblock \doi{https://doi.org/10.1016/j.watres.2025.124766}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0043135425016690}.
+
+\bibitem[Adler and Painsky(2022)]{e24050687_Shap_problem}
+Afek~Ilay Adler and Amichai Painsky.
+\newblock Feature importance in gradient boosting trees with cross-validation feature selection.
+\newblock \emph{Entropy}, 24\penalty0 (5), 2022.
+\newblock ISSN 1099-4300.
+\newblock \doi{10.3390/e24050687}.
+\newblock URL \url{https://www.mdpi.com/1099-4300/24/5/687}.
+
+\bibitem[Newman et~al.(2017)Newman, Mizukami, Clark, Wood, Nijssen, and Nearing]{Benchmarkingofa_PhysicallyBasedHydrologicModel}
+Andrew~J. Newman, Naoki Mizukami, Martyn~P. Clark, Andrew~W. Wood, Bart Nijssen, and Grey Nearing.
+\newblock Benchmarking of a physically based hydrologic model.
+\newblock \emph{Journal of Hydrometeorology}, 18\penalty0 (8):\penalty0 2215 -- 2225, 2017.
+\newblock \doi{10.1175/JHM-D-16-0284.1}.
+\newblock URL \url{https://journals.ametsoc.org/view/journals/hydr/18/8/jhm-d-16-0284_1.xml}.
+
+\bibitem[Kumar et~al.(2021)Kumar, Scheidegger, Venkatasubramanian, and Friedler]{NEURIPS2021_shap_residuals}
+Indra Kumar, Carlos Scheidegger, Suresh Venkatasubramanian, and Sorelle Friedler.
+\newblock Shapley residuals: Quantifying the limits of the shapley value for explanations.
+\newblock In M.~Ranzato, A.~Beygelzimer, Y.~Dauphin, P.S. Liang, and J.~Wortman Vaughan, editors, \emph{Advances in Neural Information Processing Systems}, volume~34, pages 26598--26608. Curran Associates, Inc., 2021.
+\newblock URL \url{https://proceedings.neurips.cc/paper_files/paper/2021/file/dfc6aa246e88ab3e32caeaaecf433550-Paper.pdf}.
+
+\bibitem[Huang and Marques-Silva(2024)]{HUANG2024_shap_problems}
+Xuanxiang Huang and Joao Marques-Silva.
+\newblock On the failings of shapley values for explainability.
+\newblock \emph{International Journal of Approximate Reasoning}, 171:\penalty0 109112, 2024.
+\newblock ISSN 0888-613X.
+\newblock \doi{https://doi.org/10.1016/j.ijar.2023.109112}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0888613X23002438}.
+\newblock Synergies between Machine Learning and Reasoning.
+
+\bibitem[Yoo and Cho(2019)]{w11050905_related}
+Chulsang Yoo and Eunsaem Cho.
+\newblock Effect of multicollinearity on the bivariate frequency analysis of annual maximum rainfall events.
+\newblock \emph{Water}, 11\penalty0 (5), 2019.
+\newblock ISSN 2073-4441.
+\newblock \doi{10.3390/w11050905}.
+\newblock URL \url{https://www.mdpi.com/2073-4441/11/5/905}.
+
+\bibitem[Takefuji(2025)]{TAKEFUJI2025123514}
+Yoshiyasu Takefuji.
+\newblock Reevaluating feature importance in machine learning: concerns regarding shap interpretations in the context of the eu artificial intelligence act.
+\newblock \emph{Water Research}, 280:\penalty0 123514, 2025.
+\newblock ISSN 0043-1354.
+\newblock \doi{https://doi.org/10.1016/j.watres.2025.123514}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0043135425004270}.
+
+\end{thebibliography}

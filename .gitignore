@@ -1,0 +1,4 @@
+outputs
+*.pyc
+scripts
+.streamlit_cache
