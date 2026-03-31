@@ -1,0 +1,199 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{microtype}
+\usepackage{times}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=blue,urlcolor=blue]{hyperref}
+
+\renewcommand{\figurename}{Fig.}
+\renewcommand{\tablename}{Table}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\theequation}{S\arabic{equation}}
+
+\title{Beyond Feature Attribution: Are Deep Learning Models Learning Hydrological Processes?}
+\author{}
+\date{}
+
+\begin{document}
+
+\pagenumbering{gobble}
+
+\begin{titlepage}
+    \centering
+    {\LARGE\bfseries Beyond Feature Attribution: Are Deep Learning Models Learning Hydrological Processes?\par}
+    \vspace{2.8cm}
+    {\Huge\bfseries Supplementary Information\par}
+    \vfill
+\end{titlepage}
+
+\clearpage
+\tableofcontents
+
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\section{Experimental Design and Detailed Settings}
+
+\subsection{Supplementary Notes: Accurate Volume Response but Limited Sensitivity to Temporal and State Perturbations}
+
+To examine whether the model encodes physically consistent hydrological sensitivities—rather than relying on spurious statistical correlations—we designed a station-wise counterfactual sensitivity framework on the test split. Let $f_{\theta}$ denote the trained sparse transformer, $\mathbf{X}_{i}\in\mathbb{R}^{N_i\times L\times F}$ the input tensor for station $i$ (with $N_i$ samples, lookback length $L$, and $F$ predictors), and $\mathbf{y}_{i}\in\mathbb{R}^{N_i}$ the observed discharge target. For each intervention setting $s$, we define
+\begin{equation}
+    \hat{\mathbf{y}}_{i}^{(0)} = f_{\theta}(\mathbf{X}_{i}),
+    \qquad
+    \hat{\mathbf{y}}_{i}^{(s)} = f_{\theta}(\mathcal{T}_{s}(\mathbf{X}_{i})),
+\end{equation}
+where $\mathcal{T}_{s}(\cdot)$ denotes an intervention operator applied in physical space and subsequently mapped back to the normalized model space using the same normalization statistics as in training. This paired design isolates the model’s response to controlled perturbations while eliminating cross-sample confounding effects.
+
+\subsubsection*{Experiment design}
+
+We considered four intervention families to disentangle model sensitivities to hydrological drivers, including volume, temporal distribution, catchment state, and thermal forcing. The perturbation ranges are chosen to represent moderate yet plausible deviations that remain within the support of the training distribution.
+
+\paragraph{(1) Rainfall scaling.}
+Let $P_t$ denote precipitation at lag $t\in\{1,\dots,L\}$. With scaling factor $\alpha$, the intervention is
+\begin{equation}
+    P_t' = \alpha P_t,
+    \qquad
+    \alpha\in\{0.8,0.9,1.1,1.2\}.
+\end{equation}
+This modifies storm magnitude while preserving the original temporal structure of rainfall.
+
+\paragraph{(2) Rainfall pattern redistribution.}
+Let $\mathbf{w}^{(m)}=(w_1^{(m)},\dots,w_L^{(m)})$ be a mode-specific nonnegative weight vector (front-loaded, middle-loaded, back-loaded, uniform) satisfying $\sum_{t=1}^{L}w_t^{(m)}=1$. The redistributed rainfall is
+\begin{equation}
+    P_t' = \Big(\sum_{j=1}^{L}P_j\Big) w_t^{(m)}.
+\end{equation}
+This conserves total rainfall volume while altering its temporal distribution within the input window. We note that this intervention represents an idealized redistribution rather than a physically simulated storm evolution, and is intended to isolate model sensitivity to intra-window timing patterns.
+
+\paragraph{(3) Streamflow-input scaling (state perturbation).}
+Let $Q_t^{\mathrm{in}}$ denote the lagged streamflow input channel. With scaling factor $\beta$,
+\begin{equation}
+    Q_t^{\mathrm{in}\prime} = \beta Q_t^{\mathrm{in}},
+    \qquad t=1,\dots,L,
+    \qquad
+    \beta\in\{0.1,0.5,0.9,1.1,1.5,1.9\}.
+\end{equation}
+This isolates sensitivity to hydrological state magnitude in the full lookback window while preserving the original temporal pattern.
+
+\paragraph{(4) Temperature increase perturbation.}
+For each temperature-related predictor $T_t$, we apply
+\begin{equation}
+    T_t' = T_t + \Delta T,
+    \qquad
+    \Delta T\in\{3,5,7\}^{\circ}\mathrm{C}.
+\end{equation}
+This probes thermal forcing effects (e.g., evapotranspiration or snowmelt processes), particularly in energy-limited or snow-influenced catchments.
+
+In total, the intervention set contains $4+4+6+3=17$ scenarios per station. For each station and scenario, responses are computed against the same baseline prediction, enabling paired comparison.
+
+\subsubsection*{Evaluation metrics}
+
+For station $i$ and scenario $s$, with sample-wise observations $y_{i,n}$ and predictions $\hat y_{i,n}^{(s)}$ ($n=1,\dots,N_i$), we evaluate:\textbf{(1) MSE.}
+
+\paragraph{(2) Predicted streamflow volume.}
+\begin{equation}
+    V_{i}^{(s)} = \sum_{n=1}^{N_i}\hat y_{i,n}^{(s)}.
+\end{equation}
+
+\paragraph{(3) Predicted peak timing index.}
+\begin{equation}
+    \tau_{i}^{(s)} = \arg\max_{1\le n\le N_i}\hat y_{i,n}^{(s)}.
+\end{equation}
+
+Relative to baseline $s=0$, we define
+\begin{equation}
+    \Delta\mathrm{MSE}_{i}^{(s)} = \mathrm{MSE}_{i}^{(s)}-\mathrm{MSE}_{i}^{(0)},
+    \quad
+    \Delta V_{i}^{(s)} = V_{i}^{(s)}-V_{i}^{(0)},
+    \quad
+    \Delta\tau_{i}^{(s)} = \tau_{i}^{(s)}-\tau_{i}^{(0)}.
+\end{equation}
+
+For visualization comparability across stations, relative changes are reported as
+\begin{equation}
+    \delta\mathrm{MSE}_{i}^{(s)}(\%) = 100\times\frac{\Delta\mathrm{MSE}_{i}^{(s)}}{\max\big(|\mathrm{MSE}_{i}^{(0)}|,1\big)},
+    \qquad
+    \delta V_{i}^{(s)}(\%) = 100\times\frac{\Delta V_{i}^{(s)}}{\max\big(|V_{i}^{(0)}|,1\big)}.
+\end{equation}
+
+\subsubsection*{Physical consistency criteria}
+
+To assess whether model responses align with expected hydrological behavior, we adopt direction-based consistency criteria:
+
+For rainfall scaling and streamflow-input scaling, expected behavior requires directionally consistent changes in streamflow volume, i.e., $\Delta V$ increases for scaling factors greater than 1 and decreases for factors less than 1.
+
+For rainfall pattern redistribution and temperature perturbation, expected behavior requires that model performance does not exhibit systematic degradation, i.e., no consistent increase in prediction error across scenarios.
+
+Finally, for each intervention family, station-level expectedness is aggregated by majority vote over its scenarios. Statistical significance of paired scenario effects is assessed by two-sided Wilcoxon signed-rank tests, with Benjamini--Hochberg correction for multiple comparisons.
+
+\subsection{STEH-Derived Interpretability Enhances Random Forest Predictive Performance}
+
+To evaluate whether the hydrological structures revealed by STEH can improve a conventional machine-learning benchmark, we designed a paired station-wise comparison between a \emph{baseline} Random Forest (RF) and a \emph{STEH-informed modified} RF. Both models are trained and tested on the same station, temporal split, and target variable, ensuring that any performance differences can be attributed to the STEH-derived design rather than inconsistencies in data or experimental setup.
+
+Let station index be $i\in\{1,\dots,M\}$, predictors $\mathbf{X}_i$, and discharge target $\mathbf{y}_i$. For each station, we train
+\begin{equation}
+    \hat{\mathbf{y}}^{\text{base}}_i = g_{\phi_i}(\mathbf{X}_i),
+    \qquad
+    \hat{\mathbf{y}}^{\text{mod}}_i = g_{\psi_i}(\widetilde{\mathbf{X}}_i),
+\end{equation}
+where $g_{\phi_i}$ and $g_{\psi_i}$ denote RF predictors with station-specific fitted parameters.
+
+\subsubsection*{Experiment design}
+
+During model training, the hyperparameters of both Random Forest models are optimized using Bayesian optimisation on the validation set, ensuring that performance differences are not attributable to discrepancies in tuning strategy.
+
+The task is formulated as a one-step-ahead prediction problem, where a fixed 10-day input window is used to predict next-day discharge. Both baseline and modified models use the same input length ($L=10$). Data are split chronologically into training, validation, and testing sets with ratios of $0.7/0.15/0.15$, respectively, on a per-station basis.Both models use identical raw drivers, including precipitation, temperature, shortwave radiation, and antecedent discharge.
+
+\paragraph{Baseline RF.}
+The baseline model adopts standard lagged inputs and rolling statistical summaries, without incorporating explicit hydrological regime information.
+
+\paragraph{STEH-informed modified RF.}
+The modified model incorporates structural insights revealed by STEH (primarily P--Q, Q--Q, and T--Q pathways). Specifically, it includes physically interpretable aggregated features (e.g., $P_{3}, P_{7}, P_{14}, Q_{3}, Q_{7}, Q_{3}-Q_{7}, T_{7}^{+}, T_{7}^{-}$), introduces regime indicators to distinguish dominant hydrological processes (P--Q, Q--Q, T--Q), and applies light regime-aware sample weighting for selected regimes (P--Q and T--Q) during training.
+
+The dominant regime for each station is identified over the training period based on correlation analysis. Specifically, we compute
+\begin{equation}
+    r_{\mathrm{PQ}} = \mathrm{corr}(P_t, Q_t),
+    \quad
+    r_{\mathrm{QQ}} = \mathrm{corr}(Q_{t-1}, Q_t),
+    \quad
+    r_{\mathrm{TQ}} = \mathrm{corr}(T_t, Q_t),
+\end{equation}
+and define the regime as
+\begin{equation}
+    \mathcal{R}_i = \arg\max\{r_{\mathrm{PQ}}, r_{\mathrm{QQ}}, r_{\mathrm{TQ}}\}.
+\end{equation}
+This regime label is then used as part of the model input.
+
+\subsubsection*{Training and evaluation protocol}
+
+Model performance is evaluated using Nash--Sutcliffe efficiency (NSE), mean squared error (MSE), and Kling--Gupta efficiency (KGE), with test NSE serving as the primary comparison metric. Evaluation is conducted on stations where the sparse-transformer benchmark achieves NSE greater than 0.5.
+
+For the selected stations, we report the mean NSE, mean MSE and mean KGE of both baseline and modified RF models, and perform a paired t-test on station-wise NSE differences.
+
+\subsection{Model Hyperparameters}
+\subsubsection{STEH}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Hyperparameter settings and search space}
+    \label{tab:hyperparameters}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llll}
+        \toprule
+        \textbf{Hyperparameter} & \textbf{Symbol} & \textbf{Description} & \textbf{Search Space} \\
+        \midrule
+        Learning rate & -- & Controls optimisation step size & $10^{-4}$ -- $10^{-2}$ \\
+        Batch size & $M$ & Number of samples per mini-batch & $32$ -- $256$ \\
+        Hidden size & -- & Dimension of hidden representations & $16$ -- $256$ \\
+        Number of layers & $N$ & Number of Transformer encoder layers & $1$ -- $16$ \\
+        Weight sparsity & $\rho$ & Sparsity level in weight pruning & $0.7$ -- $0.95$ \\
+        Activation sparsity & $\rho$ & Sparsity level for activations & $0.6$ -- $0.9$ \\
+        Gate regularisation & $\lambda_{\mathrm{gate}}$ & Strength of gate sparsity regularization & $10^{-5}$ -- $10^{-3}$ \\
+        \bottomrule
+    \end{tabular*}
+\end{table}
+
+\end{document}

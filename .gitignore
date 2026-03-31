@@ -1,0 +1,13 @@
+outputs
+*.pyc
+scripts
+.streamlit_cache
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.out
+*.synctex.gz
+*.toc
+*.blg
+*.bbl

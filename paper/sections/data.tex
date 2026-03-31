@@ -1,0 +1,32 @@
+\section{Data}
+This study uses the CAMELS-US dataset (\href{https://doi.org/10.1016/0022-1694(89)90184-4}{https://doi.org/10.1016/0022-1694(89)90184-4}), which provides daily hydro-meteorological time series for minimally disturbed catchments across the contiguous United States \cite{CAMELS}. The dataset is selected for three reasons: (1) the catchments are weakly affected by direct human regulation, which is suitable for identifying robust hydrological knowledge; (2) the long and standardized daily forcing-streamflow records are well suited to deep-learning time-series training and cross-basin comparison \cite{hess-camels}; and (3) the data organization is consistent with large-sample hydrology workflows, supporting reproducible model evaluation \cite{nearing2021role}. To ensure temporal consistency across stations, the common period from 1980-01-01 to 2014-12-31 is selected for analysis.
+
+Because the availability of streamflow records varies across stations, a unified quality-control procedure is applied within this period. Stations with more than 100 missing daily values in the target streamflow series are excluded, whereas stations with at most 100 missing days are retained and the missing values are filled using linear interpolation. After preprocessing, 521 stations remain for subsequent analysis. All retained stations provide multi-year continuous records over the common window (well beyond 20 years), ensuring sufficient sample size for deep-learning training.
+
+The model input variables are summarized in Table~\ref{tab:input_features}. For each station, seven daily meteorological forcing variables from Daymet are used, and daily streamflow is additionally incorporated to represent antecedent hydrological state knowledge.
+
+\begin{table}[htbp]
+	\centering
+	\caption{Selected Input Meteorological and Hydrological Variables}
+	\label{tab:input_features}
+	\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll}
+		\toprule
+		Group & Feature name & Unit \\
+		\midrule
+		\multirow{2}{*}{Energy} & day length (dayl) & s day$^{-1}$ \\
+		& shortwave radiation (srad) & W m$^{-2}$ \\
+		\multirow{2}{*}{Temperature} & maximum air temperature (tmax) & $^\circ$C \\
+		& minimum air temperature (tmin) & $^\circ$C \\
+		Atmospheric moisture & water vapour pressure (vp) & Pa \\
+		Precipitation & precipi tation (prcp) & mm day$^{-1}$ \\
+		Snow & snow water equivalent (swe) & mm \\
+		Runoff & streamflow (Q) & mm day$^{-1}$ \\
+		\bottomrule
+	\end{tabular*}
+\end{table}
+
+The prediction task is formulated as sequence-to-one regression. A sliding window of $L=15$ days is used to predict streamflow at the next time step.
+
+All features are standardized using training-set statistics. Data are split chronologically into training (70\%), validation (15\%), and test (15\%) subsets.
+
+The model is implemented in Python 3.10 using PyTorch, and all experiments are conducted on a Linux server equipped with NVIDIA CUDA-enabled GPUs. The three-stage training pipeline (dense pre-training, weight sparsification, mask learning) shares a single AdamW optimiser with weight decay. Hyperparameters are tuned via Bayesian optimisation\cite{BO_OPT}, with the search space covering learning rate ($10^{-4}$--$10^{-2}$), batch size (32--256), hidden size (16--256), number of layer (1--16), target weight sparsity (0.7--0.95), target activation sparsity (0.6--0.9), and mask regularisation strengths $\lambda_{\mathrm{mask}}$ and $\lambda_{\mathrm{in}}$ ($10^{-5}$--$10^{-3}$). The objective of Bayesian optimisation is the validation NSE, and the optimal configuration is then applied consistently across the three training stages and all subsequent explainability analyses reported in this study.
