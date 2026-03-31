@@ -7,7 +7,7 @@
 \usepackage{microtype}
 \usepackage{times}
 \usepackage[a4paper,margin=1in]{geometry}
-\usepackage[colorlinks=true,linkcolor=black,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
 \renewcommand{\figurename}{Fig.}
 \renewcommand{\tablename}{Table}
@@ -144,7 +144,7 @@ where $g_{\phi_i}$ and $g_{\psi_i}$ denote RF predictors with station-specific f
 
 \subsubsection*{Experiment design}
 
-During model training, the hyperparameters of both Random Forest models are optimized using Bayesian optimisation on the validation set, ensuring that performance differences are not attributable to discrepancies in tuning strategy.
+During model training, the hyperparameters of both Random Forest models are optimized using Bayesian optimisation on the validation set, ensuring that performance differences are not attributable to discrepancies in tuning strategy. Specifically, the tuned hyperparameters include tree depth ($\in [2, 8]$), the minimum number of samples required for node splitting ($\in [2, 8]$), the minimum number of samples at leaf nodes ($\in [1, 4]$), and the feature sampling ratio for split selection ($\in [0.5, 0.8]$), further information can be seen in Supplementary Notes \ref{sec:rfHyper}.
 
 The task is formulated as a one-step-ahead prediction problem, where a fixed 10-day input window is used to predict next-day discharge. Both baseline and modified models use the same input length ($L=10$). Data are split chronologically into training, validation, and testing sets with ratios of $0.7/0.15/0.15$, respectively, on a per-station basis.Both models use identical raw drivers, including precipitation, temperature, shortwave radiation, and antecedent discharge.
 
@@ -174,8 +174,13 @@ Model performance is evaluated using Nash--Sutcliffe efficiency (NSE), mean squa
 
 For the selected stations, we report the mean NSE, mean MSE and mean KGE of both baseline and modified RF models, and perform a paired t-test on station-wise NSE differences.
 
-\subsection{Model Hyperparameters}
-\subsubsection{STEH}
+\section{Model Hyperparameters}
+\subsection{STEH}
+
+Hyperparameters were systematically optimized within the predefined search spaces listed in Table \ref{tab:hyperparameters}, ensuring reproducibility and minimizing subjective bias.
+
+Due to the large number of study sites, reporting all optimized hyperparameter configurations in this Supplementary Information is impractical. Therefore, the complete set of best hyperparameters is provided in an repository for full transparency and reproducibility:\href{https://github.com/Polyethylenekjc/Sparse-Transformer-In-Streamflow-Prediction/blob/main/outcomes/STEH\_Best\_Hyperparams.csv}{https://github.com/Polyethylenekjc/Sparse-Transformer-In-Streamflow-Prediction/blob/main/outcomes/STEH\_Best\_Hyperparams.csv}
+
 
 \begin{table}[htbp]
     \centering
@@ -194,6 +199,32 @@ For the selected stations, we report the mean NSE, mean MSE and mean KGE of both
         Gate regularisation & $\lambda_{\mathrm{gate}}$ & Strength of gate sparsity regularization & $10^{-5}$ -- $10^{-3}$ \\
         \bottomrule
     \end{tabular*}
+\end{table}
+
+\subsection{Random Forest}
+\label{sec:rfHyper}
+Hyperparameters of the Random Forest models were systematically optimized using Bayesian optimisation within the predefined search spaces listed in Table \ref{tab:rf_hyperparameters}, ensuring reproducibility and minimizing subjective bias.
+
+Due to the large number of study sites, reporting all optimized hyperparameter configurations in this Supplementary Information is impractical. Therefore, the complete set of best hyperparameters is provided in a repository for full transparency and reproducibility: \href{https://github.com/Polyethylenekjc/Sparse-Transformer-In-Streamflow-Prediction/blob/main/outcomes/Rf\_Best\_Hyperparams.csv}{https://github.com/Polyethylenekjc/Sparse-Transformer-In-Streamflow-Prediction/blob/main/outcomes/Rf\_Best\_Hyperparams.csv}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Hyperparameter settings and search space for Random Forest}
+    \label{tab:rf_hyperparameters}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llll}
+        \toprule
+        \textbf{Hyperparameter} & \textbf{Symbol} & \textbf{Description} & \textbf{Search Space} \\
+        \midrule
+        Tree depth & $D$ & Max tree depth & $2$ -- $8$ \\
+        Min samples (split) & $n_{\mathrm{split}}$ & Min samples to split & $2$ -- $8$ \\
+        Min samples (leaf) & $n_{\mathrm{leaf}}$ & Min samples per leaf & $1$ -- $4$ \\
+        Feature ratio & $\alpha$ & Feature fraction per split & $0.5$ -- $0.8$ \\
+        \bottomrule
+    \end{tabular*}
+    
+    \vspace{2mm}
+    \footnotesize
+    \textit{Note:} ``Baseline'' refers to the standard Random Forest model without incorporating STEH-derived hydrological knowledge, while ``Modified'' denotes the Random Forest model augmented with STEH-informed structured features.
 \end{table}
 
 \end{document}
