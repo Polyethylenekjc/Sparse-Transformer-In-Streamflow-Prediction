@@ -11,3 +11,37 @@ The source code and processed datasets are available in the GitHub repository: \
 \section*{Declaration of Competing Interest}
 
 The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\begin{table}[htbp]
+\centeringIdentified consistentl
+\noindent\textbf{Appendix 1: Main Terminology Overview}
+\vspace{0.5em}
+\begin{tabularx}{\textwidth}{p{3cm} p{2cm} X}
+\toprule
+\textbf{Full Name} & \textbf{Abbreviation} & \textbf{Description} \\
+\midrule
+Physics-Informed Neural Networks & PINNs & Optimization constraint, emphasizes that predictions must obey physical laws, e.g., streamflow predictions satisfy mass conservation. \\
+Sparse Transformer for Explainable Hydrology & STEH & Architecture design, emphasizes sparse and analyzable internal paths, e.g., identifying paths responsible for evapotranspiration. \\
+Circuit & Circuit & Micro-level structure, emphasizes atomic function of specific computational units, e.g., a particular attention head responding to high-intensity rainfall. \\
+Structural & Structural & Macro-level architecture, emphasizes organization of model components (layers/heads), e.g., encoder hierarchy reflects rainfall-runoff time lag. \\
+Explainable AI & XAI & Overall goal, broad transparency and interpretability, e.g., understanding why the model predicts more accurately during drought periods. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\noindent\textbf{Appendix 2: Confusable Concepts and Verification Methods}
+\vspace{0.5em}
+\begin{tabularx}{\textwidth}{p{4cm} X}
+\toprule
+\textbf{Full Name} & \textbf{Verification / Implementation Method} \\
+\midrule
+Explainability & Post-hoc analysis (SHAP / LIME) or intrinsic structural analysis to understand model prediction behavior. \\
+Physical Structure Explainability & Structural sparsification + linear probing to verify whether internal computational paths correspond to physical quantities (e.g., soil moisture). \\
+Causal Contribution & Rigorous causal verification, including causal graphs / SEMs, intervention experiments (Do-Calculus), and counterfactual / A/B comparisons to ensure true causal effect from input to output. \\
+Structural Causal Contribution & Structured intervention + causal pathway verification + counterfactual comparison, to verify that internal components (attention heads, paths) are necessary and irreplaceable in the input–output causal chain. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier

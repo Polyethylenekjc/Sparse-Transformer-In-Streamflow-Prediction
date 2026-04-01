@@ -23,7 +23,7 @@ Finally, the interpretability results are validated from a hydrological perspect
 
 \subsection{Sparse Transformer Architecture}
 
-\subsubsection*{Transformer Formulation}
+\subsubsection{Transformer Formulation}
 
 The Transformer architecture has recently been introduced into hydrological time-series modelling because its self-attention mechanism can effectively capture long-range temporal dependencies in hydro-meteorological sequences\cite{LIU2024131389}. In streamflow prediction, antecedent rainfall, temperature, and soil moisture conditions jointly influence discharge responses across multiple time lags, making long-term dependency modelling particularly important\cite{li2024application}.
 
@@ -42,7 +42,7 @@ Hidden representations are updated through stacked Transformer encoder blocks\ci
 \end{equation}
 where $\mathbf{H}^{(l)}$ represents the hidden state of layer $l$, and $N$ denotes the number of encoder layers.
 
-\subsubsection*{Structured Gating Mechanism}
+\subsubsection{Structured Gating Mechanism}
 
 To enable circuit-level interpretability, structured gating mechanisms are introduced at three levels of the network architecture: input variables, attention heads, and feed-forward neurons\cite{louizos2018learningsparseneuralnetworks}. The effect of gate-based circuit selection is illustrated in Fig.~\ref{fig:sparseTransformer}(e--f).
 
@@ -55,7 +55,7 @@ where $\mathbf{m}_{\mathrm{in}}\in\{0,1\}^{F}$ is a binary mask indicating wheth
 
 Similarly, head-level and neuron-level masks are defined for each Transformer layer, denoted by $\mathbf{m}_{\mathrm{head}}^{(l)}$ and $\mathbf{m}_{\mathrm{neu}}^{(l)}$, respectively. These masks control the activation of attention heads and feed-forward neurons\cite{TFT}, enabling structured sparsification of the model.
 
-\subsubsection*{Sparse Training Strategy}
+\subsubsection{Sparse Training Strategy}
 
 Training is conducted in three consecutive stages to stabilize optimization and avoid premature pruning of potentially important connections\cite{NIPS2015_three_step_pruning}.
 
@@ -108,18 +108,18 @@ where $\tau$ is the pruning threshold. Applying this rule to all gates yields a 
 
 \subsection{Interpretability Analysis}
 
-\subsection*{Ablation-based Importance}
+\subsection*{(1) Ablation-based Importance}
 
-To quantify the causal importance of individual computational units, targeted ablation is applied to each candidate unit $u$~\cite{morcos2018importancesingledirectionsgeneralization}. The importance score is defined as
+To quantify the structural importance of individual computational units, targeted ablation is applied to each candidate unit $u$~\cite{morcos2018importancesingledirectionsgeneralization}. The importance score is defined as
 
 \begin{equation}
     \Delta \mathrm{MSE}_{u}=\mathrm{MSE}(\mathrm{ablate}(u))-\mathrm{MSE}(\mathrm{base}).
     \label{eq:Delta_MSE}
 \end{equation}
 
-Unlike gradient-based attribution methods, this intervention-based measurement directly evaluates the causal contribution of each component by observing the performance change after structural removal\cite{wang2022interpretabilitywildcircuitindirect}.
+Unlike gradient-based attribution methods, this intervention-based measurement directly evaluates the structural contribution of each component by observing the performance change after structural removal\cite{wang2022interpretabilitywildcircuitindirect}.
 
-\subsection*{Interaction Analysis}
+\subsection*{(2) Interaction Analysis}
 
 To analyze dependencies between components, pairwise interaction scores are defined as
 
@@ -130,11 +130,11 @@ To analyze dependencies between components, pairwise interaction scores are defi
 
 Positive values indicate synergistic interactions, whereas negative values suggest redundancy or functional substitution.
 
-\subsection*{Top-K Faithfulness}
+\subsection*{(3) Top-K Faithfulness}
 
 To evaluate the trade-off between circuit compactness and predictive fidelity, a top-$K$ faithfulness analysis is conducted by retaining only the most important units and measuring the resulting performance degradation\cite{7552539}.
 
-\subsection*{Physical Probing}
+\subsection*{(4) Physical Probing}
 
 To examine whether hidden representations encode physically meaningful hydrological information, linear probes are applied to hidden states\cite{pmlr-v97-verma19a}.
 

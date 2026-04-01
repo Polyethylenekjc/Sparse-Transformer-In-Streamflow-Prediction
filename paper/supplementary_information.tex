@@ -6,6 +6,8 @@
 \usepackage{caption}
 \usepackage{microtype}
 \usepackage{times}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage[a4paper,margin=1in]{geometry}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
@@ -15,7 +17,7 @@
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\theequation}{S\arabic{equation}}
 
-\title{Beyond Feature Attribution: Are Deep Learning Models Learning Hydrological Processes?}
+\title{A Deep Dive into Model Structure: Are Deep Learning Models Learning Hydrological Processes?}
 \author{}
 \date{}
 
@@ -32,14 +34,88 @@
 \end{titlepage}
 
 \clearpage
-\tableofcontents
+{\hypersetup{linkcolor=black}
+    \tableofcontents
+}
 
 \clearpage
 \pagenumbering{arabic}
 \setcounter{page}{1}
 \section{Experimental Design and Detailed Settings}
 
+\subsection{Learned Core Circuits Reflect Hydrological Knowledge Across Basins}
+\label{sec:knowledge}
+
+To analyze how learned core interaction circuits vary under different hydro-climatic conditions, we constructed multiple climate classification indicators based on static basin attributes, including aridity class, snow regime, and geo-climatic type. These classifications were used for post-hoc grouping and statistical analysis of interaction circuits across basins.
+
+\subsubsection*{Aridity Class}
+
+Dryness conditions were classified using the aridity index (\texttt{aridity}) through binning. The classification criteria are summarized in Table~\ref{tab:aridity_class}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Aridity-based hydro-climatic classification}
+    \label{tab:aridity_class}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll}
+        \toprule
+        \textbf{Aridity range} & \textbf{Class} & \textbf{Description} \\
+        \midrule
+        $-1 \le aridity < 0.65$ & Humid & Humid \\
+        $0.65 \le aridity < 1.0$ & Sub-humid & Sub-humid \\
+        $aridity \ge 1.0$ & Arid & Arid \\
+        \bottomrule
+    \end{tabular*}
+\end{table}
+
+The thresholds (0.65 and 1.0) follow established hydrological practices and effectively distinguish energy-limited from water-limited basins. They provide physically meaningful groupings for subsequent analysis of interaction circuit distributions.
+
+\subsubsection*{Snow Regime}
+
+Snow regime was classified based on snowfall fraction (\texttt{frac\_snow}) to distinguish rain-dominated, mixed, and snow-influenced basins, as summarized in Table~\ref{tab:snow_regime}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Snow regime classification based on snowfall fraction}
+    \label{tab:snow_regime}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll}
+        \toprule
+        \textbf{Fraction range} & \textbf{Class} & \textbf{Description} \\
+        \midrule
+        $-0.1 \le frac\_snow < 0.1$ & Rain-dominant & Rain-dominated \\
+        $0.1 \le frac\_snow < 0.3$ & Mixed & Mixed \\
+        $frac\_snow \ge 0.3$ & Snow-influenced & Snow-influenced \\
+        \bottomrule
+    \end{tabular*}
+\end{table}
+
+The selected thresholds (0.1 and 0.3) reflect the gradual transition from rain-driven to snow-driven runoff. Low snowfall fractions correspond to basins dominated by direct rainfall, whereas higher fractions indicate increasing importance of snow accumulation and melt processes.
+
+\subsubsection*{Geo-climatic Type}
+
+Geo-climatic type was determined using a hierarchical rule based on elevation (\texttt{forcing\_elev\_m}), longitude (\texttt{lon}), and aridity. The pseudocode is shown in Algorithm~\ref{alg:geo_climate}.
+
+\begin{algorithm}[htbp]
+    \caption{Hierarchical classification for geo-climatic type}
+    \label{alg:geo_climate}
+    \begin{algorithmic}[1]
+        \Require Elevation $forcing\_elev\_m$, Longitude $lon$, Aridity $aridity$
+        \Ensure Geo-climatic type $geo\_climate\_type$
+        \If{$forcing\_elev\_m \ge 1500$}
+        \State $geo\_climate\_type \gets \text{"Plateau/Mountain"}$
+        \ElsIf{$lon \le -120$}
+        \State $geo\_climate\_type \gets \text{"Oceanic"}$
+        \ElsIf{$aridity \ge 1.5$}
+        \State $geo\_climate\_type \gets \text{"Arid Continental"}$
+        \Else
+        \State $geo\_climate\_type \gets \text{"Humid Continental/Subtropical"}$
+        \EndIf
+    \end{algorithmic}
+\end{algorithm}
+
+This hierarchical classification first identifies high-elevation regions ($\geq 1500 m$), then distinguishes oceanic versus inland climates based on longitude, and finally separates arid continental basins using a higher aridity threshold (1.5). This approach provides a physically interpretable stratification of basins across major hydro-climatic regimes.
+
 \subsection{Supplementary Notes: Accurate Volume Response but Limited Sensitivity to Temporal and State Perturbations}
+\label{sec:sensitive}
 
 To examine whether the model encodes physically consistent hydrological sensitivities—rather than relying on spurious statistical correlations—we designed a station-wise counterfactual sensitivity framework on the test split. Let $f_{\theta}$ denote the trained sparse transformer, $\mathbf{X}_{i}\in\mathbb{R}^{N_i\times L\times F}$ the input tensor for station $i$ (with $N_i$ samples, lookback length $L$, and $F$ predictors), and $\mathbf{y}_{i}\in\mathbb{R}^{N_i}$ the observed discharge target. For each intervention setting $s$, we define
 \begin{equation}
@@ -131,7 +207,7 @@ For rainfall pattern redistribution and temperature perturbation, expected behav
 Finally, for each intervention family, station-level expectedness is aggregated by majority vote over its scenarios. Statistical significance of paired scenario effects is assessed by two-sided Wilcoxon signed-rank tests, with Benjamini--Hochberg correction for multiple comparisons.
 
 \subsection{STEH-Derived Interpretability Enhances Random Forest Predictive Performance}
-
+\label{sec:rfDesign}
 To evaluate whether the hydrological structures revealed by STEH can improve a conventional machine-learning benchmark, we designed a paired station-wise comparison between a \emph{baseline} Random Forest (RF) and a \emph{STEH-informed modified} RF. Both models are trained and tested on the same station, temporal split, and target variable, ensuring that any performance differences can be attributed to the STEH-derived design rather than inconsistencies in data or experimental setup.
 
 Let station index be $i\in\{1,\dots,M\}$, predictors $\mathbf{X}_i$, and discharge target $\mathbf{y}_i$. For each station, we train
@@ -186,17 +262,17 @@ Due to the large number of study sites, reporting all optimized hyperparameter c
     \centering
     \caption{Hyperparameter settings and search space}
     \label{tab:hyperparameters}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llll}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll}
         \toprule
-        \textbf{Hyperparameter} & \textbf{Symbol} & \textbf{Description} & \textbf{Search Space} \\
+        \textbf{Hyperparameter} & \textbf{Description} & \textbf{Search Space} \\
         \midrule
-        Learning rate & -- & Controls optimisation step size & $10^{-4}$ -- $10^{-2}$ \\
-        Batch size & $M$ & Number of samples per mini-batch & $32$ -- $256$ \\
-        Hidden size & -- & Dimension of hidden representations & $16$ -- $256$ \\
-        Number of layers & $N$ & Number of Transformer encoder layers & $1$ -- $16$ \\
-        Weight sparsity & $\rho$ & Sparsity level in weight pruning & $0.7$ -- $0.95$ \\
-        Activation sparsity & $\rho$ & Sparsity level for activations & $0.6$ -- $0.9$ \\
-        Gate regularisation & $\lambda_{\mathrm{gate}}$ & Strength of gate sparsity regularization & $10^{-5}$ -- $10^{-3}$ \\
+        Learning rate & Controls optimisation step size & $10^{-4}$ -- $10^{-2}$ \\
+        Batch size & Number of samples per mini-batch & $32$ -- $256$ \\
+        Hidden size & Dimension of hidden representations & $16$ -- $256$ \\
+        Number of layers & Number of Transformer encoder layers & $1$ -- $16$ \\
+        Weight sparsity & Sparsity level in weight pruning & $0.7$ -- $0.95$ \\
+        Activation sparsity & Sparsity level for activations & $0.6$ -- $0.9$ \\
+        Gate regularisation & Strength of gate sparsity regularization & $10^{-5}$ -- $10^{-3}$ \\
         \bottomrule
     \end{tabular*}
 \end{table}
@@ -211,17 +287,17 @@ Due to the large number of study sites, reporting all optimized hyperparameter c
     \centering
     \caption{Hyperparameter settings and search space for Random Forest}
     \label{tab:rf_hyperparameters}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llll}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll}
         \toprule
-        \textbf{Hyperparameter} & \textbf{Symbol} & \textbf{Description} & \textbf{Search Space} \\
+        \textbf{Hyperparameter} & \textbf{Description} & \textbf{Search Space} \\
         \midrule
-        Tree depth & $D$ & Max tree depth & $2$ -- $8$ \\
-        Min samples (split) & $n_{\mathrm{split}}$ & Min samples to split & $2$ -- $8$ \\
-        Min samples (leaf) & $n_{\mathrm{leaf}}$ & Min samples per leaf & $1$ -- $4$ \\
-        Feature ratio & $\alpha$ & Feature fraction per split & $0.5$ -- $0.8$ \\
+        Tree depth & Maximum tree depth & $2$ -- $8$ \\
+        Min samples (split) & Minimum number of samples required to split & $2$ -- $8$ \\
+        Min samples (leaf) & Minimum number of samples per leaf & $1$ -- $4$ \\
+        Feature ratio & Fraction of features considered per split & $0.5$ -- $0.8$ \\
         \bottomrule
     \end{tabular*}
-    
+
     \vspace{2mm}
     \footnotesize
     \textit{Note:} ``Baseline'' refers to the standard Random Forest model without incorporating STEH-derived hydrological knowledge, while ``Modified'' denotes the Random Forest model augmented with STEH-informed structured features.

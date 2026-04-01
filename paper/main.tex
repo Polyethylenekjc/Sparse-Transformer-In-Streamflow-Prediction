@@ -5,12 +5,15 @@
 \usepackage{graphicx}
 \usepackage{microtype}
 \usepackage{times}
-
+\usepackage{tabularx}
 \usepackage{booktabs}        
 \usepackage{multirow}        
 \usepackage{threeparttable}  
 \usepackage{float}          
-\usepackage{placeins}        
+\usepackage{placeins}    
+
+\usepackage{xr}
+\externaldocument{supplementary_information}
 
 \usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
@@ -21,7 +24,7 @@
 \captionsetup[table]{name=\textbf{Table}, labelsep=space}
 
 \raggedbottom
-\title{Beyond Feature Attribution: Do Deep Learning Models Learn Verifiable and Transferable Hydrological Knowledge?}
+\title{A Deep Dive into Model Structure: Do Deep Learning Models Learn Verifiable and Transferable Hydrological Knowledge?}
 
 \author{
 Jiachen Kong$^{1}$,
