@@ -75,8 +75,20 @@ Taken together, these results suggest that parsimony and physical interpretabili
 \begin{figure*}[htbp]
     \centering
     \includegraphics[width=\textwidth]{Figures/interaction_analysis.pdf}
-    \caption{(a) Spatial distribution of dominant interaction factors across basins. (b) Frequency of top interaction pairs. (c) Interaction composition under different aridity conditions. (d) Interaction composition across snow regimes. (e) Interaction composition across geo-climatic types.}
+    \caption{
+        \textbf{Spatial patterns of hydrological interaction regimes and their performance} (a,c,e) Spatial distribution of dominant interaction modes (e.g., P–Q, Q–Q$_{\mathrm{target}}$, and energy-related).
+        (b,d,f) NSE, interaction strength, and physical probe states for the corresponding interaction types.
+    }
     \label{fig:interaction_analysis}
+\end{figure*}
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Figures/circular_plot.pdf}
+    \caption{
+    Distribution of dominant interaction groups across different hydro-climatic regimes, including aridity levels, snow influence, and geo-climatic types.
+    }
+    \label{fig:interaction_circular}
 \end{figure*}
 
 To answer that question, we examine the spatial organization of the learned core interaction circuits. The results show that the model captures structured and regime-dependent hydrological knowledge across diverse basins\cite{hess-camels}. As shown in Fig.~\ref{fig:interaction_analysis}(a), the dominant interaction in most basins is between precipitation and discharge (P--Q), reflecting the fundamental role of precipitation as the primary driver of streamflow generation\cite{Berghuijs2014}. Importantly, this is not only a feature-attribution result; it indicates a recurrent hydrological mode in which rainfall forcing dominates the event-scale runoff pathway across many catchments. The detailed procedure for how we performed the classification can be found in the Supplementary Information~\ref{sec:knowledge}.
@@ -105,18 +117,17 @@ Under rainfall pattern redistribution (Fig.~\ref{fig:counterfactual_main}c), the
     \label{fig:counterfactual_main}
 \end{figure}
 
-\FloatBarrier
-
 For streamflow-state perturbations (Fig.~\ref{fig:counterfactual_main}d), moderate scaling of recent streamflow history leads to corresponding adjustments in predicted volume, while prediction error remains stable. This demonstrates that the model can effectively utilize state information while maintaining consistent predictive performance. As the scaling magnitude increases, however, the model response gradually saturates, with volume changes no longer increasing proportionally to the input. This attenuation behavior indicates that the model does not simply amplify streamflow magnitude linearly, but instead imposes constraints on non-structured or inconsistent input variations, thereby avoiding unrealistic over-amplification. Such behavior suggests that the model captures streamflow dynamics through interactions among multiple hydrological factors\cite{bloschl2017changing} rather than relying solely on absolute magnitude.
 
 For temperature perturbations (Fig.~\ref{fig:counterfactual_main}e), the predicted streamflow volume shows a slight decreasing trend, with consistent direction across snow-dominated and rainfall-dominated catchments and no significant difference between groups. This aligns with hydrological expectations that warming generally reduces streamflow through enhanced evapotranspiration or phase-related processes. In contrast, prediction error exhibits significantly different sensitivities between the two regimes: snow-dominated catchments show substantially stronger responses to temperature changes than rainfall-dominated ones\cite{milly2020colorado}, and this difference is consistent across warming magnitudes (p < 0.001). This suggests that the model not only captures the overall volumetric effects of temperature, but also differentiates between distinct hydrological knowledge patterns, reflecting sensitivity to process heterogeneity.
 
 Overall, the model demonstrates robust responses to precipitation-driven volume changes and shows sensitivity to temporal structure and catchment state variations\cite{LouiseSlater2024_XAI_Hydrology}, indicating effective learning of key hydrological knowledge. At the same time, the differing response patterns across perturbation types suggest that the representation of more complex processes, such as temporal organization and state evolution, remains an area for further improvement. This behavioral consistency supports the validity of the extracted knowledge, and naturally leads to the final question: \textit{can this knowledge be transferred to improve other model classes?}
 
+\FloatBarrier
 
 \subsection{Cross-Model Transfer Validates STEH-Derived Knowledge}
 
-To answer this final question, we evaluate transferability using an external model family. Specifically, we designed a comparative experiment in which STEH-derived structural information is incorporated into a conventional Random Forest model\cite{Stephan2015} and compared against a baseline model without such information. The key purpose is not only to improve another model, but to test whether the extracted structures represent model-independent hydrological knowledge that remains effective outside the Transformer architecture\cite{song2026physics}. 
+To answer this final question, we evaluate transferability using an external model family. Specifically, we designed a comparative experiment in which STEH-derived structural information is incorporated into a conventional Random Forest model\cite{Stephan2015} and compared against a baseline model without such information. The key purpose is not only to improve another model, but to test whether the extracted structures represent model-independent hydrological knowledge that remains effective outside the Transformer architecture\cite{song2026physics}.
 
 Furthermore, station-wise paired significance tests (paired t-test and Wilcoxon signed-rank test) demonstrate that the modified model significantly outperforms the baseline in a statistical sense, confirming the robustness of the observed improvements. Detailed descriptions of the model architecture, feature construction, and training and evaluation procedures are provided in Supplementary Information \ref{sec:rfDesign}.
 
