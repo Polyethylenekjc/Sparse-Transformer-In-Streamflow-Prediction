@@ -49,7 +49,7 @@ def _find_col(df: pd.DataFrame, candidates: List[str], allowed_cols: Optional[Li
         if k in norm_map:
             return norm_map[k]
 
-    # 仅对长度>=3的候选词做包含匹配，避免 "T" 命中 "date_utc" 这种误匹配
+    # Only use contains-matching for candidates of length >= 3 to avoid false hits like "T" in "date_utc".
     for c in cols:
         low = c.lower()
         tokens = [x for x in re.split(r"[^a-z0-9]+", low) if x]
@@ -84,11 +84,11 @@ def _load_station_data(config: ExperimentConfig) -> Tuple[pd.DataFrame, str, Lis
         elif forcing_ids:
             station_id = sorted(forcing_ids)[0]
         else:
-            raise FileNotFoundError("Forcing 目录下未找到 CSV 数据")
+            raise FileNotFoundError("No CSV files found under forcing directory")
 
     forcing_path = os.path.join(config.forcing_dir, f"{station_id}.csv")
     if not os.path.exists(forcing_path):
-        raise FileNotFoundError(f"找不到 forcing 文件: {forcing_path}")
+        raise FileNotFoundError(f"Forcing file not found: {forcing_path}")
 
     forcing_df = _maybe_parse_date(pd.read_csv(forcing_path))
 
@@ -99,7 +99,7 @@ def _load_station_data(config: ExperimentConfig) -> Tuple[pd.DataFrame, str, Lis
         if q_stream_col is None:
             numeric_stream_cols = [c for c in stream_df.columns if pd.api.types.is_numeric_dtype(stream_df[c])]
             if len(numeric_stream_cols) == 0:
-                raise ValueError(f"streamflow 文件缺少数值列: {stream_path}")
+                raise ValueError(f"Streamflow file has no numeric columns: {stream_path}")
             q_stream_col = numeric_stream_cols[0]
 
         target_col = "target_q"
@@ -113,7 +113,7 @@ def _load_station_data(config: ExperimentConfig) -> Tuple[pd.DataFrame, str, Lis
             min_len = min(len(forcing_df), len(stream_df))
             merged = pd.concat([forcing_df.iloc[:min_len].reset_index(drop=True), stream_df.iloc[:min_len].reset_index(drop=True)], axis=1)
     else:
-        raise FileNotFoundError(f"找不到 streamflow 文件: {stream_path}")
+        raise FileNotFoundError(f"Streamflow file not found: {stream_path}")
 
     return merged, station_id, list(forcing_df.columns), target_col
 
@@ -128,11 +128,11 @@ def _build_feature_target(
     forcing_numeric_cols = [c for c in forcing_cols if c in df.columns and pd.api.types.is_numeric_dtype(df[c])]
 
     if target_col not in df.columns:
-        raise ValueError(f"目标流量列不存在: {target_col}")
+        raise ValueError(f"Target streamflow column does not exist: {target_col}")
 
     used_cols = list(dict.fromkeys(forcing_numeric_cols))
     if len(used_cols) == 0:
-        raise ValueError("Forcing 中没有可用数值特征列")
+        raise ValueError("No usable numeric feature columns found in forcing data")
 
     if config.include_streamflow_history_input and target_col not in used_cols:
         used_cols.append(target_col)
@@ -174,7 +174,7 @@ def _make_windows(
         y_list.append(target_norm[i + seq_len + pred_horizon - 1])
 
     if not x_list:
-        raise ValueError("样本太短，无法构建时序窗口，请减小 seq_len 或检查数据")
+        raise ValueError("Samples are too short to build sequence windows; reduce seq_len or check data")
 
     return np.stack(x_list), np.array(y_list, dtype=np.float32)
 
@@ -206,7 +206,7 @@ def _synthetic_data(config: ExperimentConfig):
 
 def load_data(config: ExperimentConfig) -> DataBundle:
     if not os.path.exists(config.forcing_dir):
-        raise FileNotFoundError("forcing 目录不存在")
+        raise FileNotFoundError("Forcing directory does not exist")
 
     merged_df, station_id, forcing_cols, target_col = _load_station_data(config)
     feat_norm, q_norm, q_raw, meta, clean_df = _build_feature_target(

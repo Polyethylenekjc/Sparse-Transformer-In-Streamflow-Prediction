@@ -4,9 +4,9 @@ from typing import List, Optional
 
 @dataclass
 class ExperimentConfig:
-    """配置对象：集中管理模型、训练、稀疏和可解释性实验参数。"""
+    """Central configuration for model, training, sparsity, and explainability settings."""
 
-    # 数据参数
+    # Data settings
     data_root: str = "data"
     forcing_dir: str = "data/Forcing"
     streamflow_dir: str = "data/Streamflow"
@@ -14,7 +14,7 @@ class ExperimentConfig:
     seq_len: int = 15
     pred_horizon: int = 1
 
-    # 输入字段（会做容错匹配）
+    # Input-field candidates (matched with tolerant fallback logic)
     rainfall_col_candidates: List[str] = field(default_factory=lambda: ["P", "prcp", "precip", "rain"])
     temp_col_candidates: List[str] = field(default_factory=lambda: ["T", "tmean", "temp"])
     pet_col_candidates: List[str] = field(default_factory=lambda: ["PET", "pet", "evap"])
@@ -23,19 +23,19 @@ class ExperimentConfig:
     streamflow_col_candidates: List[str] = field(default_factory=lambda: ["Q", "streamflow", "flow"])
     include_streamflow_history_input: bool = True
 
-    # 任务参数
+    # Task settings
     task_type: str = "regression"  # regression | classification
     flood_quantile_threshold: float = 0.9
     nse_threshold: float = 0.5
 
-    # 模型参数
+    # Model settings
     d_model: int = 128
     n_heads: int = 4
     num_layers: int = 3
     d_ff: int = 256
     dropout: float = 0.1
 
-    # 稀疏参数
+    # Sparsity settings
     enable_weight_sparsity: bool = True
     enable_activation_sparsity: bool = True
     target_weight_sparsity: float = 0.9
@@ -46,7 +46,7 @@ class ExperimentConfig:
     weight_topk_mode: str = "neuronwise"  # global | neuronwise
     minimum_alive_per_neuron: int = 2
 
-    # 电路 mask 正则
+    # Circuit-mask regularization
     enable_learnable_masks: bool = True
     lambda_mask_l1: float = 1e-4
     lambda_input_mask_l1: float = 1e-4
@@ -56,7 +56,7 @@ class ExperimentConfig:
     edge_ablation_topk: int = 0
     in_node_bridge_max_nodes: int = 32
 
-    # 训练参数
+    # Training settings
     seed: int = 42
     epochs_dense: int = 10
     epochs_sparse: int = 10
@@ -67,11 +67,11 @@ class ExperimentConfig:
     train_ratio: float = 0.7
     val_ratio: float = 0.15
 
-    # 输出
+    # Output settings
     output_dir: str = "outputs"
     device: str = "cpu"
 
-    # 调试与日志
+    # Debugging and logging
     debug: bool = False
     use_rich_progress: bool = True
     log_every: int = 20

@@ -7,10 +7,10 @@ import torch
 
 
 def compute_topk_threshold(weight: torch.Tensor, sparsity_ratio: float) -> Optional[torch.Tensor]:
-    """根据目标稀疏率计算幅值阈值。
+    """Compute magnitude threshold from target sparsity ratio.
 
-    定义：保留比例为 (1 - sparsity_ratio)，阈值取第 k 大绝对值，其中
-    k = max(1, int((1 - sparsity_ratio) * N))，N 为元素总数。
+    Definition: keep ratio = (1 - sparsity_ratio); threshold is the k-th largest absolute value, where
+    k = max(1, int((1 - sparsity_ratio) * N)), where N is the total number of elements.
     """
     if sparsity_ratio <= 0 or sparsity_ratio >= 1:
         return None
@@ -33,11 +33,11 @@ def update_sparsity(
     mode: str = "cosine",
     exponent: int = 2,
 ) -> float:
-    """按训练步数退火稀疏率。
+    """Anneal sparsity ratio by training step.
 
-    设计：
-    - 先 warmup 保持 dense（稀疏率为 0）
-    - 后续采用余弦退火平滑过渡到 target_sparsity
+    Design:
+    - Keep dense during warmup (sparsity ratio = 0)
+    - Then use cosine annealing to smoothly reach target_sparsity
     """
     if total_steps <= 0:
         return target_sparsity
@@ -61,7 +61,7 @@ def update_sparsity(
 
 
 def apply_topk_sparsity(weight: torch.Tensor, sparsity_ratio: float) -> torch.Tensor:
-    """对任意张量施加 Top-K 稀疏：保留绝对值最大的 K 个元素，其余置零。"""
+    """Apply Top-K sparsity to any tensor: keep K largest absolute values, zero out the rest."""
     if sparsity_ratio <= 0:
         return weight
     if sparsity_ratio >= 1:
@@ -78,7 +78,7 @@ def apply_topk_sparsity(weight: torch.Tensor, sparsity_ratio: float) -> torch.Te
 def ste_binary_mask(mask_logits: torch.Tensor) -> torch.Tensor:
     """Sigmoid + Straight-Through Estimator.
 
-    前向使用 hard 二值化，反向保留 sigmoid 梯度。
+    Use hard binarization in forward pass and keep sigmoid gradient in backward pass.
     """
     probs = torch.sigmoid(mask_logits)
     hard = (probs >= 0.5).float()
@@ -86,7 +86,7 @@ def ste_binary_mask(mask_logits: torch.Tensor) -> torch.Tensor:
 
 
 def topk_activation(x: torch.Tensor, sparsity_ratio: float) -> torch.Tensor:
-    """在 batch 维保持不变的前提下，对最后一维做逐样本 Top-K 激活稀疏。"""
+    """Apply per-sample Top-K activation sparsity on the last dimension while preserving batch dimension."""
     if sparsity_ratio <= 0:
         return x
     if sparsity_ratio >= 1:
@@ -109,15 +109,15 @@ def apply_topk_sparsity_neuronwise(
     neuron_dim: int,
     minimum_alive_per_neuron: int = 0,
 ) -> torch.Tensor:
-    """按神经元维度做 Top-K 稀疏。
+    """Apply Top-K sparsity along neuron dimension.
 
-    设 weight 为二维，neuron_dim 表示每个神经元所在维度：
-    - neuron_dim=0: 每一行是一个神经元
-    - neuron_dim=1: 每一列是一个神经元
+    Assume weight is 2D; neuron_dim indicates which axis indexes neurons:
+    - neuron_dim=0: each row is one neuron
+    - neuron_dim=1: each column is one neuron
 
-    该函数模仿 circuit_sparsity 的核心思路：
-    - 全局目标稀疏率
-    - 可额外保证每个神经元至少保留 minimum_alive_per_neuron 条连接
+    This function follows the core idea of circuit_sparsity:
+    - global target sparsity ratio
+    - can additionally enforce at least minimum_alive_per_neuron connections per neuron
     """
     if weight.dim() != 2:
         return apply_topk_sparsity(weight, sparsity_ratio)

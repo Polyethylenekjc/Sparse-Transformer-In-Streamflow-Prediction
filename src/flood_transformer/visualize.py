@@ -77,7 +77,7 @@ def save_attention_statistics(attn_stats: Dict[str, np.ndarray | float], output_
 
 
 def save_circuit_graph(circuit: Dict[str, List], output_dir: str) -> str:
-    """将最小电路可视化为简图。"""
+    """Visualize the minimal circuit as a simplified graph."""
     os.makedirs(output_dir, exist_ok=True)
     path = os.path.join(output_dir, "circuit_graph.png")
 
@@ -96,7 +96,7 @@ def save_circuit_graph(circuit: Dict[str, List], output_dir: str) -> str:
             n_idx = np.where(np.asarray(n_mask) > 0)[0]
 
             head_nodes = [f"L{l}_H{int(i)}" for i in h_idx]
-            neuron_nodes = [f"L{l}_N{int(i)}" for i in n_idx[:20]]  # 过多神经元时做截断显示
+            neuron_nodes = [f"L{l}_N{int(i)}" for i in n_idx[:20]]  # Truncate display when there are too many neurons.
 
             for node in head_nodes + neuron_nodes:
                 g.add_node(node)
@@ -123,7 +123,7 @@ def save_circuit_graph(circuit: Dict[str, List], output_dir: str) -> str:
         plt.close()
         return path
     except Exception:
-        # 回退：至少输出一个占位图
+        # Fallback: emit at least one placeholder figure.
         plt.figure(figsize=(6, 3))
         plt.text(0.05, 0.6, "Circuit graph rendering requires networkx.", fontsize=12)
         plt.text(0.05, 0.3, "Install: pip install networkx", fontsize=10)

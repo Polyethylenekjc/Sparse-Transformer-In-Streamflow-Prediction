@@ -321,7 +321,7 @@ def _configure_kaleido_chrome(chrome_path: str) -> None:
 def _show_export_studio(fig: go.Figure, chart_key: str, default_file_name: str) -> None:
     pop = st.popover(f"Open Export Studio: {default_file_name}", use_container_width=False)
     with pop:
-        st.caption("弹出调试面板：修改参数后点击 Update Preview，避免主界面频繁重渲染。")
+        st.caption("text text text text text text：text text text text text click Update Preview，text text text text text text text text text text。")
 
         traces = list(fig.data)
         trace_options = [_trace_label(i, tr) for i, tr in enumerate(traces)]
@@ -447,7 +447,7 @@ def _show_export_studio(fig: go.Figure, chart_key: str, default_file_name: str) 
                 st.session_state[preview_format_key] = out_format
                 st.error(f"Export failed. Details: {e}")
                 st.info(
-                    "请在 WSL 环境安装 Linux Chrome/Chromium，并在此填写其可执行路径（例如 /usr/bin/google-chrome）。"
+                    "text text WSL text text text text Linux Chrome/Chromium，text text text text text text text text text text text（text text /usr/bin/google-chrome）。"
                 )
 
         preview_to_show = st.session_state.get(preview_state_key)
@@ -642,13 +642,13 @@ def build_circuit_edges(
 
             last_nodes = n_nodes if n_nodes else h_nodes
         elif n_nodes:
-            # 当该层没有激活 head 时，使用旁路连接保持层间连续
+            # text text text text text text text head text，text text text text text text text text text text text text
             for src in last_nodes:
                 for dst in n_nodes:
                     edges.append((src, dst))
             last_nodes = n_nodes
         else:
-            # 该层完全被剪空：保持 last_nodes 不变，后续层继续连接
+            # text text text text text text text：text text last_nodes text text，text text text text text text text
             continue
 
     nodes.append("OUT:Q")
@@ -682,7 +682,7 @@ def build_node_importance(
         for k in imp:
             imp[k] = imp[k] / max_imp
 
-    # 输入节点没有直接消融分数：用第一层 head 的平均重要性近似
+    # input node text text text text text text text text：text text text text head text text text text text text text text
     first_layer_heads = [v for k, v in imp.items() if k.startswith("L0.H")]
     approx_input = float(np.mean(first_layer_heads)) if first_layer_heads else 0.2
     for n in nodes:
@@ -702,7 +702,7 @@ def build_edge_importance(
     for s, t in edges:
         sv = float(node_importance.get(s, 0.0))
         tv = float(node_importance.get(t, 0.0))
-        # 连线重要性：源节点与目标节点的重要性几何平均
+        # text text text text text：text node text target node text text text text text text text text
         edge_imp[(s, t)] = float(np.sqrt(max(0.0, sv * tv)))
     return edge_imp
 
@@ -737,7 +737,7 @@ def merge_edge_importance(
     heuristic_imp: Dict[Tuple[str, str], float],
     real_weight: float = 0.8,
 ) -> Dict[Tuple[str, str], float]:
-    """融合真实边消融分数与启发式分数，避免仅少数边有颜色。"""
+    """text text text text edge text text text text text text text text text text，text text text text text edge text color。"""
     w = float(max(0.0, min(1.0, real_weight)))
     out: Dict[Tuple[str, str], float] = {}
     for e in edges:
@@ -778,15 +778,15 @@ def _normalize_scores(scores: List[float], mode: str) -> List[float]:
 
 
 def _enhance_mode_key(label: str) -> str:
-    if label in ["按层排序渐变（新）", "排序增强"]:
+    if label in ["text text text text text text（text）", "text text text text"]:
         return "rank"
-    if label == "分位数增强":
+    if label == "text text text text text":
         return "quantile"
     return "linear"
 
 
 def _edge_layer_id(src: str, dst: str) -> int:
-    # 连线归属：优先使用目标层，便于表达“进入某层的重要边”
+    # text text text text：text text text text target text，text text text text“text text text text text text text edge”
     return _node_visual_layer(dst)
 
 
@@ -834,9 +834,9 @@ def _layer_rank_fade(scores: List[float], top_ratio: float = 0.2, sharpness: flo
 
 def _score_to_blue_gray(score: float, alpha_min: float = 0.38, alpha_max: float = 0.92) -> str:
     score = float(max(0.0, min(1.0, score)))
-    c_hi = np.array([26.0, 86.0, 219.0], dtype=float)   # 深蓝
-    c_mid = np.array([120.0, 180.0, 245.0], dtype=float)  # 浅蓝
-    c_lo = np.array([220.0, 224.0, 230.0], dtype=float)   # 淡灰
+    c_hi = np.array([26.0, 86.0, 219.0], dtype=float)   # text text
+    c_mid = np.array([120.0, 180.0, 245.0], dtype=float)  # text text
+    c_lo = np.array([220.0, 224.0, 230.0], dtype=float)   # text text
 
     if score >= 0.5:
         t = (score - 0.5) / 0.5
@@ -985,7 +985,7 @@ def build_circuit_figure(
     fig = go.Figure()
     edge_importance = edge_importance or {}
 
-    # 按层排序 + 非线性衰减：前 top_ratio 明显，其余快速变灰
+    # text text text text + text linear text text：text top_ratio text text，text text text text text text
     layer_scores: Dict[int, List[float]] = {}
     for (a, b) in edges:
         layer = _edge_layer_id(a, b)
@@ -1373,11 +1373,11 @@ def _scale_signed_array(values: np.ndarray, mode: str) -> np.ndarray:
 
 def _scale_label(mode: str) -> str:
     mapping = {
-        "raw": "原始值",
-        "signed_log": "符号对数",
+        "raw": "raw",
+        "signed_log": "signed log",
         "zscore": "Z-Score",
-        "robust": "稳健缩放(IQR)",
-        "abs_norm": "绝对值归一化",
+        "robust": "robust scaling(IQR)",
+        "abs_norm": "abs normalization",
     }
     return mapping.get(mode, mode)
 
@@ -1390,7 +1390,7 @@ def variable_mechanism_sankey(
     if not var_interaction or not isinstance(var_interaction.get("single_delta"), dict):
         return go.Figure()
 
-    # 过滤掉目标流量变量 Qtar（使用缩写判断以覆盖不同原始命名）
+    # text text text target text text variable Qtar（text text text text text text text text text text text text text text text）
     def _is_qtar_name(n: str) -> bool:
         try:
             return _abbr_feature(str(n)) == "Qtar"
@@ -1398,7 +1398,7 @@ def variable_mechanism_sankey(
             return False
 
     single_raw = {k: float(v) for k, v in var_interaction.get("single_delta", {}).items()}
-    # 删除目标流量变量 Qtar
+    # text text target text text variable Qtar
     single = {k: v for k, v in single_raw.items() if not _is_qtar_name(k)}
     pairs = var_interaction.get("pair_ranking", []) or []
 
@@ -1407,21 +1407,21 @@ def variable_mechanism_sankey(
     single_scaled_vals = _scale_signed_array(single_vals, scale_mode)
     single_scaled = {k: float(v) for k, v in zip(single_keys, single_scaled_vals)}
 
-    # 构建节点：变量、交互对、输出，所有展示均为缩写
+    # text text node：variable、interaction text、output，text text text text text text text text
     pair_rows = sorted(pairs, key=lambda d: abs(float(d.get("interaction", 0.0))), reverse=True)[:top_pairs]
-    # 过滤掉包含目标流量变量 Qtar 的 pair
+    # text text text text text target text text variable Qtar text pair
     pair_rows = [r for r in pair_rows if not (_is_qtar_name(r.get("var_i")) or _is_qtar_name(r.get("var_j")))]
     pair_inter_vals = np.asarray([float(r.get("interaction", 0.0)) for r in pair_rows], dtype=float)
     pair_inter_scaled = _scale_signed_array(pair_inter_vals, scale_mode)
 
-    # 原始变量名 -> 缩写 映射
+    # text text variable text -> text text text text
     abbr_map = {n: _abbr_feature(n) for n in single_keys}
     var_nodes = [abbr_map[n] for n in single_keys]
     pair_nodes = [f"{_abbr_feature(str(r['var_i']))}×{_abbr_feature(str(r['var_j']))}" for r in pair_rows]
     out_node = "Q"
 
     labels = var_nodes + pair_nodes + [out_node]
-    # 建立从原始名到索引的映射（用于 src/dst 构建）
+    # text text text text text text text text text text text text（text text src/dst text text）
     idx = {}
     for i, n in enumerate(single_keys):
         idx[n] = i
@@ -1432,23 +1432,23 @@ def variable_mechanism_sankey(
 
     src, dst, val, color = [], [], [], []
 
-    # 变量 -> 输出（单变量影响） — 使用更显色但更透明的连线颜色
+    # variable -> output（text variable text text） — text text text text text text text text text text text text color
     for vname, dv in single_scaled.items():
         src.append(idx[vname])
         dst.append(idx[out_node])
         val.append(abs(dv) + 1e-6)
         color.append("rgba(100,100,180,0.45)")
 
-    # 变量 -> 交互项 -> 输出
+    # variable -> interaction text -> output
     for pair_idx, (row, pnode, inter_scaled) in enumerate(zip(pair_rows, pair_nodes, pair_inter_scaled)):
         vi = str(row["var_i"])
         vj = str(row["var_j"])
         inter = float(row.get("interaction", 0.0))
         w = abs(float(inter_scaled)) + 1e-6
-        # 正负交互颜色，降低透明度以避免背景过重
+        # text text interaction color，text text text text text text text text text text text text
         c = "rgba(214,39,40,0.45)" if inter >= 0 else "rgba(31,119,180,0.45)"
 
-        # pair 节点使用 PAIR: 索引映射
+        # pair node text text PAIR: text text text text
         src.extend([idx[vi], idx[vj], idx[f"PAIR:{pair_idx}"]])
         dst.extend([idx[f"PAIR:{pair_idx}"], idx[f"PAIR:{pair_idx}"], idx[out_node]])
         val.extend([w * 0.5, w * 0.5, w])
@@ -1470,9 +1470,9 @@ def variable_mechanism_sankey(
             )
         ]
     )
-    # 使用更清新的字体与较浅的文字颜色
+    # text text text text text text text text text text text text text text color
     fig.update_layout(
-        title=f"变量→交互→流量 机制链路图（{_scale_label(scale_mode)}）",
+        title=f"text→text→text text（{_scale_label(scale_mode)}）",
         height=520,
         font=dict(family="Times New Roman", color="#444444"),
     )
@@ -1782,7 +1782,7 @@ def structural_mechanism_sankey(
         ]
     )
     fig.update_layout(
-        title="结构强度版本：变量-交互-流量机制链路",
+        title="structural strength text text：variable-interaction-text text mechanism pathway",
         height=540,
         font=dict(family="Times New Roman", color="#2f2f2f"),
     )
@@ -1973,7 +1973,7 @@ def structural_chord_figure(
     )
 
     fig.update_layout(
-        title="结构强度圆形交互图（Chord-like）",
+        title="structural strength text text interaction plot（Chord-like）",
         height=700,
         xaxis=dict(visible=False, range=[-1.45, 1.45]),
         yaxis=dict(visible=False, range=[-1.35, 1.55], scaleanchor="x", scaleratio=1),
@@ -2071,13 +2071,13 @@ def collapse_attention_heads(
 
     merged: Dict[Tuple[str, str], float] = {}
 
-    # 保留原本不经过 head 的边
+    # text text text text text text text head text edge
     for s, t in edges:
         if s in head_nodes or t in head_nodes:
             continue
         merged[(s, t)] = merged.get((s, t), 0.0) + float(edge_importance.get((s, t), 0.0))
 
-    # 将 p->head->q 折叠为 p->q，避免后续层被省略
+    # text p->head->q text text text p->q，text text text text text text text text
     for h in head_nodes:
         preds = [p for p in in_map.get(h, []) if p != h and p not in head_nodes]
         succs = [q for q in out_map.get(h, []) if q != h and q not in head_nodes]
@@ -2171,7 +2171,7 @@ def _expand_with_neighbors(selected: Set[str], edges: List[Tuple[str, str]]) -> 
 
     out = set(selected)
 
-    # 仅向上游追溯到 IN：不在中途反向扩展
+    # text text text text text text text IN：text text text text text text text text
     up_visited = set(selected)
     up_queue = list(selected)
     while up_queue:
@@ -2187,7 +2187,7 @@ def _expand_with_neighbors(selected: Set[str], edges: List[Tuple[str, str]]) -> 
             if not p.startswith("IN:"):
                 up_queue.append(p)
 
-    # 仅向下游延伸到 OUT：不在中途反向扩展
+    # text text text text text text text OUT：text text text text text text text text
     down_visited = set(selected)
     down_queue = list(selected)
     while down_queue:
@@ -2256,7 +2256,7 @@ def build_fig4_picker(
     )
 
     fig.update_layout(
-        title="点击选择节点（自动包含上下游一跳）",
+        title="click select node（text text text text text text text text text）",
         xaxis=dict(visible=False),
         yaxis=dict(visible=False),
         height=480,
@@ -2525,7 +2525,7 @@ def _build_station_overview(output_root: str, signatures: Tuple[Tuple[str, float
 
 
 def _render_station_overview(output_root: str):
-    st.subheader("站点总览与筛选")
+    st.subheader("station overview text filter")
 
     required_cols_with_default: Dict[str, Any] = {
         "station_id": "",
@@ -2552,9 +2552,9 @@ def _render_station_overview(output_root: str):
 
     c_cache1, c_cache2, c_cache3 = st.columns([1.5, 1.2, 3.3])
     with c_cache1:
-        use_disk_cache = st.checkbox("优先使用磁盘缓存", value=True)
+        use_disk_cache = st.checkbox("text text text text text text cache", value=True)
     with c_cache2:
-        rebuild_clicked = st.button("重建索引缓存")
+        rebuild_clicked = st.button("rebuild text text cache")
 
     if rebuild_clicked:
         st.cache_data.clear()
@@ -2572,7 +2572,7 @@ def _render_station_overview(output_root: str):
             cache_source = "fresh"
 
     if len(overview) == 0:
-        st.info("站点索引为空。")
+        st.info("station text text text text。")
         return
 
     # Backward compatibility: old disk caches may not contain newly added columns.
@@ -2583,38 +2583,38 @@ def _render_station_overview(output_root: str):
     with c_cache3:
         if cache_time is not None:
             ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(cache_time))
-            src_text = "磁盘缓存" if cache_source == "disk" else "重建缓存" if cache_source == "rebuilt" else "新扫描"
-            st.caption(f"当前索引来源: {src_text} | 更新时间: {ts}")
+            src_text = "text text cache" if cache_source == "disk" else "rebuild cache" if cache_source == "rebuilt" else "text text text"
+            st.caption(f"text: {src_text} | text: {ts}")
         else:
-            st.caption("当前索引来源: 新扫描")
+            st.caption("current text text text text: text text text")
 
     # Row 1: core filters
     f1, f2, f3, f4, f5 = st.columns([2.0, 2.2, 1.2, 1.6, 1.6])
     with f1:
-        query = st.text_input("搜索站点ID", value="", key="overview_query")
+        query = st.text_input("text text stationID", value="", key="overview_query")
     with f3:
-        pass_filter = st.selectbox("NSE通过", options=["全部", "通过", "未通过"], index=0)
+        pass_filter = st.selectbox("NSEpass", options=["text text", "pass", "fail"], index=0)
     with f4:
         factor_options = sorted([x for x in overview["top_factor"].dropna().unique().tolist() if str(x).strip()])
-        factor_filter = st.multiselect("因果主要因素", options=factor_options)
+        factor_filter = st.multiselect("causal text text text text", options=factor_options)
     with f5:
         struct_factor_options = sorted([x for x in overview["top_factor_struct"].dropna().unique().tolist() if str(x).strip()])
-        struct_factor_filter = st.multiselect("结构主要因素", options=struct_factor_options)
+        struct_factor_filter = st.multiselect("structural text text text text", options=struct_factor_options)
 
     # Row 2: visualization clipping controls
     cclip1, cclip2, cclip3, cclip4, cclip5, cclip6 = st.columns([1.3, 1.0, 1.0, 1.3, 1.0, 1.0])
     with cclip1:
-        clip_nse_for_viz = st.checkbox("裁剪NSE可视化", value=True, help="仅影响总览筛选与图表显示，不修改原始NSE")
+        clip_nse_for_viz = st.checkbox("text textNSEvisualization", value=True, help="text text text overview filter text plot text show，text text text text textNSE")
     with cclip2:
-        nse_floor = st.number_input("NSE下限", value=-5.0, step=0.5)
+        nse_floor = st.number_input("NSElower bound", value=-5.0, step=0.5)
     with cclip3:
-        nse_ceiling = st.number_input("NSE上限", value=1.0, step=0.1)
+        nse_ceiling = st.number_input("NSEupper bound", value=1.0, step=0.1)
     with cclip4:
-        clip_probe_for_viz = st.checkbox("裁剪Probe可视化", value=True, help="仅影响probe相关图表显示，不修改原始R²")
+        clip_probe_for_viz = st.checkbox("text textProbevisualization", value=True, help="text text textprobetext text plot text show，text text text text textR²")
     with cclip5:
-        probe_floor = st.number_input("Probe下限", value=-1.0, step=0.5)
+        probe_floor = st.number_input("Probelower bound", value=-1.0, step=0.5)
     with cclip6:
-        probe_ceiling = st.number_input("Probe上限", value=1.0, step=0.1)
+        probe_ceiling = st.number_input("Probeupper bound", value=1.0, step=0.1)
 
     # Build viz columns
     overview["nse_viz"] = pd.to_numeric(overview["nse"], errors="coerce")
@@ -2636,7 +2636,7 @@ def _render_station_overview(output_root: str):
         if len(nse_series) > 0:
             lo = float(np.floor(nse_series.min() * 100.0) / 100.0)
             hi = float(np.ceil(nse_series.max() * 100.0) / 100.0)
-            nse_range = st.slider("NSE 区间", min_value=lo, max_value=hi, value=(lo, hi), step=0.01)
+            nse_range = st.slider("NSE range", min_value=lo, max_value=hi, value=(lo, hi), step=0.01)
         else:
             nse_range = (-1e9, 1e9)
 
@@ -2644,9 +2644,9 @@ def _render_station_overview(output_root: str):
     if query.strip():
         mask &= overview["station_id"].astype(str).str.contains(query.strip(), case=False, regex=False)
     mask &= overview["nse_viz"].fillna(-1e9).between(float(nse_range[0]), float(nse_range[1]))
-    if pass_filter == "通过":
+    if pass_filter == "pass":
         mask &= overview["nse_pass"].fillna(False)
-    elif pass_filter == "未通过":
+    elif pass_filter == "fail":
         mask &= ~overview["nse_pass"].fillna(False)
     if factor_filter:
         mask &= overview["top_factor"].isin(factor_filter)
@@ -2655,7 +2655,7 @@ def _render_station_overview(output_root: str):
 
     filtered = overview.loc[mask].copy()
     filtered = filtered.sort_values(["nse", "station_id"], ascending=[False, True])
-    st.caption(f"当前筛选结果: {len(filtered)} / {len(overview)} 个站点")
+    st.caption(f"text: {len(filtered)} / {len(overview)} text")
 
     display_cols = [
         "station_id", "nse", "nse_pass", "rmse", "mae", "feature_count",
@@ -2664,26 +2664,26 @@ def _render_station_overview(output_root: str):
     ]
     st.dataframe(filtered[display_cols], use_container_width=True, height=460)
 
-    st.markdown("### 总览可视化")
+    st.markdown("### overview visualization")
     g1, g2 = st.columns(2)
     with g1:
         causal_counts = filtered["top_factor"].dropna().astype(str)
         if len(causal_counts) > 0:
             vc = causal_counts.value_counts().head(12)
             fig = go.Figure(go.Bar(x=vc.index.tolist(), y=vc.values.tolist(), marker_color="#5b8ff9"))
-            fig.update_layout(title="因果主要影响因素（站点计数）", height=320, xaxis_title="Variable", yaxis_title="Station Count")
+            fig.update_layout(title="causal text text text text text text（station text text）", height=320, xaxis_title="Variable", yaxis_title="Station Count")
             _plotly_chart_with_export(fig, chart_key="overview_causal_factor_count", default_file_name="overview_causal_factor_count")
         else:
-            st.info("暂无可用的因果主要影响因素数据。")
+            st.info("none available text text text causal text text text text text text data。")
     with g2:
         struct_counts = filtered["top_factor_struct"].dropna().astype(str)
         if len(struct_counts) > 0:
             vc = struct_counts.value_counts().head(12)
             fig = go.Figure(go.Bar(x=vc.index.tolist(), y=vc.values.tolist(), marker_color="#36cfc9"))
-            fig.update_layout(title="结构主要影响因素（站点计数）", height=320, xaxis_title="Variable", yaxis_title="Station Count")
+            fig.update_layout(title="structural text text text text text text（station text text）", height=320, xaxis_title="Variable", yaxis_title="Station Count")
             _plotly_chart_with_export(fig, chart_key="overview_struct_factor_count", default_file_name="overview_struct_factor_count")
         else:
-            st.info("暂无可用的结构主要影响因素数据。")
+            st.info("none available text text text structural text text text text text text data。")
 
     g3, g4 = st.columns(2)
     with g3:
@@ -2696,10 +2696,10 @@ def _render_station_overview(output_root: str):
             agg["combo_score"] = agg["count"] * agg["mean_score"]
             agg = agg.sort_values("combo_score", ascending=False).head(12)
             fig = go.Figure(go.Bar(x=agg["top_pair_struct"], y=agg["combo_score"], marker_color="#73d13d"))
-            fig.update_layout(title="结构变量组合（出现多且贡献大）", height=320, xaxis_title="Variable Pair", yaxis_title="count × mean(score)")
+            fig.update_layout(title="structural variable text text（text text text text text text text）", height=320, xaxis_title="Variable Pair", yaxis_title="count × mean(score)")
             _plotly_chart_with_export(fig, chart_key="overview_struct_pair_combo", default_file_name="overview_struct_pair_combo")
         else:
-            st.info("暂无可用的结构变量组合数据。")
+            st.info("none available text text text structural variable text text data。")
     with g4:
         p = filtered[["probe_r2_cum_rain_viz", "probe_r2_api_viz", "probe_r2_dpdt_viz"]].copy()
         vals = [
@@ -2709,10 +2709,10 @@ def _render_station_overview(output_root: str):
         ]
         if any(pd.notna(v) for v in vals):
             fig = go.Figure(go.Bar(x=["cum_rain", "api", "dpdt"], y=vals, marker_color=["#9254de", "#597ef7", "#fa8c16"]))
-            fig.update_layout(title="探针情况（平均 R²）", height=320, xaxis_title="Physical Proxy Variable", yaxis_title="Mean R²")
+            fig.update_layout(title="probe text text（text text R²）", height=320, xaxis_title="Physical Proxy Variable", yaxis_title="Mean R²")
             _plotly_chart_with_export(fig, chart_key="overview_probe_mean", default_file_name="overview_probe_mean")
         else:
-            st.info("暂无 probe R² 数据。")
+            st.info("none available probe R² data。")
 
     g5, g6 = st.columns(2)
     with g5:
@@ -2758,7 +2758,7 @@ def _render_station_overview(output_root: str):
                     fit_r2 = float(1.0 - ss_res / ss_tot)
                 except Exception:
                     pass
-            fig.update_layout(title="结构节点数量 vs 模型性能", height=340, xaxis_title="Total Active Nodes", yaxis_title="NSE")
+            fig.update_layout(title="structural node text text vs text text text text", height=340, xaxis_title="Total Active Nodes", yaxis_title="NSE")
             if pd.notna(rho) or pd.notna(fit_a):
                 eq_text = ""
                 if pd.notna(fit_a) and pd.notna(fit_b):
@@ -2778,7 +2778,7 @@ def _render_station_overview(output_root: str):
                 )
             _plotly_chart_with_export(fig, chart_key="overview_active_nodes_vs_nse", default_file_name="overview_active_nodes_vs_nse")
         else:
-            st.info("暂无结构节点数量与性能关系数据。")
+            st.info("none available structural node text text text text text text text data。")
     with g6:
         rel_df = filtered[["probe_r2_mean_viz", "nse_viz", "station_id"]].dropna().copy()
         if len(rel_df) > 0:
@@ -2794,28 +2794,28 @@ def _render_station_overview(output_root: str):
                     hovertemplate="station=%{text}<br>probe_r2_mean=%{x:.4f}<br>NSE=%{y:.4f}<extra></extra>",
                 )
             )
-            fig.update_layout(title="探针可解码性 vs 模型性能", height=340, xaxis_title="Probe Mean R²", yaxis_title="NSE")
+            fig.update_layout(title="probe text text text text vs text text text text", height=340, xaxis_title="Probe Mean R²", yaxis_title="NSE")
             _plotly_chart_with_export(fig, chart_key="overview_probe_vs_nse", default_file_name="overview_probe_vs_nse")
         else:
-            st.info("暂无探针与性能关系数据。")
+            st.info("none available probe text text text text text data。")
 
     if len(filtered) == 0:
-        st.info("当前筛选条件下没有可选站点。")
+        st.info("current filter text text text text text text text station。")
         return
 
     station_options = filtered["station_id"].astype(str).tolist()
     default_sid = st.session_state.get("viz_station_id")
     default_idx = station_options.index(default_sid) if default_sid in station_options else 0
-    selected_sid = st.selectbox("选择站点进入详情", options=station_options, index=default_idx)
+    selected_sid = st.selectbox("select station text text details", options=station_options, index=default_idx)
 
     c_open, c_refresh = st.columns([1, 1])
     with c_open:
-        if st.button("进入站点详情", type="primary"):
+        if st.button("text text station details", type="primary"):
             st.session_state["viz_station_id"] = selected_sid
             st.session_state["viz_view"] = "detail"
             st.rerun()
     with c_refresh:
-        if st.button("刷新内存缓存"):
+        if st.button("refresh text text cache"):
             st.cache_data.clear()
             st.rerun()
 
@@ -2823,12 +2823,12 @@ def _render_station_overview(output_root: str):
 def _render_station_detail(output_root: str, station_id: str):
     output_dir = os.path.join(output_root, station_id)
     if not os.path.isdir(output_dir):
-        st.error(f"站点目录不存在: {output_dir}")
+        st.error(f"text: {output_dir}")
         return
 
-    top_heads = st.sidebar.slider("显示 top heads", 5, 100, 30)
-    top_neurons = st.sidebar.slider("显示 top neurons", 10, 200, 60)
-    max_neurons_graph = st.sidebar.slider("电路图每层最大神经元", 5, 80, 24)
+    top_heads = st.sidebar.slider("show top heads", 5, 100, 30)
+    top_neurons = st.sidebar.slider("show top neurons", 10, 200, 60)
+    max_neurons_graph = st.sidebar.slider("text text plot text text text text text text text", 5, 80, 24)
     if "collapse_attention_view" not in st.session_state:
         st.session_state["collapse_attention_view"] = False
     if "fig4_manual_nodes" not in st.session_state:
@@ -2839,23 +2839,23 @@ def _render_station_detail(output_root: str, station_id: str):
         st.session_state["fig4_focus_nodes"] = []
     if "fig4_selected_nodes" not in st.session_state:
         st.session_state["fig4_selected_nodes"] = []
-    if st.sidebar.button("切换：省略 Attention 层"):
+    if st.sidebar.button("text text：text text Attention text"):
         st.session_state["collapse_attention_view"] = not st.session_state["collapse_attention_view"]
 
     collapse_attention_view = bool(st.session_state["collapse_attention_view"])
-    st.sidebar.caption(f"当前电路视图：{'省略Attention头（保留后续层）' if collapse_attention_view else '完整电路'}")
-    edge_top_ratio = st.sidebar.slider("每层明显连线占比", 0.05, 0.50, 0.20, 0.05)
-    real_edge_weight = st.sidebar.slider("真实边分数权重", 0.0, 1.0, 0.80, 0.05)
-    fig4_topk = st.sidebar.slider("Figure4 显示 Top-K 节点", 4, 64, 12)
-    fig4_show_inactive = st.sidebar.checkbox("Figure4 显示非活跃部分(灰色)", value=True)
+    st.sidebar.caption(f"text：{'text textAttentiontext（text text text text text）' if collapse_attention_view else 'text text text text'}")
+    edge_top_ratio = st.sidebar.slider("text text text text text text text text", 0.05, 0.50, 0.20, 0.05)
+    real_edge_weight = st.sidebar.slider("text text edge text text text text", 0.0, 1.0, 0.80, 0.05)
+    fig4_topk = st.sidebar.slider("Figure4 show Top-K node", 4, 64, 12)
+    fig4_show_inactive = st.sidebar.checkbox("Figure4 show text text text text text(text text)", value=True)
 
     c_back, c_path = st.columns([1, 3])
     with c_back:
-        if st.button("返回站点总览"):
+        if st.button("back station overview"):
             st.session_state["viz_view"] = "stations"
             st.rerun()
     with c_path:
-        st.caption(f"当前站点: {station_id} | 结果目录: {output_dir}")
+        st.caption(f"text: {station_id} | text: {output_dir}")
 
     summary = _safe_read_json(os.path.join(output_dir, "summary.json"))
     if summary and isinstance(summary.get("metrics"), dict):
@@ -2866,25 +2866,25 @@ def _render_station_detail(output_root: str, station_id: str):
         m3.metric("MAE", f"{float(metrics.get('mae')):.4f}" if metrics.get("mae") is not None else "NA")
 
     panel = st.radio(
-        "站点详情视图",
-        options=["电路图", "Head/Neuron 排名", "Attention", "因果与探针", "变量交互", "结构强度子页", "Figure4风格"],
+        "station details text plot",
+        options=["text text plot", "Head/Neuron text text", "Attention", "causal text probe", "variable interaction", "structural strength subpage", "Figure4style"],
         horizontal=True,
         key=f"station_panel_{station_id}",
     )
 
-    if panel == "电路图":
+    if panel == "text text plot":
         circuit = _safe_read_json(os.path.join(output_dir, "circuit_structure.json"))
         var_interaction = _safe_read_json(os.path.join(output_dir, "variable_interactions.json"))
         in_node_df, in_node_src = _load_in_node_records(output_dir)
         if circuit is None:
-            st.warning("未找到 circuit_structure.json，请先运行训练生成结果。")
+            st.warning("not found circuit_structure.json，please first run training generate results。")
             return
 
         head_df = _safe_read_csv(os.path.join(output_dir, "head_importance_ranking.csv"))
         neuron_df = _safe_read_csv(os.path.join(output_dir, "neuron_importance_ranking.csv"))
         edge_df, edge_src_name = _load_edge_importance_table(output_dir)
         if edge_src_name:
-            st.caption(f"当前边重要性来源: {edge_src_name}")
+            st.caption(f"text: {edge_src_name}")
 
         feature_names = summary.get("feature_names", []) if summary else []
         nodes, edges, display_map = build_circuit_edges(
@@ -2935,24 +2935,24 @@ def _render_station_detail(output_root: str, station_id: str):
             shown_nodes, shown_edges = nodes, edges
 
         _plotly_chart_with_export(fig, chart_key=f"{station_id}_circuit", default_file_name=f"{station_id}_circuit")
-        if st.button("导出电路图SVG", key="export_circuit_svg"):
+        if st.button("export text text plotSVG", key="export_circuit_svg"):
             try:
                 p = _save_plot_svg(fig, station_id=station_id, image_name="circuit")
-                st.success(f"已保存: {p}")
+                st.success(f"text: {p}")
             except Exception as e:
-                st.error(f"导出失败: {e}")
+                st.error(f"text: {e}")
 
         st.caption(
-            f"节点数: {len(shown_nodes)} | 边数: {len(shown_edges)} | 输入简写: {', '.join([_abbr_feature(x) for x in feature_names])} | "
-            f"每层明显连线占比: {edge_top_ratio:.2f} | 真实边权重: {real_edge_weight:.2f}"
+            f"text: {len(shown_nodes)} | text: {len(shown_edges)} | text: {', '.join([_abbr_feature(x) for x in feature_names])} | "
+            f"text: {edge_top_ratio:.2f} | text: {real_edge_weight:.2f}"
         )
         if in_node_src:
-            st.caption(f"IN->节点真实交互来源: {in_node_src} | 已注入 IN->L0 边: {len(in_real_imp)}")
+            st.caption(f"IN->text: {in_node_src} | text IN->L0 text: {len(in_real_imp)}")
 
         if in_node_df is not None and len(in_node_df) > 0:
             show_cols = [c for c in ["feature", "node_id", "interaction", "abs_interaction", "mse_i", "mse_j", "mse_ij"] if c in set(in_node_df.columns)]
             if len(show_cols) > 0:
-                st.markdown("**IN->节点真实交互（Top）**")
+                st.markdown("**IN->node text text interaction（Top）**")
                 st.dataframe(
                     in_node_df.sort_values("abs_interaction", ascending=False).head(30) if "abs_interaction" in in_node_df.columns else in_node_df.head(30),
                     use_container_width=True,
@@ -2960,7 +2960,7 @@ def _render_station_detail(output_root: str, station_id: str):
                 )
 
         if collapse_attention_view:
-            st.markdown("**输入变量 -> 第一层节点（L0 Neuron）影响权重**")
+            st.markdown("**input variable -> text text text node（L0 Neuron）text text text text**")
             if p_df is not None and len(p_df) > 0:
                 mat = p_df.pivot(index="input", columns="l0_neuron", values="weight").fillna(0.0)
                 hfig = go.Figure(
@@ -2981,13 +2981,13 @@ def _render_station_detail(output_root: str, station_id: str):
                     height=240,
                 )
             else:
-                st.info("当前没有可展示的输入->L0节点投影权重。")
+                st.info("current text text text text text text input->L0node text text text text。")
 
         if edge_df is not None and len(edge_df) > 0 and {"src_node", "dst_node", "interaction"}.issubset(set(edge_df.columns)):
             top_show = edge_df.sort_values("interaction", ascending=False).head(20).copy()
             top_show["src"] = top_show["src_node"].map(lambda x: display_map.get(str(x), str(x)))
             top_show["dst"] = top_show["dst_node"].map(lambda x: display_map.get(str(x), str(x)))
-            st.markdown("**Top 连线重要性（真实边消融 interaction）**")
+            st.markdown("**Top text text text text text（text text edge text text interaction）**")
             st.dataframe(
                 top_show[["src", "dst", "interaction", "delta_both", "heuristic_score"]],
                 use_container_width=True,
@@ -3007,10 +3007,10 @@ def _render_station_detail(output_root: str, station_id: str):
                         for (s, t), v in edge_items
                     ]
                 )
-                st.markdown("**Top 连线重要性（启发式）**")
+                st.markdown("**Top text text text text text（text text text）**")
                 st.dataframe(edge_tbl, use_container_width=True, height=260)
 
-    elif panel == "Head/Neuron 排名":
+    elif panel == "Head/Neuron text text":
         head_df = _safe_read_csv(os.path.join(output_dir, "head_importance_ranking.csv"))
         neuron_df = _safe_read_csv(os.path.join(output_dir, "neuron_importance_ranking.csv"))
         c1, c2 = st.columns(2)
@@ -3024,7 +3024,7 @@ def _render_station_detail(output_root: str, station_id: str):
                 _plotly_chart_with_export(head_fig, chart_key=f"{station_id}_head_ranking", default_file_name=f"{station_id}_head_ranking")
                 st.dataframe(d.head(top_heads), use_container_width=True, height=300)
             else:
-                st.info("未找到 head_importance_ranking.csv")
+                st.info("not found head_importance_ranking.csv")
 
         with c2:
             if neuron_df is not None and len(neuron_df) > 0:
@@ -3036,7 +3036,7 @@ def _render_station_detail(output_root: str, station_id: str):
                 _plotly_chart_with_export(neuron_fig, chart_key=f"{station_id}_neuron_ranking", default_file_name=f"{station_id}_neuron_ranking")
                 st.dataframe(d.head(top_neurons), use_container_width=True, height=300)
             else:
-                st.info("未找到 neuron_importance_ranking.csv")
+                st.info("not found neuron_importance_ranking.csv")
 
     elif panel == "Attention":
         attn_stats = _safe_read_json(os.path.join(output_dir, "attention_statistics.json"))
@@ -3047,9 +3047,9 @@ def _render_station_detail(output_root: str, station_id: str):
             _plotly_chart_with_export(attn_fig, chart_key=f"{station_id}_attention", default_file_name=f"{station_id}_attention")
             st.json({"flood_threshold_y": attn_stats.get("flood_threshold_y")})
         else:
-            st.info("未找到 attention_statistics.json")
+            st.info("not found attention_statistics.json")
 
-    elif panel == "因果与探针":
+    elif panel == "causal text probe":
         causal = _safe_read_json(os.path.join(output_dir, "causal_intervention_results.json"))
         probe = _safe_read_json(os.path.join(output_dir, "physical_probe_results.json"))
         c1, c2 = st.columns(2)
@@ -3058,17 +3058,17 @@ def _render_station_detail(output_root: str, station_id: str):
             if causal:
                 st.json(causal)
             else:
-                st.info("未找到 causal_intervention_results.json")
+                st.info("not found causal_intervention_results.json")
 
         with c2:
             st.subheader("Linear Probe")
             if probe:
                 st.json(probe)
             else:
-                st.info("未找到 physical_probe_results.json")
+                st.info("not found physical_probe_results.json")
 
-    elif panel == "变量交互":
-        st.subheader("输入变量相互作用（真实干预，原始值）")
+    elif panel == "variable interaction":
+        st.subheader("input variable text text text text（text text text text，raw）")
         var_interaction = _safe_read_json(os.path.join(output_dir, "variable_interactions.json"))
         var_interaction_rank = _safe_read_csv(os.path.join(output_dir, "variable_interactions_ranking.csv"))
 
@@ -3077,7 +3077,7 @@ def _render_station_detail(output_root: str, station_id: str):
             mat = np.asarray(var_interaction["interaction_matrix"], dtype=float)
             keep_idxs = [i for i, n in enumerate(names_all) if _abbr_feature(n) != "Qtar"]
             if len(keep_idxs) == 0:
-                st.info("交互矩阵仅包含流量变量或为空，已被过滤。")
+                st.info("interaction matrix text text text text text variable text text text，text text text text。")
             else:
                 names = [names_all[i] for i in keep_idxs]
                 mat_sub = mat[np.ix_(keep_idxs, keep_idxs)]
@@ -3108,12 +3108,12 @@ def _render_station_detail(output_root: str, station_id: str):
                     single_df = pd.DataFrame(
                         [{"variable": k, "delta_single": v, "abbr": _abbr_feature(k)} for k, v in single_items]
                     ).sort_values("delta_single", ascending=False)
-                    st.markdown("**单变量干预敏感性（原始 Δ_i）**")
+                    st.markdown("**text variable text text text text text（text text Δ_i）**")
                     st.dataframe(single_df, use_container_width=True, height=220)
                 else:
-                    st.info("单变量干预结果仅包含流量变量或为空，已被过滤。")
+                    st.info("text variable text text results text text text text text variable text text text，text text text text。")
         else:
-            st.info("未找到 variable_interactions.json，请重新训练后生成。")
+            st.info("not found variable_interactions.json，text text text training text generate。")
 
         if var_interaction_rank is not None and len(var_interaction_rank) > 0:
             show = var_interaction_rank.copy()
@@ -3123,31 +3123,31 @@ def _render_station_detail(output_root: str, station_id: str):
             )
             show = show[mask_keep].copy()
             if len(show) == 0:
-                st.info("Top 变量对中不包含非流量变量，已被过滤。")
+                st.info("Top variable text text text text text text text text variable，text text text text。")
             else:
                 show["abs_interaction"] = show["interaction"].abs()
                 show = show.sort_values("abs_interaction", ascending=False).head(20)
                 show["var_i_abbr"] = show["var_i"].astype(str).map(lambda x: _abbr_feature(x))
                 show["var_j_abbr"] = show["var_j"].astype(str).map(lambda x: _abbr_feature(x))
-                st.markdown("**Top 变量对交互（按 |interaction|，原始值）**")
+                st.markdown("**Top variable text interaction（text |interaction|，raw）**")
                 st.dataframe(
                     show[["var_i_abbr", "var_j_abbr", "interaction", "delta_pair", "delta_i", "delta_j"]],
                     use_container_width=True,
                     height=280,
                 )
 
-        st.markdown("**变量-交互-流量机制链路（原始值）**")
+        st.markdown("**variable-interaction-text text mechanism pathway（raw）**")
         sk = variable_mechanism_sankey(var_interaction, top_pairs=8, scale_mode="raw")
         if len(sk.data) > 0:
             _plotly_chart_with_export(sk, chart_key=f"{station_id}_interaction_sankey", default_file_name=f"{station_id}_interaction_sankey")
             _plotly_chart_with_export(sk, chart_key=f"{station_id}_interaction_sankey", default_file_name=f"{station_id}_interaction_sankey")
-            st.caption("红色链路：正协同交互（interaction>0）；蓝色链路：负交互/替代关系（interaction<0）。")
+            st.caption("text text pathway：text text text interaction（interaction>0）；text text pathway：text interaction/text text text text（interaction<0）。")
         else:
-            st.info("缺少 variable_interactions.json，无法绘制机制链路图。")
+            st.info("missing variable_interactions.json，unable to text text mechanism pathway plot。")
 
         st.markdown("---")
-        st.subheader("结构强度协作（省略 Attention，基于 L0 节点）")
-        st.caption("定义: S(i,j)=Σ_n c_n*w(i,n)*w(j,n)，其中 c_n 为 L0 节点传播贡献分，w(i,n) 为 IN->L0 投影权重。")
+        st.subheader("structural strength text text（text text Attention，text text L0 node）")
+        st.caption("text text: S(i,j)=Σ_n c_n*w(i,n)*w(j,n)，text text c_n text L0 node text text text text text，w(i,n) text IN->L0 text text text text。")
 
         circuit = _safe_read_json(os.path.join(output_dir, "circuit_structure.json"))
         in_node_df, _ = _load_in_node_records(output_dir)
@@ -3156,7 +3156,7 @@ def _render_station_detail(output_root: str, station_id: str):
         edge_df, _ = _load_edge_importance_table(output_dir)
 
         if circuit is None:
-            st.info("缺少 circuit_structure.json，无法计算结构强度协作。")
+            st.info("missing circuit_structure.json，unable to text text structural strength text text。")
         else:
             feature_names = summary.get("feature_names", []) if summary else []
             s_nodes, s_edges, _ = build_circuit_edges(
@@ -3185,7 +3185,7 @@ def _render_station_detail(output_root: str, station_id: str):
             labels = list(struct.get("input_labels", []))
 
             if mat.size == 0 or len(labels) == 0:
-                st.info("当前结构图中缺少有效的 IN->L0 投影边，无法计算结构协作。")
+                st.info("current structural plot text missing text text text IN->L0 text text edge，unable to text text structural text text。")
             else:
                 fig_s = go.Figure(
                     data=go.Heatmap(
@@ -3206,19 +3206,19 @@ def _render_station_detail(output_root: str, station_id: str):
 
                 s_single = pd.DataFrame(struct.get("single_structural", []))
                 if len(s_single) > 0:
-                    st.markdown("**单变量结构影响度（对角项 S(i,i)）**")
+                    st.markdown("**text variable structural text text text（text text text S(i,i)）**")
                     st.dataframe(s_single.head(20), use_container_width=True, height=220)
 
                 s_pairs = pd.DataFrame(struct.get("pair_ranking", []))
                 if len(s_pairs) > 0:
-                    st.markdown("**Top 变量对结构协作（按 synergy）**")
+                    st.markdown("**Top variable text structural text text（text synergy）**")
                     st.dataframe(
                         s_pairs.head(20)[["var_i_abbr", "var_j_abbr", "synergy"]],
                         use_container_width=True,
                         height=280,
                     )
 
-                st.markdown("**结构强度版本：变量-交互-流量机制链路图**")
+                st.markdown("**structural strength text text：variable-interaction-text text mechanism pathway plot**")
                 ss = structural_mechanism_sankey(struct, top_pairs=10, top_vars=8)
                 if len(ss.data) > 0:
                     _plotly_chart_with_export(
@@ -3227,14 +3227,14 @@ def _render_station_detail(output_root: str, station_id: str):
                         default_file_name=f"{station_id}_structural_mechanism_sankey",
                     )
                 else:
-                    st.info("结构强度结果不足，无法绘制结构机制链路图。")
+                    st.info("structural strength results text text，unable to text text structural mechanism pathway plot。")
 
-    elif panel == "结构强度子页":
-        st.subheader("单站点结构强度详情")
-        st.caption("基于你计算的结构强度（S(i,j)）展示变量交互与变量-流量机制，包含圆形弦图风格。")
+    elif panel == "structural strength subpage":
+        st.subheader("text station structural strength details")
+        st.caption("text text text text text text structural strength（S(i,j)）text text variable interaction text variable-text text mechanism，text text text text text plot style。")
 
-        struct_top_pairs = st.slider("弦图显示 Top 结构交互对", 4, 40, 16, 2)
-        struct_top_vars = st.slider("机制图显示 Top 变量", 4, 16, 8, 1)
+        struct_top_pairs = st.slider("text plot show Top structural interaction text", 4, 40, 16, 2)
+        struct_top_vars = st.slider("mechanism plot show Top variable", 4, 16, 8, 1)
 
         circuit = _safe_read_json(os.path.join(output_dir, "circuit_structure.json"))
         in_node_df, _ = _load_in_node_records(output_dir)
@@ -3243,7 +3243,7 @@ def _render_station_detail(output_root: str, station_id: str):
         edge_df, _ = _load_edge_importance_table(output_dir)
 
         if circuit is None:
-            st.info("缺少 circuit_structure.json，无法计算结构强度。")
+            st.info("missing circuit_structure.json，unable to text text structural strength。")
             return
 
         feature_names = summary.get("feature_names", []) if summary else []
@@ -3272,7 +3272,7 @@ def _render_station_detail(output_root: str, station_id: str):
         mat = np.asarray(struct.get("synergy_matrix", []), dtype=float)
         labels = list(struct.get("input_labels", []))
         if mat.size == 0 or len(labels) == 0:
-            st.info("当前站点没有可用结构强度矩阵（可能缺少 IN->L0 投影边）。")
+            st.info("current station text text text text structural strength matrix（text text missing IN->L0 text text edge）。")
             return
 
         c1, c2 = st.columns(2)
@@ -3287,7 +3287,7 @@ def _render_station_detail(output_root: str, station_id: str):
                 )
             )
             fig_s.update_layout(
-                title="结构强度矩阵（L0）",
+                title="structural strength matrix（L0）",
                 height=500,
                 font=dict(family="Times New Roman", color="#444444"),
             )
@@ -3306,7 +3306,7 @@ def _render_station_detail(output_root: str, station_id: str):
                     default_file_name=f"{station_id}_structural_mechanism_page",
                 )
             else:
-                st.info("结构强度机制图所需数据不足。")
+                st.info("structural strength mechanism plot text text data text text。")
 
         chord_fig = structural_chord_figure(struct, top_pairs=struct_top_pairs, top_vars=struct_top_vars)
         if len(chord_fig.data) > 0:
@@ -3315,28 +3315,28 @@ def _render_station_detail(output_root: str, station_id: str):
                 chart_key=f"{station_id}_structural_chord_page",
                 default_file_name=f"{station_id}_structural_chord_page",
             )
-            st.caption("圆形图中：绿色弦表示变量-变量结构协作强度，蓝色虚线表示变量到流量 Q 的单变量结构贡献。")
+            st.caption("text text plot text：text text text text text variable-variable structural text text strength，text text text text text text variable text text text Q text text variable structural text text。")
         else:
-            st.info("结构强度弦图所需数据不足。")
+            st.info("structural strength text plot text text data text text。")
 
         s_single = pd.DataFrame(struct.get("single_structural", []))
         s_pairs = pd.DataFrame(struct.get("pair_ranking", []))
         t1, t2 = st.columns(2)
         with t1:
             if len(s_single) > 0:
-                st.markdown("**单变量结构影响度（S(i,i)）**")
+                st.markdown("**text variable structural text text text（S(i,i)）**")
                 st.dataframe(s_single.head(30), use_container_width=True, height=280)
         with t2:
             if len(s_pairs) > 0:
-                st.markdown("**Top 变量对结构协作（S(i,j)）**")
+                st.markdown("**Top variable text structural text text（S(i,j)）**")
                 st.dataframe(s_pairs.head(30)[["var_i_abbr", "var_j_abbr", "synergy"]], use_container_width=True, height=280)
 
         st.markdown("---")
-        st.subheader("导出真弦图数据（R/circlize）")
+        st.subheader("export text text plot data（R/circlize）")
         export_dir = os.path.join(output_dir, "chord_export")
         cexp1, cexp2 = st.columns([1.2, 1.2])
         with cexp1:
-            if st.button("导出弦图CSV", key=f"{station_id}_export_chord_csv"):
+            if st.button("export text plotCSV", key=f"{station_id}_export_chord_csv"):
                 paths = _export_structural_chord_data(
                     struct,
                     export_dir=export_dir,
@@ -3344,15 +3344,15 @@ def _render_station_detail(output_root: str, station_id: str):
                     top_pairs=max(40, int(struct_top_pairs)),
                 )
                 if paths:
-                    st.success("已导出弦图数据。")
+                    st.success("exported text plot data。")
                     st.caption(f"pairs: {paths.get('pairs', '')}")
                     st.caption(f"single: {paths.get('single', '')}")
                     st.caption(f"matrix: {paths.get('matrix', '')}")
                 else:
-                    st.warning("结构强度数据为空，未导出。")
+                    st.warning("structural strength data text text，text export。")
 
         with cexp2:
-            if st.button("调用 R 脚本绘制真弦图", key=f"{station_id}_run_r_chord"):
+            if st.button("text text R text text text text text text plot", key=f"{station_id}_run_r_chord"):
                 paths = _export_structural_chord_data(
                     struct,
                     export_dir=export_dir,
@@ -3360,12 +3360,12 @@ def _render_station_detail(output_root: str, station_id: str):
                     top_pairs=max(40, int(struct_top_pairs)),
                 )
                 if not paths:
-                    st.warning("结构强度数据为空，无法调用 R 脚本。")
+                    st.warning("structural strength data text text，unable to text text R text text。")
                 else:
                     script_path = os.path.join(os.getcwd(), "scripts", "plot_structural_chord.R")
                     out_svg = os.path.join(export_dir, f"{station_id}_structural_chord.svg")
                     if not os.path.exists(script_path):
-                        st.error(f"未找到 R 脚本: {script_path}")
+                        st.error(f"text R text: {script_path}")
                     else:
                         cmd = [
                             "Rscript",
@@ -3379,28 +3379,28 @@ def _render_station_detail(output_root: str, station_id: str):
                         try:
                             proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
                             if proc.returncode != 0:
-                                st.error("R 脚本执行失败。")
+                                st.error("R text text text text failed。")
                                 if proc.stderr:
                                     st.code(proc.stderr)
                             else:
-                                st.success(f"已生成: {out_svg}")
+                                st.success(f"text: {out_svg}")
                                 if os.path.exists(out_svg):
                                     with open(out_svg, "rb") as f:
                                         svg_bytes = f.read()
                                     st.download_button(
-                                        "下载 SVG",
+                                        "text text SVG",
                                         data=svg_bytes,
                                         file_name=os.path.basename(out_svg),
                                         mime="image/svg+xml",
                                         key=f"{station_id}_download_structural_chord_svg",
                                     )
-                                    st.caption("SVG 已生成（可直接用于论文矢量排版）。")
+                                    st.caption("SVG generated（text text text text text text text text text text text）。")
                                 if proc.stdout:
                                     st.code(proc.stdout)
                         except Exception as e:
-                            st.error(f"调用 Rscript 失败: {e}")
+                            st.error(f"text Rscript text: {e}")
 
-        st.caption("可在终端直接执行: Rscript scripts/plot_structural_chord.R --pairs <pairs.csv> --single <single.csv> --out <svg>")
+        st.caption("text text text text text text text text: Rscript scripts/plot_structural_chord.R --pairs <pairs.csv> --single <single.csv> --out <svg>")
 
     else:
         circuit = _safe_read_json(os.path.join(output_dir, "circuit_structure.json"))
@@ -3413,9 +3413,9 @@ def _render_station_detail(output_root: str, station_id: str):
         faith_df = _safe_read_csv(os.path.join(output_dir, "faithfulness_curve.csv"))
         cherry = _safe_read_json(os.path.join(output_dir, "cherry_samples.json"))
 
-        st.subheader("Figure 4 风格：最小关键路径 + Faithfulness")
+        st.subheader("Figure 4 style：text text text text text text + Faithfulness")
         if circuit is None:
-            st.info("未找到 circuit_structure.json")
+            st.info("not found circuit_structure.json")
             return
 
         feature_names = summary.get("feature_names", []) if summary else []
@@ -3444,7 +3444,7 @@ def _render_station_detail(output_root: str, station_id: str):
 
         fig4_node_imp = _compute_node_contribution_to_output(fig4_nodes, fig4_edges, fig4_edge_imp)
 
-        st.caption(f"Figure4 视图模式：{'省略 Attention 头（保留后续层）' if collapse_attention_view else '完整电路'}")
+        st.caption(f"Figure4 text：{'text text Attention text（text text text text text）' if collapse_attention_view else 'text text text text'}")
 
         picker_fig = build_fig4_picker(fig4_nodes, fig4_edges, display_map)
         pick_state = _st_plotly_chart_compat(
@@ -3472,20 +3472,20 @@ def _render_station_detail(output_root: str, station_id: str):
 
         if picked_nodes:
             picked_show = ", ".join([display_map.get(n, n) for n in sorted(picked_nodes)])
-            st.caption(f"已捕获点击节点：{picked_show}")
+            st.caption(f"text：{picked_show}")
         else:
-            st.caption("已捕获点击节点：暂无（请直接点击节点圆点，或框选节点）")
+            st.caption("text text text click node：none available（text text text click node text text，text text text node）")
 
-        if st.button("生成所选节点 Figure4", key="fig4_generate_from_click"):
+        if st.button("generate text text node Figure4", key="fig4_generate_from_click"):
             expanded = _expand_with_neighbors(picked_nodes, fig4_edges)
             st.session_state["fig4_manual_nodes"] = sorted(expanded)
             st.session_state["fig4_selected_nodes"] = sorted(expanded)
             st.session_state["fig4_focus_nodes"] = sorted(picked_nodes)
 
-        if st.button("重置点击捕获", key="fig4_reset_click_capture"):
+        if st.button("text text click text text", key="fig4_reset_click_capture"):
             st.session_state["fig4_clicked_nodes"] = []
 
-        if st.button("清空自定义节点", key="fig4_clear_manual"):
+        if st.button("text text text text text node", key="fig4_clear_manual"):
             st.session_state["fig4_manual_nodes"] = []
             st.session_state["fig4_selected_nodes"] = []
             st.session_state["fig4_clicked_nodes"] = []
@@ -3505,7 +3505,7 @@ def _render_station_detail(output_root: str, station_id: str):
             st.session_state["fig4_selected_nodes"] = list(seed)
 
         selected_nodes = st.multiselect(
-            "自定义节点（可与点击选择联用；留空则使用 Top-K 自动节点）",
+            "text text text node（text text click select text text；text text text text text Top-K text text node）",
             options=node_options,
             format_func=lambda n: f"{display_map.get(n, n)} ({n})",
             key="fig4_selected_nodes",
@@ -3545,12 +3545,12 @@ def _render_station_detail(output_root: str, station_id: str):
             focus_node_ids=focus_nodes if focus_nodes else None,
         )
         _plotly_chart_with_export(fig, chart_key=f"{station_id}_figure4", default_file_name=f"{station_id}_figure4")
-        if st.button("导出Figure4 SVG", key="export_fig4_svg"):
+        if st.button("exportFigure4 SVG", key="export_fig4_svg"):
             try:
                 p = _save_plot_svg(fig, station_id=station_id, image_name="fig4")
-                st.success(f"已保存: {p}")
+                st.success(f"text: {p}")
             except Exception as e:
-                st.error(f"导出失败: {e}")
+                st.error(f"text: {e}")
 
         c1, c2 = st.columns([1, 1])
         with c1:
@@ -3560,12 +3560,12 @@ def _render_station_detail(output_root: str, station_id: str):
             _plotly_chart_with_export(faith_fig, chart_key=f"{station_id}_faithfulness", default_file_name=f"{station_id}_faithfulness")
         with c2:
             if node_df is not None and len(node_df) > 0:
-                st.markdown("**Top-K 关键节点**")
+                st.markdown("**Top-K text text node**")
                 st.dataframe(node_df.sort_values("importance", ascending=False).head(fig4_topk), use_container_width=True, height=320)
             else:
-                st.info("未找到 node_importance_ranking.csv")
+                st.info("not found node_importance_ranking.csv")
 
-        st.markdown("**Cherry-picked 样本（高流量/低流量）**")
+        st.markdown("**Cherry-picked sample（high flow/low flow）**")
         if cherry and isinstance(cherry, dict):
             high = cherry.get("high_flow_samples", []) or []
             low = cherry.get("low_flow_samples", []) or []
@@ -3573,12 +3573,12 @@ def _render_station_detail(output_root: str, station_id: str):
 
             if pool:
                 labels = [f"{grp}-{idx} (target={s['target']:.3f}, pred={s['pred']:.3f})" for grp, idx, s in pool]
-                pick = st.selectbox("选择样本", options=list(range(len(labels))), format_func=lambda i: labels[i])
+                pick = st.selectbox("select sample", options=list(range(len(labels))), format_func=lambda i: labels[i])
                 sel = pool[pick][2]
 
                 if isinstance(sel.get("feature_series"), dict) and len(sel["feature_series"]) > 0:
                     feat_names = list(sel["feature_series"].keys())
-                    feat = st.selectbox("选择变量", options=feat_names)
+                    feat = st.selectbox("select variable", options=feat_names)
                     y = np.asarray(sel["feature_series"][feat], dtype=float)
                     x = np.arange(len(y))
                     sf = go.Figure(go.Scatter(x=x, y=y, mode="lines", name=feat))
@@ -3587,9 +3587,9 @@ def _render_station_detail(output_root: str, station_id: str):
                     _plotly_chart_with_export(sf, chart_key=f"{station_id}_sample_trace_{feat}", default_file_name=f"{station_id}_sample_trace_{feat}")
                     st.json({"target": sel.get("target"), "pred": sel.get("pred"), "error": sel.get("error")})
             else:
-                st.info("cherry_samples.json 为空")
+                st.info("cherry_samples.json text text")
         else:
-            st.info("未找到 cherry_samples.json，请重新训练生成。")
+            st.info("not found cherry_samples.json，text text text training generate。")
 
 
 @st.cache_data(show_spinner=False)
@@ -3603,23 +3603,23 @@ def _load_cluster_features(output_root: str, stations_csv: str, camels_root: str
 
 
 def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | None):
-    st.subheader("CAMELS 主导变量空间分布（非聚类）")
+    st.subheader("CAMELS text text variable text text text text（text clustering）")
 
     if not os.path.exists(stations_csv):
-        st.error(f"站点文件不存在: {stations_csv}")
+        st.error(f"text: {stations_csv}")
         return
     if not os.path.isdir(output_root):
-        st.error(f"结果目录不存在: {output_root}")
+        st.error(f"text: {output_root}")
         return
 
     if camels_root and (not os.path.isdir(camels_root)):
-        st.warning("CAMELS 属性目录不可访问，当前仅使用站点+解释结果特征。")
+        st.warning("CAMELS text text directory text text text text，current text text text station+text text results text text。")
         camels_root = None
 
-    with st.spinner("加载站点特征..."):
+    with st.spinner("text text station text text..."):
         plot_df = _load_cluster_features(output_root, stations_csv, camels_root)
     if len(plot_df) == 0:
-        st.info("未发现有效站点输出（outputs/*/summary.json）。")
+        st.info("text text text text text station output（outputs/*/summary.json）。")
         return
 
     plot_df = plot_df.copy()
@@ -3663,13 +3663,13 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
         lon = float(row.get("lon", 0) if pd.notna(row.get("lon")) else 0)
         arid = float(row.get("aridity", 1.0) if pd.notna(row.get("aridity")) else 1.0)
         if elev >= 1500:
-            return "高原/山地 (Plateau/Mountain)"
+            return "text text/text text (Plateau/Mountain)"
         elif lon <= -120:
-            return "海洋性气候 (Oceanic)"
+            return "text text text climate (Oceanic)"
         elif arid >= 1.5:
-            return "干旱大陆性 (Arid Continental)"
+            return "text text text text text (Arid Continental)"
         else:
-            return "湿润大陆性/季风 (Humid Continental/Subtropical)"
+            return "text text text text text/text text (Humid Continental/Subtropical)"
 
     if "dom_land_cover" in plot_df.columns:
         plot_df["dom_land_cover_agg"] = plot_df["dom_land_cover"].apply(agg_landcover)
@@ -3678,28 +3678,28 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
 
     plot_df["geo_climate_type"] = plot_df.apply(get_climate_type, axis=1)
 
-    st.caption(f"当前输出目录已加载站点数: {len(plot_df)}")
+    st.caption(f"text: {len(plot_df)}")
 
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         dominant_mode = st.selectbox(
-            "主导变量维度",
+            "text text variable text text",
             options=["top_factor_name", "struct_top_factor_name", "top_pair_interaction_name", "probe_r2_mean"],
             format_func=lambda x: {
-                "top_factor_name": "Top Factor（变量名）",
-                "struct_top_factor_name": "Struct Top Factor（变量名）",
-                "top_pair_interaction_name": "Struct 交互对（变量名）",
-                "probe_r2_mean": "Probe 均值水平",
+                "top_factor_name": "Top Factor（variable text）",
+                "struct_top_factor_name": "Struct Top Factor（variable text）",
+                "top_pair_interaction_name": "Struct interaction text（variable text）",
+                "probe_r2_mean": "Probe text text text text",
             }.get(x, x),
             index=0,
         )
     with c2:
-        nse_min = st.number_input("最小 NSE", value=0.0, step=0.05)
+        nse_min = st.number_input("text text NSE", value=0.0, step=0.05)
     with c3:
         huc_list = sorted([str(x) for x in plot_df["huc_02"].dropna().unique()]) if "huc_02" in plot_df.columns else []
         sel_huc = st.multiselect("HUC-02", options=huc_list, default=[])
     with c4:
-        size_mode = st.selectbox("点大小", options=["fixed", "nse", "top_factor_score", "probe_r2_mean"], index=0)
+        size_mode = st.selectbox("text text text", options=["fixed", "nse", "top_factor_score", "probe_r2_mean"], index=0)
 
     if dominant_mode == "probe_r2_mean":
         v = pd.to_numeric(plot_df.get("probe_r2_mean"), errors="coerce")
@@ -3719,7 +3719,7 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
     f1, f2, f3 = st.columns(3)
     with f1:
         color_mode = st.selectbox(
-            "颜色",
+            "color",
             options=[
                 "dominant_label",
                 "nse",
@@ -3736,12 +3736,12 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
             index=0,
         )
     with f2:
-        show_name_labels = st.checkbox("地图显示名称标签", value=False)
+        show_name_labels = st.checkbox("map show text text label", value=False)
     with f3:
-        show_climate_band = st.checkbox("显示气候带参考线", value=False)
+        show_climate_band = st.checkbox("show climate text reference line", value=False)
 
     label_options = [x for x in ["station_id", "dominant_label", "top_factor_name", "struct_top_factor_name", "top_pair_interaction_name"] if x in plot_df.columns]
-    label_field = st.selectbox("标签字段", options=label_options, index=0) if len(label_options) > 0 else "station_id"
+    label_field = st.selectbox("label text text", options=label_options, index=0) if len(label_options) > 0 else "station_id"
 
     mask = pd.Series(True, index=plot_df.index)
     if "nse" in plot_df.columns:
@@ -3750,7 +3750,7 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
         mask &= plot_df["huc_02"].astype(str).isin(sel_huc)
     plot_df = plot_df.loc[mask].copy()
 
-    # 当按“主导变量对”上色时，隐藏样本数过少的类别，避免地图被稀有类别干扰。
+    # text text“text text variable text”text text text，text text sample text text text text text text，text text map text text text text text text text。
     if dominant_mode == "top_pair_interaction_name" and "dominant_label" in plot_df.columns:
         pair_counts = plot_df["dominant_label"].fillna("unknown").astype(str).value_counts()
         valid_pairs = pair_counts[pair_counts >= 10].index
@@ -3758,11 +3758,11 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
         plot_df = plot_df[plot_df["dominant_label"].fillna("unknown").astype(str).isin(valid_pairs)].copy()
         removed_n = before_n - len(plot_df)
         if removed_n > 0:
-            st.caption(f"已过滤出现次数 < 10 的主导变量对类别：移除 {removed_n} 个站点")
+            st.caption(f"text < 10 text：text {removed_n} text")
 
     plot_df = plot_df.dropna(subset=["lat", "lon"])
     if len(plot_df) == 0:
-        st.info("筛选后无有效经纬度站点。")
+        st.info("filter text text text text text text text station。")
         return
 
     if size_mode == "fixed" or size_mode not in plot_df.columns:
@@ -3778,7 +3778,7 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
     if show_name_labels and len(plot_df) <= 250 and label_field in plot_df.columns:
         text_arg = label_field
     elif show_name_labels and len(plot_df) > 250:
-        st.info("当前点位较多，已自动关闭文本标签以避免重叠。可先筛选后再开启。")
+        st.info("current text text text text，text text text text text text text label text text text text text。text text filter text text text text。")
 
     common_kwargs = dict(
         data_frame=plot_df,
@@ -3791,7 +3791,7 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
         hover_name="station_id",
         hover_data=[c for c in ["dominant_label", "top_factor_name", "struct_top_factor_name", "top_pair_interaction_name", "nse", "huc_02"] if c in plot_df.columns],
         scope="usa",
-        title="US Stations: 主导变量空间分布",
+        title="US Stations: text text variable text text text text",
     )
     if color_is_numeric:
         fig = px.scatter_geo(**common_kwargs, color_continuous_scale="Viridis")
@@ -3812,7 +3812,7 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
                     lat=np.full_like(lon_seq, lat_line),
                     mode="lines",
                     line=dict(color="rgba(80,80,80,0.55)", width=1, dash="dash"),
-                    name=f"气候带参考线 {label}",
+                    name=f"text {label}",
                     showlegend=True,
                     hovertemplate=f"lat={lat_line:.1f}<extra>{label}</extra>",
                 )
@@ -3826,13 +3826,13 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
     def _to_english_label(v: Any) -> str:
         s = str(v) if v is not None else "Unknown"
         rep = {
-            "高原/山地 (Plateau/Mountain)": "Plateau/Mountain",
-            "海洋性气候 (Oceanic)": "Oceanic",
-            "干旱大陆性 (Arid Continental)": "Arid Continental",
-            "湿润大陆性/季风 (Humid Continental/Subtropical)": "Humid Continental/Subtropical",
-            "气候带参考线": "Climate Band",
-            "未知": "Unknown",
-            "无": "None",
+            "text text/text text (Plateau/Mountain)": "Plateau/Mountain",
+            "text text text climate (Oceanic)": "Oceanic",
+            "text text text text text (Arid Continental)": "Arid Continental",
+            "text text text text text/text text (Humid Continental/Subtropical)": "Humid Continental/Subtropical",
+            "climate text reference line": "Climate Band",
+            "text text": "Unknown",
+            "text": "None",
         }
         for k, r in rep.items():
             s = s.replace(k, r)
@@ -4025,30 +4025,30 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
             use_container_width=False,
         )
 
-    st.markdown("### 主导变量分布")
+    st.markdown("### text text variable text text")
     vc = plot_df["dominant_label"].astype(str).value_counts().head(25).reset_index()
     vc.columns = ["dominant_label", "count"]
-    fig_vc = px.bar(vc, x="dominant_label", y="count", title="主导变量类别计数")
+    fig_vc = px.bar(vc, x="dominant_label", y="count", title="text text variable text text text text")
     fig_vc.update_layout(height=320, xaxis_title="Dominant Factor", yaxis_title="Station Count")
     _plotly_chart_with_export(fig_vc, chart_key="cluster_map_dominant_count", default_file_name="cluster_map_dominant_count")
 
-    st.markdown("### 主导变量 × 气候构成占比")
+    st.markdown("### text text variable × climate text text text text")
     comp_c1, comp_c2 = st.columns(2)
     with comp_c1:
         comp_dominant_mode = st.selectbox(
-            "分析变量",
+            "text text variable",
             options=["top_factor_name", "struct_top_factor_name", "top_pair_interaction_name"],
             format_func=lambda x: {
-                "top_factor_name": "Top Factor（变量名）",
-                "struct_top_factor_name": "Struct Top Factor（变量名）",
-                "top_pair_interaction_name": "Struct 交互对（变量名）",
+                "top_factor_name": "Top Factor（variable text）",
+                "struct_top_factor_name": "Struct Top Factor（variable text）",
+                "top_pair_interaction_name": "Struct interaction text（variable text）",
             }.get(x, x),
             index=0,
             key="comp_dominant_mode",
         )
     with comp_c2:
         climate_mode = st.selectbox(
-            "气候指标",
+            "climate text text",
             options=[c for c in ["aridity_class", "elev_band", "lat_band", "snow_regime", "dom_land_cover", "dom_land_cover_agg", "geo_climate_type"] if c in plot_df.columns],
             index=0,
         )
@@ -4059,7 +4059,7 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
         
     use = plot_df[[use_col, climate_mode]].dropna().copy()
     if len(use) == 0:
-        st.info("当前筛选下无可用数据。")
+        st.info("current filter text text text text data。")
     else:
         tab = pd.crosstab(use[use_col].astype(str), use[climate_mode].astype(str), normalize="index")
         # Keep top dominant labels for readability.
@@ -4072,17 +4072,17 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
             y="ratio",
             color="climate_class",
             barmode="stack",
-            title=f"不同主导变量类别的气候构成占比",
+            title=f"text",
         )
         b.update_layout(height=420, yaxis_tickformat=".0%", xaxis_title="Dominant Factor", yaxis_title="Composition Ratio")
         _plotly_chart_with_export(b, chart_key="cluster_map_composition", default_file_name="cluster_map_composition")
 
-    st.markdown("### 相关性与线性拟合分析")
+    st.markdown("### correlation text linear text text text text")
     
-    tab1, tab2 = st.tabs(["分类变量相关性检验 (卡方检验)", "连续变量线性拟合 (OLS)"])
+    tab1, tab2 = st.tabs(["text text variable correlation test (text text test)", "text text variable linear text text (OLS)"])
     
     with tab1:
-        st.write(f"检验 **{use_col}** 与 **{climate_mode}** 之间是否相互关联。")
+        st.write(f"text **{use_col}** text **{climate_mode}** text。")
         try:
             from scipy.stats import chi2_contingency
             raw_tab = pd.crosstab(use[use_col].astype(str), use[climate_mode].astype(str))
@@ -4093,35 +4093,35 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
                 min_dim = min(raw_tab.shape) - 1
                 cramer_v = np.sqrt(chi2 / (n * min_dim)) if min_dim > 0 else 0
                 
-                st.metric(label="Pearson 卡方检验 P-value", value=f"{p:.4e}", help="P值越小(如<0.05)，越能说明两个变量之间存在关联")
+                st.metric(label="Pearson text text test P-value", value=f"{p:.4e}", help="Ptext text text(text<0.05)，text text text text text text variable text text text text association")
                 
                 if p < 0.05:
-                    st.success(f"**结论认为有关联:** P-value < 0.05，在显著性水平0.05下，可以认定 **{use_col}** 和 **{climate_mode}** 之间存在显著关联！\n\n(关联强度 Cramer's V = {cramer_v:.3f}，值越接近1说明关联越强)")
+                    st.success(f"**text:** P-value < 0.05，text0.05text，text **{use_col}** text **{climate_mode}** text！\n\n(text Cramer's V = {cramer_v:.3f}，text1text)")
                 else:
-                    st.warning(f"**未发现明显关联:** P-value >= 0.05，目前证据**无法**证明两者的分布有显著相关性。 (关联强度 Cramer's V: {cramer_v:.3f})")
+                    st.warning(f"**text:** P-value >= 0.05，text**text**text。 (text Cramer's V: {cramer_v:.3f})")
                 
-                with st.expander("查看原始列联表"):
+                with st.expander("text text text text text text text"):
                     st.dataframe(raw_tab)
             else:
-                st.info("数据样本不够或只有单一类别，无法完成检验。")
+                st.info("data sample text text text text text text text text text，unable to text text test。")
         except ImportError:
-            st.warning("如需卡方检验请安装 scipy 库。")
+            st.warning("text text text text test text text text scipy text。")
 
     with tab2:
         num_cols = plot_df.select_dtypes(include=[np.number]).columns.tolist()
         num_cols = [c for c in num_cols if plot_df[c].nunique() > 1]
         
-        st.write("利用线性回归(OLS)分析**连续维度**变量间的关系，这常用于验证数值指标间的线性趋势。")
+        st.write("text text linear text text(OLS)text text**text text text text**variable text text text text，text text text text text text text text text text text text linear text text。")
         c1, c2 = st.columns(2)
         with c1:
             x_opts = [c for c in ["aridity", "frac_snow", "forcing_elev_m", "lat", "lon", "p_mean"] if c in num_cols] + num_cols
             # Deduplicate while preserving order
             x_opts = list(dict.fromkeys(x_opts))
-            x_ax = st.selectbox("X 轴 (如连续气象、地理维度)", options=x_opts, index=0)
+            x_ax = st.selectbox("X text (text text text text text、text text text text)", options=x_opts, index=0)
         with c2:
             y_opts = [c for c in ["top_factor_score", "nse", "probe_r2_mean"] if c in num_cols] + [c for c in num_cols if "top_factor" in c] + num_cols
             y_opts = list(dict.fromkeys(y_opts))
-            y_ax = st.selectbox("Y 轴 (如模型指标、变量注意力得分)", options=y_opts, index=0)
+            y_ax = st.selectbox("Y text (text text text text text、variable text text text text text)", options=y_opts, index=0)
             
         fit_use = plot_df[[x_ax, y_ax]].dropna()
         if len(fit_use) > 2:
@@ -4130,9 +4130,9 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
                 corr, p_corr = pearsonr(fit_use[x_ax], fit_use[y_ax])
                 
                 if p_corr < 0.05:
-                    st.success(f"**结论认为有关联:** Pearson相关系数 **R = {corr:.3f}** (P值: {p_corr:.4e})。变量存在显著线性关系！")
+                    st.success(f"**text:** Pearsontext **R = {corr:.3f}** (Ptext: {p_corr:.4e})。text！")
                 else:
-                    st.warning(f"**未发现明显线性关联:** Pearson相关系数 **R = {corr:.3f}** (P值: {p_corr:.4e})。说明线性趋势不显著。")
+                    st.warning(f"**text:** Pearsontext **R = {corr:.3f}** (Ptext: {p_corr:.4e})。text。")
                     
                 color_opt = climate_mode if climate_mode in plot_df.columns else None
                 fig_scatter = px.scatter(
@@ -4140,17 +4140,17 @@ def _render_cluster_map(output_root: str, stations_csv: str, camels_root: str | 
                     hover_name="station_id",
                     color=color_opt,
                     trendline="ols",
-                    title=f"`{y_ax}` 与 `{x_ax}` 的线性拟合图"
+                    title=f"`{y_ax}` text `{x_ax}` text"
                 )
                 _plotly_chart_with_export(fig_scatter, chart_key="cluster_map_linear_fit", default_file_name="cluster_map_linear_fit")
             except Exception as e:
-                st.error(f"绘图时出错: {e}")
+                st.error(f"text: {e}")
         else:
-            st.info("缺少足够的同时满足X和Y的有数值的数据点。")
+            st.info("missing text text text text text text textXtextYtext text text text text data text。")
 
 
 def main():
-    st.title("可交互电路可视化")
+    st.title("text interaction text text visualization")
 
     workspace_root = os.getcwd()
     local_default = os.path.join(workspace_root, "outputs")
@@ -4166,20 +4166,20 @@ def main():
     if "viz_view" not in st.session_state:
         st.session_state["viz_view"] = "stations"
 
-    st.sidebar.markdown("### 全局设置")
+    st.sidebar.markdown("### global settings")
     output_root = st.sidebar.text_input(
-        "结果根目录",
+        "results text directory",
         value=st.session_state.get("viz_output_root", preferred_output_root if os.path.isdir(preferred_output_root) else local_default),
     )
-    stations_csv = st.sidebar.text_input("站点元数据CSV", value=st.session_state.get("viz_stations_csv", local_stations_default))
-    camels_root = st.sidebar.text_input("CAMELS属性目录", value=st.session_state.get("viz_camels_root", local_camels_default))
-    page_mode = st.sidebar.radio("页面", options=["站点总览", "聚类地图"], index=0)
+    stations_csv = st.sidebar.text_input("station text dataCSV", value=st.session_state.get("viz_stations_csv", local_stations_default))
+    camels_root = st.sidebar.text_input("CAMELStext text directory", value=st.session_state.get("viz_camels_root", local_camels_default))
+    page_mode = st.sidebar.radio("page", options=["station overview", "clustering map"], index=0)
     st.session_state["viz_output_root"] = output_root
     st.session_state["viz_stations_csv"] = stations_csv
     st.session_state["viz_camels_root"] = camels_root
 
     view_mode = st.session_state.get("viz_view", "stations")
-    if page_mode == "聚类地图":
+    if page_mode == "clustering map":
         _render_cluster_map(output_root, stations_csv, camels_root.strip() or None)
     elif view_mode == "detail":
         station_id = st.session_state.get("viz_station_id")

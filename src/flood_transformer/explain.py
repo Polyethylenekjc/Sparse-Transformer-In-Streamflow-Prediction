@@ -16,11 +16,11 @@ def extract_hidden_states(
     data_loader: DataLoader,
     device: torch.device,
 ) -> List[np.ndarray]:
-    """提取所有层 hidden states。
+    """Extract hidden states for all layers.
 
-    返回:
-        list[np.ndarray]，长度为 num_layers+1，
-        每个元素形状为 [N, L, D]
+    Returns:
+        list[np.ndarray], length = num_layers + 1,
+        each element has shape [N, L, D]
     """
     model.eval()
     all_layers: Optional[List[List[np.ndarray]]] = None
@@ -66,7 +66,7 @@ def _collect_preds(
                 rain_mean = rain.mean(dim=1, keepdim=True)
                 x_mod[:, :, rainfall_index] = rain_mean
             elif intervention == "shuffle_keep_total":
-                # 仅打乱时间顺序，总和天然保持不变
+                # Shuffle only temporal order; total amount remains unchanged.
                 bsz, seq = rain.shape
                 idx = torch.stack([torch.randperm(seq, device=x.device) for _ in range(bsz)], dim=0)
                 shuffled = rain.gather(1, idx)
@@ -83,7 +83,7 @@ def _collect_preds(
         preds.append(out.pred.detach().cpu().numpy())
         ys.append(y.detach().cpu().numpy())
 
-        # 记录最后一层注意力，供统计使用
+        # Record last-layer attention for statistics.
         if out.attention_maps:
             all_attn.append(out.attention_maps[-1].detach().cpu())
 
@@ -93,10 +93,10 @@ def _collect_preds(
 
 
 def linear_probe(hidden_states: np.ndarray, physical_variable: np.ndarray) -> Dict[str, np.ndarray | float]:
-    """线性探针：用隐藏态预测物理变量。
+    """Linear probe: predict physical variables from hidden states.
 
-    参数:
-        hidden_states: [N, L, D] 或 [N, D]
+    Args:
+        hidden_states: [N, L, D] or [N, D]
         physical_variable: [N]
     """
     if hidden_states.ndim == 3:
@@ -135,7 +135,7 @@ def get_attention_statistics(
     device: torch.device,
     flood_quantile: float = 0.9,
 ) -> Dict[str, np.ndarray | float]:
-    """统计洪水前后注意力分布。"""
+    """Compute attention distributions before and after flood events."""
     model.eval()
     attn_last_query = []
     y_list = []
@@ -146,9 +146,9 @@ def get_attention_statistics(
         if not out.attention_maps:
             continue
 
-        # 最后一层 attention: [B, H, L, L]
+        # Last-layer attention: [B, H, L, L]
         attn = out.attention_maps[-1].detach().cpu().numpy()
-        # 取最后一个 query 对所有历史 key 的关注
+        # Use the last query and aggregate attention over all historical keys.
         attn = attn[:, :, -1, :]  # [B, H, L]
         attn = attn.mean(axis=1)  # [B, L]
 
@@ -178,7 +178,7 @@ def head_ablation_test(
     data_loader: DataLoader,
     device: torch.device,
 ) -> List[Dict[str, float]]:
-    """逐层逐 head 消融，评估性能下降（MSE increase）。"""
+    """Ablate each head layer-by-layer and evaluate performance drop (MSE increase)."""
     model.eval()
 
     base_pred, base_y, _ = _collect_preds(model, data_loader, device)
@@ -222,10 +222,10 @@ def mean_ablation(
     device: torch.device,
     ablate: str = "neuron",
 ) -> List[Dict[str, float]]:
-    """均值消融测试。
+    """Mean-ablation test.
 
-    ablate='head': 将某个 head gate 替换为该层 head gate 均值
-    ablate='neuron': 将某个 neuron gate 替换为该层 neuron gate 均值
+    ablate='head': replace a head gate by the layer-wise mean head gate
+    ablate='neuron': replace a neuron gate by the layer-wise mean neuron gate
     """
     model.eval()
 
@@ -280,7 +280,7 @@ def input_ablation_test(
     device: torch.device,
     feature_names: List[str],
 ) -> List[Dict[str, float | str]]:
-    """输入节点均值消融：将单个输入 gate 替换为输入 gate 均值。"""
+    """Input-node mean ablation: replace one input gate with the mean input gate."""
     model.eval()
 
     base_pred, base_y, _ = _collect_preds(model, data_loader, device)
@@ -317,7 +317,7 @@ def prune_circuit(
     threshold: float = 0.5,
     input_threshold: float | None = None,
 ) -> Dict[str, List[torch.Tensor] | torch.Tensor]:
-    """提取最小电路（关键 input / head / neuron）。"""
+    """Extract the minimal circuit (key input/head/neuron nodes)."""
     return model.prune_circuit(threshold=threshold, input_threshold=input_threshold)
 
 
@@ -328,10 +328,10 @@ def causal_intervention_test(
     device: torch.device,
     feature_names: List[str],
 ) -> Dict[str, float]:
-    """因果干预：
-    1) 用均值替换降雨序列
-    2) 保持总雨量不变，打乱降雨时间顺序
-    观察预测变化
+    """Causal intervention:
+    1) replace rainfall sequence with its mean
+    2) keep total rainfall unchanged while shuffling rainfall timing
+    observe prediction changes
     """
     rain_idx = None
     for i, n in enumerate(feature_names):
@@ -409,15 +409,15 @@ def variable_interaction_test(
     feature_names: List[str],
     mode: str = "replace_mean",
 ) -> Dict[str, object]:
-    """变量交互因果分析。
+    """Causal analysis of variable interactions.
 
-    记:
+    Notation:
       Δ_i   = MSE(do(x_i)) - MSE(base)
       Δ_ij  = MSE(do(x_i,x_j)) - MSE(base)
       I_ij  = Δ_ij - Δ_i - Δ_j
 
-    I_ij > 0 表示协同效应（同时干预造成的损失高于线性叠加）
-    I_ij < 0 表示冗余/替代效应
+    I_ij > 0 indicates synergy (joint intervention causes larger loss than linear sum)
+    I_ij < 0 indicates redundancy/substitution effect
     """
     model.eval()
 
@@ -683,7 +683,7 @@ def build_overrides_from_active_nodes(
     device: torch.device,
     active_node_ids: List[str],
 ) -> Tuple[Dict[int, torch.Tensor], Dict[int, torch.Tensor]]:
-    """从节点集合构建 hard overrides：仅保留 active_node_ids，其余置零。"""
+    """Build hard overrides from a node set: keep only active_node_ids and zero out others."""
     head_overrides: Dict[int, torch.Tensor] = {}
     neuron_overrides: Dict[int, torch.Tensor] = {}
 
@@ -711,7 +711,7 @@ def faithfulness_k_sweep(
     node_ranking: List[Dict[str, float | str]],
     k_values: List[int],
 ) -> List[Dict[str, float]]:
-    """评估保留 Top-K 节点时的性能变化，用于最小电路 faithful 曲线。"""
+    """Evaluate performance change when keeping Top-K nodes for the minimal-circuit faithfulness curve."""
     model.eval()
     base_pred, base_y, _ = _collect_preds(model, data_loader, device)
     base_mse = float(np.mean((base_pred - base_y) ** 2))
@@ -759,13 +759,13 @@ def edge_ablation_test(
     candidate_edges: List[Tuple[str, str, float]],
     threshold: float = 0.5,
 ) -> List[Dict[str, float | str]]:
-    """真实边消融：对每条候选边做四种干预并计算交互效应。
+    """Real-edge ablation: apply four interventions per candidate edge and compute interaction effects.
 
-    对边 e=(s,t)：
-      - base: 不额外消融
-      - src: 仅消融源节点
-      - dst: 仅消融目标节点
-      - both: 同时消融源和目标
+    For edge e=(s,t):
+      - base: no extra ablation
+      - src: ablate source node only
+      - dst: ablate destination node only
+      - both: ablate both source and destination
 
     interaction = both - src - dst + base
     """

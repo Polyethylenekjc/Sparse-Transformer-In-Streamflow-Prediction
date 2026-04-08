@@ -166,14 +166,14 @@ def _train_phase(
 
         mask_loss = torch.tensor(0.0, device=device)
         if lambda_mask_l1 > 0:
-            # head + neuron 掩码
+            # head + neuron masks
             hm = torch.tensor(0.0, device=device)
             for layer in model.layers:
                 hm = hm + torch.sigmoid(layer.attn.head_mask_logits).sum()
                 hm = hm + torch.sigmoid(layer.mlp.neuron_mask_logits).sum()
             mask_loss = mask_loss + hm * lambda_mask_l1
         if lambda_input_mask_l1 > 0:
-            # 输入节点掩码
+            # input-node masks
             im = torch.sigmoid(model.input_mask_logits).sum()
             mask_loss = mask_loss + im * lambda_input_mask_l1
         loss = task_loss + mask_loss
@@ -240,7 +240,7 @@ def _collect_physical_variables(test_loader, feature_names: List[str]) -> Dict[s
     if soil_idx is not None:
         api = x_all[:, :, soil_idx].mean(axis=1)
     else:
-        # 退化版 API：指数衰减累计降雨
+        # Approximate API: exponentially decayed accumulated rainfall.
         L = rain.shape[1]
         decay = np.exp(-np.arange(L)[::-1] / 10.0)
         api = (rain * decay[None, :]).sum(axis=1)
@@ -374,7 +374,7 @@ def _build_candidate_edges(
 
     candidates: List[Tuple[str, str, float]] = []
 
-    # 同层: head -> neuron
+    # Same-layer: head -> neuron
     for l_idx, (h_mask, n_mask) in enumerate(zip(active_heads, active_neurons)):
         h_idx = np.where(np.asarray(h_mask.cpu()) > 0)[0].tolist()
         n_idx = np.where(np.asarray(n_mask.cpu()) > 0)[0].tolist()
@@ -385,7 +385,7 @@ def _build_candidate_edges(
                 score = float(np.sqrt(max(0.0, node_imp.get(s, 0.0) * node_imp.get(t, 0.0))))
                 candidates.append((s, t, score))
 
-    # 跨层: neuron(l) -> head(l+1)
+    # Cross-layer: neuron(l) -> head(l+1)
     for l_idx in range(len(active_heads) - 1):
         n_idx = np.where(np.asarray(active_neurons[l_idx].cpu()) > 0)[0].tolist()
         h_next = np.where(np.asarray(active_heads[l_idx + 1].cpu()) > 0)[0].tolist()
@@ -411,12 +411,12 @@ def _build_candidate_edges(
 
 
 def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
-    """五阶段流程：
-    1) 训练 dense Transformer
-    2) 加入权重稀疏退火
-    3) 训练可学习 mask（电路学习）
-    4) 提取最小电路
-    5) 因果干预测试
+    """Five-stage pipeline:
+    1) train dense Transformer
+    2) introduce weight sparsity annealing
+    3) train learnable masks (circuit learning)
+    4) extract minimal circuit
+    5) causal intervention test
     """
     os.makedirs(config.output_dir, exist_ok=True)
     _set_seed(config.seed)
@@ -534,7 +534,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
     _run_epochs("sparse", config.epochs_sparse, apply_sparse=config.enable_weight_sparsity, lambda_l1=0.0, lambda_input_l1=0.0)
     _run_epochs("mask", config.epochs_mask, apply_sparse=config.enable_weight_sparsity, lambda_l1=config.lambda_mask_l1, lambda_input_l1=config.lambda_input_mask_l1)
 
-    # 基础评估
+    # Basic evaluation
     test_loss = _evaluate(model, data.test_loader, device, config.task_type)
     metrics = {}
     if config.task_type == "regression":
@@ -553,7 +553,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
             else:
                 print(msg)
 
-    # 4) 提取电路 + 消融
+    # 4) extract circuit + ablation
     circuit = prune_circuit(model, threshold=config.circuit_threshold, input_threshold=config.input_threshold)
     input_importance = input_ablation_test(model, data.test_loader, device, feature_names=data.feature_names)
     head_importance = head_ablation_test(model, data.test_loader, device)
@@ -574,7 +574,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
         threshold=config.circuit_threshold,
     )
 
-    # IN -> 节点桥接（真实交互）：默认评估 L0 的 active head/neuron
+    # IN -> node bridging (real interactions): by default evaluate active L0 heads/neurons
     l0_targets: List[str] = []
     if len(circuit.get("active_heads", [])) > 0:
         h0 = np.asarray(circuit["active_heads"][0].cpu())
@@ -605,7 +605,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
         k_values=k_values,
     )
 
-    # 5) 可解释性接口
+    # 5) explainability interfaces
     attn_stats = get_attention_statistics(model, data.test_loader, device)
     hidden_states = extract_hidden_states(model, data.test_loader, device)
     phys = _collect_physical_variables(data.test_loader, data.feature_names)
@@ -616,20 +616,20 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
         "dpdt": linear_probe(hidden_states[-1], phys["dpdt"]),
     }
 
-    # ---- 新增：持久化更多中间产物，便于后续分析无需重训 ----
+    # ---- New: persist more intermediate artifacts for later analysis without retraining ----
     os.makedirs(config.output_dir, exist_ok=True)
     try:
-        # 保存隐藏态（每层为一个数组）
+        # Save hidden states (one array per layer)
         hs_path = os.path.join(config.output_dir, "hidden_states.npz")
-        # hidden_states 是 list[np.ndarray]：以 layer_0, layer_1 ... 命名
+        # hidden_states is list[np.ndarray], named layer_0, layer_1, ...
         hs_kwargs = {f"layer_{i}": np.asarray(a) for i, a in enumerate(hidden_states)}
         np.savez_compressed(hs_path, **hs_kwargs)
 
-        # 保存物理量原始数组（cum_rain, api, dpdt）
+        # Save raw physical-proxy arrays (cum_rain, api, dpdt)
         phys_path = os.path.join(config.output_dir, "physical_probe_inputs.npz")
         np.savez_compressed(phys_path, cum_rain=np.asarray(phys["cum_rain"]), api=np.asarray(phys["api"]), dpdt=np.asarray(phys["dpdt"]))
 
-        # 保存候选边列表（用于后续快速重用）
+        # Save candidate edge list for fast downstream reuse
         cand_edges_path = os.path.join(config.output_dir, "candidate_edges.csv")
         try:
             import pandas as _pd
@@ -639,9 +639,9 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
         except Exception:
             pass
     except Exception:
-        # 容错：如果保存失败，不影响主流程
+        # Fault tolerance: saving failure does not block main pipeline
         pass
-    # ---- end 新增 ----
+    # ---- end new section ----
 
     causal = causal_intervention_test(model, data.test_loader, device, data.feature_names)
     var_interaction = variable_interaction_test(
@@ -652,7 +652,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
         mode="replace_mean",
     )
 
-    # 输出结果
+    # Output results
     log_path = os.path.join(config.output_dir, "train_log.csv")
     pd.DataFrame(logs).to_csv(log_path, index=False)
 
@@ -744,7 +744,7 @@ def run_full_experiment(config: ExperimentConfig) -> Dict[str, str]:
     torch.save(model.state_dict(), model_path)
 
     x_arr, y_arr, p_arr = _collect_test_arrays(model, data.test_loader, device)
-    # 保存测试集的输入/目标/预测数组以便离线分析
+    # Save test input/target/prediction arrays for offline analysis
     try:
         test_arrays_path = os.path.join(config.output_dir, "test_arrays.npz")
         np.savez_compressed(test_arrays_path, x=x_arr, y=y_arr, p=p_arr)

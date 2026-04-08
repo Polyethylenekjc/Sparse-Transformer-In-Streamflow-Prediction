@@ -35,7 +35,7 @@ def build_args():
     p = argparse.ArgumentParser(description="Run flood sparse-transformer experiment for all stations")
     p.add_argument("--forcing_dir", type=str, default="data/Forcing")
     p.add_argument("--streamflow_dir", type=str, default="data/Streamflow")
-    p.add_argument("--output_root", type=str, default="outputs", help="每个站点输出到 output_root/站点ID")
+    p.add_argument("--output_root", type=str, default="outputs", help="Output each station to output_root/station_id")
     p.add_argument("--device", type=str, default="cpu")
     p.add_argument("--task", type=str, default="regression", choices=["regression", "classification"])
     p.add_argument("--seq_len", type=int, default=15)
@@ -61,9 +61,9 @@ def build_args():
     p.add_argument("--no_rich", action="store_true")
     p.add_argument("--log_every", type=int, default=20)
     p.add_argument("--require_streamflow", action=argparse.BooleanOptionalAction, default=True)
-    p.add_argument("--max_stations", type=int, default=0, help=">0 时只跑前 N 个站点")
-    p.add_argument("--workers", type=int, default=4, help="并行进程数")
-    p.add_argument("--progress_heartbeat_sec", type=float, default=30.0, help="并行模式心跳日志间隔秒")
+    p.add_argument("--max_stations", type=int, default=0, help=">0 means run only the first N stations")
+    p.add_argument("--workers", type=int, default=4, help="Number of parallel worker processes")
+    p.add_argument("--progress_heartbeat_sec", type=float, default=30.0, help="Heartbeat log interval (seconds) in parallel mode")
     return p.parse_args()
 
 
@@ -124,7 +124,7 @@ def main():
     args = build_args()
 
     if not os.path.exists(args.forcing_dir):
-        raise FileNotFoundError(f"forcing_dir 不存在: {args.forcing_dir}")
+        raise FileNotFoundError(f"forcing_dir does not exist: {args.forcing_dir}")
 
     station_ids = _list_station_ids(
         forcing_dir=args.forcing_dir,
@@ -135,7 +135,7 @@ def main():
         station_ids = station_ids[: args.max_stations]
 
     if len(station_ids) == 0:
-        raise RuntimeError("未找到可运行的站点")
+        raise RuntimeError("No runnable stations were found")
 
     os.makedirs(args.output_root, exist_ok=True)
 

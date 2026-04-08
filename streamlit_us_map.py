@@ -149,7 +149,7 @@ def _configure_kaleido_chrome(chrome_path: str) -> None:
 def _show_export_studio(fig: go.Figure, chart_key: str, default_file_name: str) -> None:
     pop = st.popover(f"Open Export Studio: {default_file_name}", use_container_width=False)
     with pop:
-        st.caption("弹出调试面板：修改参数后点击 Update Preview，避免主界面频繁重渲染。")
+        st.caption("Open the debug panel and click Update Preview after changing parameters to avoid frequent main-view rerendering.")
 
         traces = list(fig.data)
         trace_options = [_trace_label(i, tr) for i, tr in enumerate(traces)]
@@ -273,7 +273,7 @@ def _show_export_studio(fig: go.Figure, chart_key: str, default_file_name: str) 
                 st.session_state[preview_format_key] = out_format
                 st.error(f"Export failed. Details: {e}")
                 st.info(
-                    "请在 WSL 环境安装 Linux Chrome/Chromium，并在此填写其可执行路径（例如 /usr/bin/google-chrome）。"
+                    "Please install Linux Chrome/Chromium in WSL and provide its executable path here (for example /usr/bin/google-chrome)."
                 )
 
         preview_to_show = st.session_state.get(preview_state_key)

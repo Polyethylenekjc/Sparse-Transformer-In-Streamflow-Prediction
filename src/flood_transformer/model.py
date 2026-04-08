@@ -18,11 +18,11 @@ class ModelOutputs:
 
 
 class SparseMultiHeadSelfAttention(nn.Module):
-    """可解释 MHA：支持提取 attention，并对每个 head 加可学习门控 mask。"""
+    """Explainable MHA: exposes attention and applies learnable gating masks per head."""
 
     def __init__(self, d_model: int, n_heads: int, dropout: float, enable_learnable_masks: bool = True):
         super().__init__()
-        assert d_model % n_heads == 0, "d_model 必须能整除 n_heads"
+        assert d_model % n_heads == 0, "d_model must be divisible by n_heads"
         self.d_model = d_model
         self.n_heads = n_heads
         self.d_head = d_model // n_heads
@@ -63,7 +63,7 @@ class SparseMultiHeadSelfAttention(nn.Module):
 
 
 class SparseMLP(nn.Module):
-    """可解释 MLP：每个隐藏神经元可学习门控，并支持输出激活 Top-K 稀疏。"""
+    """Explainable MLP: learnable gate per hidden neuron with Top-K output activation sparsity."""
 
     def __init__(
         self,
@@ -153,14 +153,14 @@ class SparseTransformerBlock(nn.Module):
 
 
 class ExplainableSparseTransformer(nn.Module):
-    """时间序列洪水预测 Transformer。
+    """Time-series transformer for flood prediction.
 
-    特性：
-    - 多头注意力 + 残差 + MLP
-    - 权重稀疏（训练中外部调用 apply_global_weight_sparsity）
-    - 激活稀疏（MLP 输出 Top-K）
-    - input / head / neuron 可学习电路 mask
-    - 导出 attention map 与 hidden states
+    Features:
+    - Multi-head attention + residual + MLP
+    - Weight sparsity (apply_global_weight_sparsity is called externally during training)
+    - Activation sparsity (MLP Top-K output)
+    - input/head/neuron learnable circuit masks
+    - Exports attention maps and hidden states
     """
 
     def __init__(
@@ -235,7 +235,7 @@ class ExplainableSparseTransformer(nn.Module):
                 hidden_states.append(x)
 
         x = self.final_ln(x)
-        cls = x[:, -1, :]  # 用最后时间步进行预测
+        cls = x[:, -1, :]  # Use the last timestep for prediction.
         pred = self.head(cls).squeeze(-1)
 
         return ModelOutputs(pred=pred, attention_maps=attention_maps, hidden_states=hidden_states)
@@ -246,10 +246,10 @@ class ExplainableSparseTransformer(nn.Module):
         topk_mode: str = "global",
         minimum_alive_per_neuron: int = 0,
     ):
-        """对权重参数施加 Top-K 稀疏（不包含 bias / mask logits）。
+        """Apply Top-K sparsity to weight parameters (excluding bias and mask logits).
 
-        - global: 参数级全局 Top-K
-        - neuronwise: 对 MLP 权重做按神经元维度 Top-K，并保证最小存活连接数
+        - global: global Top-K across parameters
+        - neuronwise: neuron-dimension Top-K for MLP weights, with a minimum number of alive connections
         """
         with torch.no_grad():
             for name, param in self.named_parameters():
@@ -280,7 +280,7 @@ class ExplainableSparseTransformer(nn.Module):
                 param.copy_(sparse_param)
 
     def mask_regularization(self) -> torch.Tensor:
-        """L1(mask) 正则项：对 head + neuron 的 sigmoid 概率求和。"""
+        """L1(mask) regularizer: sum sigmoid probabilities of head and neuron masks."""
         reg = torch.tensor(0.0, device=self.pos_embed.device)
         reg = reg + torch.sigmoid(self.input_mask_logits).sum()
         for layer in self.layers:
@@ -298,7 +298,7 @@ class ExplainableSparseTransformer(nn.Module):
         return input_probs, head_probs, neuron_probs
 
     def prune_circuit(self, threshold: float = 0.5, input_threshold: Optional[float] = None) -> Dict[str, List[torch.Tensor]]:
-        """返回按阈值裁剪后的最小电路结构。"""
+        """Return the threshold-pruned minimal circuit structure."""
         input_probs, heads, neurons = self.get_mask_probabilities()
         in_th = threshold if input_threshold is None else input_threshold
         active_inputs = (input_probs > in_th).float()
