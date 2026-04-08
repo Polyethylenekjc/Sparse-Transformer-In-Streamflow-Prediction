@@ -44,10 +44,10 @@
 \setcounter{page}{1}
 \section{Experimental Design and Detailed Settings}
 
-\subsection{Learned Core Circuits Reflect Hydrological Knowledge Across Basins}
+\subsection{Learned Core Circuit Structures Reflect Hydrological Knowledge Across Basins}
 \label{sec:knowledge}
 
-To analyze how learned core interaction circuits vary under different hydro-climatic conditions, we constructed multiple climate classification indicators based on static basin attributes, including aridity class, snow regime, and geo-climatic type\cite{hess-camels}. These classifications were used for post-hoc grouping and statistical analysis of interaction circuits across basins.
+To analyze how learned interaction structures in core circuits vary under different hydro-climatic conditions, we constructed multiple climate classification indicators based on static basin attributes, including aridity class, snow regime, and geo-climatic type\cite{hess-camels}. These classifications were used for post-hoc grouping and statistical analysis of interaction structures across basins.
 
 \subsubsection*{Aridity Class}
 
@@ -68,7 +68,7 @@ Dryness conditions were classified using the aridity index (\texttt{aridity}) th
     \end{tabular*}
 \end{table}
 
-The thresholds (0.65 and 1.0) follow established hydro-climatic stratification practice and effectively distinguish energy-limited from water-limited basins\cite{hess-24-1081-2020}. They provide physically meaningful groupings for subsequent analysis of interaction circuit distributions.
+The thresholds (0.65 and 1.0) follow established hydro-climatic stratification practice and effectively distinguish energy-limited from water-limited basins\cite{hess-24-1081-2020}. They provide physically meaningful groupings for subsequent analysis of interaction structure distributions.
 
 \subsubsection*{Snow Regime}
 
@@ -115,7 +115,7 @@ Geo-climatic type was determined using a hierarchical rule based on elevation (\
 
 This hierarchical classification first identifies high-elevation regions ($\geq 1500 m$), then distinguishes oceanic versus inland climates based on longitude, and finally separates arid continental basins using a higher aridity threshold (1.5). This approach provides a physically interpretable stratification of basins across major hydro-climatic regimes.
 
-\subsection{Supplementary Notes: Accurate Volume Response but Limited Sensitivity to Temporal and State Perturbations}
+\subsection{Accurate Volume Response but Limited Sensitivity to Temporal and State Perturbations}
 \label{sec:sensitive}
 
 To examine whether the model encodes physically consistent hydrological sensitivities—rather than relying on spurious statistical correlations—we designed a station-wise counterfactual sensitivity framework on the test split\cite{simic2025perturbation}. Let $f_{\theta}$ denote the trained sparse transformer, $\mathbf{X}_{i}\in\mathbb{R}^{N_i\times L\times F}$ the input tensor for station $i$ (with $N_i$ samples, lookback length $L$, and $F$ predictors), and $\mathbf{y}_{i}\in\mathbb{R}^{N_i}$ the observed discharge target. For each intervention setting $s$, we define
@@ -210,7 +210,7 @@ Finally, for each intervention family, station-level expectedness is aggregated 
 
 \subsection{STEH-Derived Interpretability Enhances Random Forest Predictive Performance}
 \label{sec:rfDesign}
-To evaluate whether the hydrological structures revealed by STEH can improve a conventional machine-learning benchmark, we designed a paired station-wise comparison between a \emph{baseline} Random Forest (RF) and a \emph{STEH-informed modified} RF\cite{hess-25-2997-2021}. Both models are trained and tested on the same station, temporal split, and target variable, ensuring that any performance differences can be attributed to the STEH-derived design rather than inconsistencies in data or experimental setup\cite{ABBASI2021125717}.
+To evaluate whether the hydrological circuit structures revealed by STEH can improve a conventional machine-learning benchmark, we designed a paired station-wise comparison between a \emph{baseline} Random Forest (RF) and a \emph{STEH-informed modified} RF\cite{hess-25-2997-2021}. Both models are trained and tested on the same station, temporal split, and target variable, ensuring that any performance differences can be attributed to the STEH-derived design rather than inconsistencies in data or experimental setup\cite{ABBASI2021125717}.
 
 Let station index be $i\in\{1,\dots,M\}$, predictors $\mathbf{X}_i$, and discharge target $\mathbf{y}_i$. For each station, we train
 \begin{equation}
@@ -272,8 +272,8 @@ Due to the large number of study sites, reporting all optimized hyperparameter c
         Batch size & Number of samples per mini-batch & $32$ -- $256$ \\
         Hidden size & Dimension of hidden representations & $16$ -- $256$ \\
         Number of layers & Number of Transformer encoder layers & $1$ -- $16$ \\
-        Weight sparsity & Sparsity level in weight pruning & $0.7$ -- $0.95$ \\
-        Activation sparsity & Sparsity level for activations & $0.6$ -- $0.9$ \\
+        Weight sparsity & Target fraction of pruned weights in Stage II & $0.7$ -- $0.95$ \\
+        Activation sparsity & Sparsification applied on the last activation dimension. & $0.6$ -- $0.9$ \\
         Gate regularisation & Strength of gate sparsity regularization & $10^{-5}$ -- $10^{-3}$ \\
         \bottomrule
     \end{tabular*}

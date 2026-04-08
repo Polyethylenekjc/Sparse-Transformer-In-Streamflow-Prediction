@@ -6,6 +6,25 @@ from typing import Optional
 import torch
 
 
+def compute_topk_threshold(weight: torch.Tensor, sparsity_ratio: float) -> Optional[torch.Tensor]:
+    """根据目标稀疏率计算幅值阈值。
+
+    定义：保留比例为 (1 - sparsity_ratio)，阈值取第 k 大绝对值，其中
+    k = max(1, int((1 - sparsity_ratio) * N))，N 为元素总数。
+    """
+    if sparsity_ratio <= 0 or sparsity_ratio >= 1:
+        return None
+
+    flat = weight.reshape(-1).abs()
+    total = flat.numel()
+    k = max(1, int((1.0 - sparsity_ratio) * total))
+    if k >= total:
+        return None
+
+    topk_vals, _ = torch.topk(flat, k=k, largest=True, sorted=True)
+    return topk_vals[-1]
+
+
 def update_sparsity(
     step: int,
     total_steps: int,
@@ -48,17 +67,11 @@ def apply_topk_sparsity(weight: torch.Tensor, sparsity_ratio: float) -> torch.Te
     if sparsity_ratio >= 1:
         return torch.zeros_like(weight)
 
-    flat = weight.reshape(-1)
-    total = flat.numel()
-    k = max(1, int((1.0 - sparsity_ratio) * total))
-
-    if k >= total:
+    threshold = compute_topk_threshold(weight, sparsity_ratio)
+    if threshold is None:
         return weight
 
-    _, topk_idx = torch.topk(flat.abs(), k=k, largest=True, sorted=False)
-    mask = torch.zeros_like(flat)
-    mask[topk_idx] = 1.0
-    mask = mask.reshape_as(weight)
+    mask = (weight.abs() >= threshold).to(weight.dtype)
     return weight * mask
 
 

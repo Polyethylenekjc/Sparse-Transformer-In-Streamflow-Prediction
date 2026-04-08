@@ -14,16 +14,17 @@ The authors declare that they have no known competing financial interests or per
 
 \begin{table}[htbp]
 \centering
-\noindent\textbf{Appendix 1: Main Terminology Overview}
-\vspace{0.5em}
+\caption{Appendix 1: Main Terminology Overview}
+\label{tab:terminology_overview}
 \begin{tabularx}{\textwidth}{p{3cm} p{2cm} X}
 \toprule
 \textbf{Full Name} & \textbf{Abbreviation} & \textbf{Description} \\
 \midrule
 Physics-Informed Neural Networks & PINNs & Optimization constraint, emphasizes that predictions must obey physical laws, e.g., streamflow predictions satisfy mass conservation. \\
 Sparse Transformer for Explainable Hydrology & STEH & Architecture design, emphasizes sparse and analyzable internal paths, e.g., identifying paths responsible for evapotranspiration. \\
-Circuit & Circuit & Micro-level structure, emphasizes atomic function of specific computational units, e.g., a particular attention head responding to high-intensity rainfall. \\
-Structural & Structural & Macro-level architecture, emphasizes organization of model components (layers/heads), e.g., encoder hierarchy reflects rainfall-runoff time lag. \\
+Circuit & Circuit & Functional subset of computational units selected by sparsification (e.g., specific heads/neurons) that jointly supports prediction. \\
+Structural & Structural & Organization pattern of components and interactions within a circuit (e.g., layer-wise arrangement and dependency layout). \\
+Information Flow Pathway & Pathway & Directed route of information propagation within a circuit (e.g., precipitation-to-runoff transfer through key nodes). \\
 Explainable AI & XAI & Overall goal, broad transparency and interpretability, e.g., understanding why the model predicts more accurately during drought periods. \\
 \bottomrule
 \end{tabularx}

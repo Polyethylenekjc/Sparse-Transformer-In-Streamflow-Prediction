@@ -2,9 +2,9 @@
 
 \subsection{Framework Overview}
 
-The overall workflow of the proposed Sparse Transformer-based Explainable Hydrology (STEH) framework is illustrated in Fig.~\ref{fig:steh}. The framework provides an end-to-end interpretability pipeline for deep learning-based streamflow prediction, enabling systematic analysis from hydrological input variables, through internal neural structures, to prediction outputs.
+The overall workflow of the proposed Sparse Transformer-based Explainable Hydrology (STEH) framework is illustrated in Fig.~\ref{fig:steh}. The framework provides an end-to-end interpretability pipeline for deep learning-based streamflow prediction, enabling systematic analysis from hydrological input variables, through internal circuit structures, to prediction outputs.
 
-The STEH framework consists of three main components: (1) sparse circuit discovery, (2) circuit verification and refinement, and (3) physical interpretation. Together, these components aim to reveal how deep learning models process hydrological information and whether the learned representations correspond to meaningful hydrological processes.
+The STEH framework consists of three main components: (1) sparse circuit discovery, (2) circuit verification and refinement, and (3) physical interpretation. Together, these components aim to reveal how deep learning models process hydrological information and whether the learned representations correspond to meaningful hydrological processes.Terminology follows the Appendix 1 terminology table (Table~\ref{tab:terminology_overview}).
 
 First, sparse circuit discovery is performed by introducing learnable gating mechanisms into the Transformer architecture. Gates are applied to input variables, attention heads, and feed-forward neurons, allowing the model to automatically identify a compact set of critical computational units during training. Through sparsity-inducing optimization, redundant structures are gradually suppressed, resulting in a sparse computational circuit responsible for streamflow prediction.
 
@@ -13,6 +13,8 @@ Second, circuit verification and refinement are conducted through systematic abl
 Third, the extracted core circuit is further analyzed to understand internal information flow and structural dependencies. Interaction analysis is used to identify cooperative or redundant relationships between model components. In addition, linear probing techniques are applied to hidden representations to evaluate whether internal states encode physically meaningful hydrological variables.
 
 Finally, the interpretability results are validated from a hydrological perspective. Based on the structural knowledge extracted from the neural network, modifications are introduced to a Random Forest benchmark model to examine whether the discovered hydrological knowledge can improve data-driven hydrological simulations.
+
+In what follows, we first introduce the sparse Transformer architecture and the three-stage sparsification strategy, and then describe the interpretability analyses and evaluation metrics.
 
 \begin{figure}[ht]
     \centering
@@ -70,8 +72,17 @@ Top-$K$ sparsity is progressively imposed on weight tensors with an annealed spa
 \end{equation}
 where $\rho_{\min}$ and $\rho_{\max}$ denote the initial and final sparsity ratios. $t$ represents the pruning iteration, $T$ is the total number of steps over which sparsification is applied, and $\gamma$ is a shape parameter that controls the annealing schedule. Specifically, larger $\gamma$ values result in a slower increase in sparsity at early stages and a more rapid transition near the end, while smaller $\gamma$ leads to a more uniform sparsification process.
 
-\textbf{Stage III (Mask Learning\cite{NEURIPS2019_1113d7a7}).}
-Learnable gates are optimized with sparsity regularization (Fig.~\ref{fig:sparseTransformer}(e--f)):
+For each weight group $\mathbf{W}_g$ with $N_g$ elements, the annealed sparsity ratio $\rho_t$ determines the number of retained weights as
+\begin{equation}
+    k_{g,t}=\max\left(1,\left\lfloor(1-\rho_t)N_g\right\rfloor\right).
+\end{equation}
+The corresponding magnitude threshold is the $k_{g,t}$-th largest absolute value:
+\begin{equation}
+    \theta_{g,t}=\operatorname{TopKAbs}(\mathbf{W}_g, k_{g,t})_{\min},
+\end{equation}
+
+\textbf{Stage III (Mask Learning).}
+Learnable gates are optimized with sparsity regularization (Fig.~\ref{fig:sparseTransformer}(e--f))\cite{NEURIPS2019_1113d7a7}:
 
 \begin{equation}
 \left\{
@@ -99,12 +110,12 @@ where $M$ is the number of training samples in a mini-batch, $\mathcal{L}_{\math
     \label{fig:sparseTransformer}
 \end{figure}
 
-After training, a compact core predictive circuit is extracted by thresholding gate probabilities.\cite{openai_weight_sparse_transformers} Let $p_i=\sigma(z_i)$ denote the activation probability of gate $i$. A unit is retained if
+After training, a compact core predictive circuit is extracted by thresholding gate probabilities\cite{openai_weight_sparse_transformers}. Let $p_i=\sigma(z_i)$ denote the activation probability of gate $i$. A unit is retained if
 
 \begin{equation}
     a_i=\mathrm{I}(p_i>\tau),
 \end{equation}
-where $\tau$ is the pruning threshold. Applying this rule to all gates yields a compact model containing only the most important computational pathways.
+where $\tau$ is the pruning threshold, which is optimized by BO algorithm. Applying this rule to all gates yields a compact model containing only the most important computational pathways.
 
 \subsection{Interpretability Analysis}
 
@@ -166,7 +177,7 @@ where $\kappa$ is a decay factor controlling the memory of antecedent rainfall a
 
 Model evaluation is conducted from three perspectives: predictive accuracy, explainability properties, and hydro-climatic diagnostics.
 
-Predictive accuracy is measured using standard hydrological metrics including RMSE\cite{WRR_RMSE}, MAE\cite{WRR_MAE}, and NSE\cite{WRR_NSE}. Explainability-related metrics include ablation importance ($\Delta\mathrm{MSE}$, Eq. ~\ref{eq:Delta_MSE}), interaction score ($I_{ij}$, Eq. ~\ref{eq:interaction}), and top-$K$ faithfulness\cite{7552539} trends. Structural sparsity statistics are also reported to quantify circuit compactness.
+Predictive accuracy is measured using standard hydrological metrics including RMSE\cite{WRR_RMSE}, MAE\cite{WRR_MAE}, and NSE\cite{WRR_NSE}. Explainability-related metrics include ablation importance ($\Delta\mathrm{MSE}$, Eq.~\ref{eq:Delta_MSE}), interaction score ($I_{ij}$, Eq.~\ref{eq:interaction}), and top-$K$ faithfulness\cite{7552539} trends. Structural sparsity statistics are also reported to quantify circuit compactness.
 
 Hydro-climatic diagnostics are used to characterize the climatic regimes of catchments. Let $\bar{P}$, $\overline{\mathrm{PET}}$, and $\bar{Q}$ denote the long-term mean annual precipitation, potential evapotranspiration, and streamflow, respectively, and let $P_m$ ($m=1,\dots,12$) be the mean monthly precipitation with $\bar{P}_{\mathrm{ann}}=\sum_{m=1}^{12}P_m$.
 
