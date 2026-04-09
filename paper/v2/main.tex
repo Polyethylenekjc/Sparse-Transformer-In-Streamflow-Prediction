@@ -1,0 +1,58 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{times}
+\usepackage{tabularx}
+\usepackage{booktabs}       
+\usepackage{multirow}        
+\usepackage{threeparttable}  
+\usepackage{float}          
+\usepackage{placeins}    
+
+
+\usepackage{xr}
+\externaldocument{supplementary_information}
+
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+
+
+\usepackage{caption}
+\captionsetup[figure]{name=\textbf{Fig.}, labelsep=space}
+\captionsetup[table]{name=\textbf{Table}, labelsep=space}
+
+\raggedbottom
+\title{A Deep Dive into Model Structure: Do Deep Learning Models Learn Verifiable and Transferable Hydrological Knowledge?}
+
+\author{
+Jiachen Kong$^{1}$,
+Zhaocai Wang$^{1,*}$,
+Zhaoyang Zhu$^{1}$\\
+\\
+$^{1}$Shanghai Ocean University, Shanghai, China\\
+*Corresponding author: zcwang1028@163.com
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+
+\input{sections/abstract.tex}
+\input{sections/intro.tex}
+\input{sections/results.tex}
+\input{sections/discussion.tex}
+\input{sections/summary.tex}
+\input{sections/method.tex}
+\input{sections/data.tex}
+\input{sections/others.tex}
+
+\bibliographystyle{unsrtnat}
+\bibliography{reference}
+
+\end{document}

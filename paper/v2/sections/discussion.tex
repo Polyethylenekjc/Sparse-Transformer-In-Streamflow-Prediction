@@ -1,5 +1,4 @@
-\section{Discussion}
-\subsection{Parsimony and Physical Interpretability Are Prevalent Across Models}
+\subsection{Parsimony and Physical Interpretability Are Prevalent}
 Interestingly, our findings reveal a trend that contrasts with observations reported in some prior studies\cite{DONG2024130941,ZHOU2024132235}, where increased model complexity has been associated with improved predictive performance. As shown in Table~\ref{tab:complexity}, models with higher predictive skill (NSE $\geq$ 0.5) exhibit significantly lower structural complexity compared to lower-performing counterparts, as indicated by a reduced number of nodes (45.77 vs. 56.35, $p = 5.00 \times 10^{-5}$). This suggests that increased model complexity does not necessarily translate into improved performance in this context; instead, more parsimonious architectures may facilitate better generalization\cite{ORTH2015147}. One possible explanation is that overly complex models introduce redundant representations or noise, which can degrade predictive robustness in hydrological applications\cite{Wrr_PGDL}.
 
 \begin{table}[htbp]
@@ -68,11 +67,11 @@ Taken together, these results suggest that parsimony and physical interpretabili
 
 \FloatBarrier
 
-\subsection{Learned Core Circuits Reflect Hydrological Knowledge Across Basins}
+\subsection{Core Circuits Reflect Hydrological Knowledge Across Basins}
 
 \begin{figure*}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{Figures/interaction_analysis.pdf}
+    \includegraphics[width=\textwidth]{../Figures/interaction_analysis.pdf}
     \caption{
         \textbf{Spatial patterns of hydrological interaction regimes and their performance} (a,c,e) Spatial distribution of dominant interaction modes (e.g., P–Q, Q–Q$_{\mathrm{target}}$, and energy-related).
         (b,d,f) NSE, interaction strength, and physical probe states for the corresponding interaction types.
@@ -82,7 +81,7 @@ Taken together, these results suggest that parsimony and physical interpretabili
 
 \begin{figure*}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{Figures/circular_plot.pdf}
+    \includegraphics[width=\textwidth]{../Figures/circular_plot.pdf}
     \caption{
     Distribution of dominant interaction groups across different hydro-climatic regimes, including aridity levels, snow influence, and geo-climatic types.
     }
@@ -105,16 +104,17 @@ Overall, these findings indicate that the learned core circuits are not arbitrar
 
 Following the structural analysis above, we next test whether the extracted hydrological knowledge corresponds to realistic model behavior. As shown in Fig.~\ref{fig:counterfactual_main}, the counterfactual analysis indicates that the model exhibits physically meaningful responses under different types of perturbations\cite{read2019process}. For magnitude-based interventions, particularly rainfall scaling (Fig.~\ref{fig:counterfactual_main}b), the model produces directionally consistent and approximately linear changes in streamflow volume across stations. As precipitation increases (or decreases), the predicted streamflow volume correspondingly increases (or decreases), while prediction error remains largely unchanged. This indicates that the model has learned a stable and physically consistent mapping between precipitation and streamflow generation, and can respond to changes in input water magnitude without substantial loss of predictive accuracy\cite{nearing2021role}.
 
-Under rainfall pattern redistribution (Fig.~\ref{fig:counterfactual_main}c), the total precipitation is conserved, and the predicted streamflow volume remains broadly stable, consistent with mass conservation expectations\cite{WRR_NSE}. Structural differences nevertheless emerge across redistribution modes. In particular, the back-loaded configuration shows a clear positive deviation in predicted streamflow volume relative to other scenarios. This indicates that the model is sensitive to the temporal concentration of rainfall and produces stronger streamflow responses\cite{hess-camels} when precipitation is concentrated toward later periods, reflecting an initial capability to capture rainfall-streamflow lag relationships. Meanwhile, the variation in prediction error across scenarios indicates that the model's utilization of temporal structure remains somewhat scenario-dependent.
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{Figures/Fig_counterfactual_panel_main.pdf}
+    \includegraphics[width=\textwidth]{../Figures/Fig_counterfactual_panel_main.pdf}
     \caption{\textbf{Counterfactual sensitivity analysis across intervention types. }(a) Station-level expected behavior statistics. (b) Rainfall scaling. (c) Rainfall pattern redistribution. (d) streamflow-state scaling. (e) Temperature perturbation.
         Blue lines denote relative changes in predicted streamflow volume, and orange lines denote relative changes in prediction error. Detailed experimental design and evaluation metrics are provided in Supplementary Information~\ref{sec:sensitive}.
     }
     \label{fig:counterfactual_main}
 \end{figure}
 \FloatBarrier
+
+Under rainfall pattern redistribution (Fig.~\ref{fig:counterfactual_main}c), the total precipitation is conserved, and the predicted streamflow volume remains broadly stable, consistent with mass conservation expectations\cite{WRR_NSE}. Structural differences nevertheless emerge across redistribution modes. In particular, the back-loaded configuration shows a clear positive deviation in predicted streamflow volume relative to other scenarios. This indicates that the model is sensitive to the temporal concentration of rainfall and produces stronger streamflow responses\cite{hess-camels} when precipitation is concentrated toward later periods, reflecting an initial capability to capture rainfall-streamflow lag relationships. Meanwhile, the variation in prediction error across scenarios indicates that the model's utilization of temporal structure remains somewhat scenario-dependent.
 
 For streamflow-state perturbations (Fig.~\ref{fig:counterfactual_main}d), moderate scaling of recent streamflow history leads to corresponding adjustments in predicted volume, while prediction error remains stable. This indicates that the model can utilize state information while maintaining consistent predictive performance. As the scaling magnitude increases, however, the model response gradually saturates, with volume changes no longer increasing proportionally to the input. This attenuation pattern suggests that the model does not simply amplify streamflow magnitude linearly, but may impose constraints on non-structured or inconsistent input variations, thereby avoiding unrealistic over-amplification. Such behavior is consistent with a model that captures streamflow dynamics through interactions among multiple hydrological factors\cite{bloschl2017changing} rather than relying solely on absolute magnitude.
 
@@ -132,7 +132,7 @@ From an overall perspective, the modified model exhibits consistent performance 
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{Figures/RF_Performance.pdf}
+    \includegraphics[width=\textwidth]{../Figures/RF_Performance.pdf}
 
     \caption{
         \textbf{Performance comparison between baseline and STEH-informed Random Forest models.} (a) Spatial distribution of NSE differences (red: improved; blue: degraded). (b,c) Performance distributions of the baseline and modified models. (d) Station-wise NSE comparison (points above the diagonal indicate improvement). (e) NSE improvement relative to baseline performance. All results are based on stations with STEH model performance (NSE $>$ 0.5).
@@ -181,5 +181,14 @@ Across different hydro-climatic regimes, the most pronounced improvements are ob
 In humid regions, the modified model also achieves consistent improvements (NSE: 0.700 to 0.709), although the magnitude of improvement is relatively smaller. This can be attributed to the comparatively simpler hydrological processes in such regions\cite{hess-25-2997-2021}, where streamflow generation is primarily controlled by a dominant driver. Under these conditions, the baseline model is already capable of capturing the main dynamics, leaving limited room for further improvement. Nevertheless, the continued reduction in error metrics indicates that structural information still contributes to improved fine-scale representation\cite{ABBASI2021125717}.
 
 Overall, these findings demonstrate that the structural information extracted by STEH is not only interpretable but also scientifically verifiable through cross-model transfer. In particular, in regions characterized by complex or multi-factor-controlled processes, incorporating such structural knowledge can substantially improve model performance. Successful transfer to Random Forest provides an external validation step: the extracted knowledge is not tied to a single network design, but reflects portable hydrological regularities. In this section we successfully illustrate several major questions: hydrological knowledge is broadly encoded across models, can be structurally identified, can be behaviorally validated for physical consistency, and can be externally verified through cross-model transfer.
+
+\subsection{Limitations}
+Nevertheless, despite the progress made in uncovering knowledge representations in deep learning–based hydrological models, several limitations should be acknowledged.
+
+First, although STEH improves structural interpretability, its results still cannot be interpreted as strict causal relationships \cite{lipton2018mythos}. This limitation arises from the intrinsic nature of deep learning models as statistical learning systems \cite{pearl2018theoreticalimpedimentsmachinelearning}, where extracted patterns primarily reflect statistical associations rather than true physical causality. Therefore, the findings should be interpreted with caution when relating them to real-world physical processes.
+
+Second, although this study reveals interaction structures among variables, their theoretical linkage to explicit physical process equations remains to be further explored. For example, the specific coupling relationships between variables, the pathways through which interactions operate, and the development of more controllable and interpretable circuit structures are not yet fully characterized \cite{pach2025sparseautoencoderslearnmonosemantic}. Moreover, although the current framework enforces sparsity to simplify internal structures, the analysis is still largely limited to the relationship between input variables and the final hidden representations, leaving the information evolution within intermediate high-dimensional feature spaces insufficiently explored.
+
+In addition, the validation of the extracted “physical knowledge” in this study is still based on machine learning models rather than explicit process-based hydrological models \cite{gmd-11-3481-2018}. This may limit the physical rigor of the conclusions, and future work should incorporate process-driven models to further verify the findings.
 
 \FloatBarrier

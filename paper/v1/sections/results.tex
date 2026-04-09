@@ -6,7 +6,7 @@ Interpretability analysis is most meaningful when the underlying predictions are
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{Figures/Fig3 Model Prediction.png}
+    \includegraphics[width=\textwidth]{../Figures/Fig3 Model Prediction.png}
     \caption{\textbf{Model performance across 521 streamflow gauging stations.} (a) Spatial distribution of NSE, with warmer colors indicating higher predictive skill. (b) Distribution of NSE values across all stations, showing that the majority achieve satisfactory performance (NSE $>$ 0.5). (c) Taylor diagram summarizing model performance in terms of correlation, normalized standard deviation, and centered root-mean-square error relative to observations. Overall, the results indicate that the model provides robust predictions for a large proportion of stations, while performance varies across regions, reflecting differences in hydrological conditions.}
     \label{nseDistribution}
 \end{figure}
@@ -52,7 +52,7 @@ Overall, for this very good inland station, the extracted core circuit is highly
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\linewidth]{Figures/Nse_99.png}
+    \includegraphics[width=\linewidth]{../Figures/Nse_99.png}
     \caption{\textbf{Extracted sparse circuit and interpretability analysis for a representative inland station with very good performance (NSE = 0.9905).} (a) Core circuit structure, key pathways, and training dynamics, where lighter-colored edges indicate weaker contributions and less important pathways. (b) Interaction strength between input variables, illustrating pairwise dependencies. (c) Contribution of each input variable to streamflow prediction.}
     \label{fig:inland_circuit}
 \end{figure}
@@ -61,7 +61,7 @@ To test whether this pattern persists beyond the best case, we next examine a re
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\linewidth]{Figures/Nse_73.png}
+    \includegraphics[width=\linewidth]{../Figures/Nse_73.png}
     \caption{Extracted sparse circuit structure and key pathways for a representative station with good performance (NSE = 0.7366).}
     \label{fig:good_station}
 \end{figure}
@@ -70,7 +70,7 @@ When performance decreases further, the learned structure becomes visibly less c
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\linewidth]{Figures/Nse_62.png}
+    \includegraphics[width=\linewidth]{../Figures/Nse_62.png}
     \caption{Extracted sparse circuit structure and key pathways for a representative station with satisfactory performance (NSE = 0.6217).}
     \label{fig:satisfactory_station}
 \end{figure}

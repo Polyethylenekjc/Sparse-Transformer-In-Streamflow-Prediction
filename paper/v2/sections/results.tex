@@ -1,0 +1,49 @@
+\section{Results and discussion}
+Next, we conduct an interpretability study of deep learning-based streamflow prediction models using the CAMELS-US dataset. After screening, 521 study sites are selected (details are provided in the Section \ref{sec:Data}), and the model performs well in the majority of regions (Supplementary Information \ref{sec:robust_performance}). By integrating the model circuitry with various interpretability methods and perspectives, we provide an in-depth explanation of how the proposed interpretable deep learning framework (STEH) better captures the internal knowledge representation and physical consistency issues that existing models struggle to resolve.
+
+\subsection{Interpretable Circuit Structures Across Hydrological Stations}
+Given the large number of stations (521), it is impractical to visualize the learned circuits for all stations individually. Therefore, a representative sampling strategy is adopted to systematically examine circuit structures under different predictive conditions.
+
+Specifically, stations are categorized into three performance groups\cite{Nse} based on the NSE. One representative station is selected from each category, as summarized in Table~\ref{tab:nse_categories}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Representative stations across NSE performance categories}
+    \label{tab:nse_categories}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lccc}
+        \toprule
+        Performance Category & NSE Range & Station ID & NSE \\
+        \midrule
+        Very Good     & NSE $>$ 0.75              & 09066300 & 0.9905 \\
+        Good          & 0.65 $<$ NSE $\leq$ 0.75 & 01439500 & 0.7366 \\
+        Satisfactory  & 0.50 $<$ NSE $\leq$ 0.65 & 03504000 & 0.6217 \\
+        \bottomrule
+    \end{tabular*}
+\end{table}
+
+We first consider a representative inland station with very good performance (Station ID: 09066300, \textit{Middle Creek near Minturn, CO.}, 39.65°N, 106.38°W, NSE = 0.9905) to illustrate the extracted core circuit (Fig.~\ref{fig:struct}a). The station is located in a high-altitude inland basin in Colorado, USA (approximately 3251 m), where hydrological processes are strongly influenced by temperature-driven dynamics and catchment routing\cite{Biemans2019}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{../Figures/struct.pdf}
+    \caption{\textbf{Sparse Circuit Extraction and Interpretability Analysis of Hydrological Forecasting Models}(a), (b), (c) Core Circuit Structures: Deep learning model circuits for high-performance (NSE = 0.9905), medium-performance (NSE = 0.7366), and low-performance (NSE = 0.6217) sites, showing sparse connectivity from input to output layers.(d) Input Variable Interaction Heatmap: Pairwise dependencies between input variables, with darker colors indicating stronger interactions.(e) Node Pruning Training Curves: Performance and error evolution as node count changes, revealing model redundancy and extraction effectiveness.(f) Input Variable Contribution Diagram: Visualization of input variable contributions to flow prediction, with chord width indicating influence magnitude.\textit{In panel (d), performance decreases from left to right; in panels (e) and (f), top to bottom represents performance from optimal to worst.}}
+    \label{fig:struct}
+\end{figure}
+
+The circuit structure (Fig.~\ref{fig:struct}a) shows that the model retains a clear and stable information flow pathway after strong sparsification. Among the inputs, streamflow (Q) and maximum temperature (Tmax) dominate, with substantially stronger connections than DayL. Beyond variable importance, this structure suggests a process-level pattern in which antecedent catchment state (with Q acting as a storage proxy) and temperature jointly regulate runoff release. The recovered pathway is consistent with plausible high-altitude controls such as snowmelt timing and evapotranspiration sensitivity\cite{openai_weight_sparse_transformers}. Within the hidden layers, information propagates through a small number of key nodes and converges to the output, forming a compact, low-redundancy computational pathway.
+
+Training dynamics (Fig.~\ref{fig:struct}d, lower right) provide complementary evidence: as the number of retained nodes (K) increases, NSE rapidly improves to near 1 and stabilizes when K remains relatively small (K < 100), while MSE decreases sharply and stays low. Notably, performance comparable to the full model is achieved with only a small subset of nodes. This indicates that the extracted sparse circuit preserves essential predictive capability, supporting its functional fidelity\cite{NIPS2015_three_step_pruning}. More broadly, the sparsity-inducing training appears to retain critical computational units while removing redundant structure\cite{wang2022interpretabilitywildcircuitindirect}.
+
+Furthermore, the interaction analysis (Fig.~\ref{fig:struct}e) reveals strong dependencies among input variables. In particular, Tmax exhibits the strongest interaction with Q, followed by the interaction between Q and DayL, while DayL shows relatively weak interactions overall. This supports a process-level interpretation: thermal forcing does not act independently, but modulates discharge response through antecedent-state conditioning, consistent with energy-state coupling in mountain basins\cite{WRR_shap}.
+
+Finally, the contribution analysis (Fig.~\ref{fig:struct}f) shows a clear imbalance among input variables. Streamflow (Q) contributes the most, followed by Tmax, while DayL has the smallest contribution. Combined with the circuit and interaction evidence, this indicates that the dominant hydrological pattern at this site is a state-dependent runoff pathway with secondary temperature regulation, rather than a uniformly distributed multi-driver response.
+
+Overall, for this very good inland station, the extracted core circuit is highly sparse while maintaining strong predictive capability\cite{7552539}. More importantly, STEH recovers a coherent hydrological mode in which antecedent state and thermal forcing jointly govern streamflow response, suggesting that the learned sparse circuit reflects hydrologically meaningful structure rather than only statistical attribution.
+
+To test whether this pattern persists beyond the best case, we next examine a representative station with good performance (Station ID: 01439500, \textit{Bush Kill at Shoemakers, PA}, 41.09°N, 75.04°W, NSE = 0.7366). The extracted circuit exhibits a moderately sparse structure (Fig.~\ref{fig:struct}b). Compared with the very good inland station, a broader set of inputs contribute to prediction, including precipitation (P), streamflow (Q), and radiation-related variables. The resulting information flow is therefore more distributed\cite{wang2022interpretabilitywildcircuitindirect}, consistent with multiple sub-processes acting simultaneously. Interaction analysis still shows a dominant role for Q, but with stronger coupling to precipitation, which aligns with an event-response pathway where rainfall signals are filtered by antecedent wetness before being transmitted to discharge\cite{BURN2023129075}.
+
+\FloatBarrier
+When performance decreases further, the learned structure becomes visibly less coherent. For a representative station with satisfactory performance (Station ID: 03504000, \textit{Nantahala River near Rainbow Springs, NC}, 35.13°N, 83.62°W, NSE = 0.6217), the extracted circuit is less structured and more diffuse (Fig.~\ref{fig:struct}c). Although streamflow (Q) still dominates prediction, other variables such as radiation (SRAD) and DayL show weaker and less consistent contributions. Interaction patterns are also less pronounced, suggesting that no single robust hydrological pathway is cleanly separated from competing signals. The circuit retains more redundant connections, and sparsity-inducing training appears less effective in isolating a compact predictive core\cite{openai_weight_sparse_transformers}.
+
+In our comparative analysis, we observed an interesting phenomenon: as prediction performance decreases, the sparsity of the extracted circuits also decreases, and the structure tends to become more dispersed. Specifically, high-performance sites exhibit compact and orderly pathways, which correspond to clear hydrological patterns, while low-performance sites show increased redundancy, weaker interaction consistency, and greater instability in the interpretability of the knowledge layer\cite{ORTH2015147}. This trend has attracted our attention. As a result, we conducted a more systematic analysis to verify \textit{whether there is a significant and stable relationship between the degree of model structure simplification and prediction performance}.
+
