@@ -11,10 +11,16 @@
 \usepackage{threeparttable}  
 \usepackage{float}          
 \usepackage{placeins}    
+\usepackage{authblk}
 
 
 \usepackage{xr}
+\makeatletter
+\let\XR@origbibcite\bibcite
+\let\bibcite\@gobbletwo
 \externaldocument{supplementary_information}
+\let\bibcite\XR@origbibcite
+\makeatother
 
 \usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
@@ -27,14 +33,15 @@
 \raggedbottom
 \title{A Deep Dive into Model Structure: Do Deep Learning Models Learn Verifiable and Transferable Hydrological Knowledge?}
 
-\author{
-Jiachen Kong$^{1}$,
-Zhaocai Wang$^{1,*}$,
-Zhaoyang Zhu$^{1}$\\
-\\
-$^{1}$Shanghai Ocean University, Shanghai, China\\
-*Corresponding author: zcwang1028@163.com
-}
+\author[1]{Jiachen Kong}
+\author[1,*]{Zhaocai Wang}
+\author[2]{Jun Wang}
+\author[1]{Zhaoyang Zhu}
+
+\affil[1]{Shanghai Ocean University, Shanghai, China}
+\affil[2]{School of Civil Engineering, Shandong University, Jinan, Shandong 250061, China}
+
+\affil[*]{Corresponding author: zcwang1028@163.com}
 
 \date{}
 
