@@ -12,3 +12,11 @@ scripts
 *.blg
 *.bbl
 .github
+
+# Double-blind review private metadata files
+paper/v1/sections/author_info.tex
+paper/v1/sections/contrib_ack.tex
+paper/v2/sections/author_info.tex
+paper/v2/sections/contrib_ack.tex
+paper/final/sections/author_info.tex
+paper/final/sections/contrib_ack.tex
