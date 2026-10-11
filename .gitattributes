@@ -1,0 +1,2 @@
+# Keep the Linux/WSL launcher runnable after a Windows Git checkout.
+start_revision.sh text eol=lf
