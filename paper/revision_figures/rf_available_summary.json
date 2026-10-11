@@ -1,0 +1,6 @@
+{
+  "n": 521,
+  "mean_delta_nse": 0.7858669090943468,
+  "improved_fraction": 0.5067178502879078,
+  "limits": "All available CSV rows; this does not reproduce the manuscript's selected 327-basin subset unless that exact subset CSV is supplied."
+}

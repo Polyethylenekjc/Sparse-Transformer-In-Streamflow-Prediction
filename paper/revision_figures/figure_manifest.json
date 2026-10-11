@@ -1,0 +1,106 @@
+{
+  "font": "Times New Roman",
+  "figures": [
+    {
+      "figure": "Fig1_revision_workflow",
+      "width_mm": 170,
+      "height_mm": 112.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    },
+    {
+      "figure": "Fig2_revision_training",
+      "width_mm": 170,
+      "height_mm": 94.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    },
+    {
+      "figure": "Fig3_performance_and_size",
+      "width_mm": 170,
+      "height_mm": 88.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    },
+    {
+      "figure": "Fig3_basin_locations",
+      "width_mm": 170,
+      "height_mm": 88.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    },
+    {
+      "figure": "Fig5_probe_scores_unfiltered",
+      "width_mm": 170,
+      "height_mm": 110.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    },
+    {
+      "figure": "Fig6_interaction_counts",
+      "width_mm": 170,
+      "height_mm": 155.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    },
+    {
+      "figure": "Fig4_example_01013500",
+      "width_mm": 170,
+      "height_mm": 106.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    },
+    {
+      "figure": "Fig4_example_03504000",
+      "width_mm": 170,
+      "height_mm": 106.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    },
+    {
+      "figure": "Fig4_example_01439500",
+      "width_mm": 170,
+      "height_mm": 106.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    },
+    {
+      "figure": "Fig7_model_sensitivity_1",
+      "width_mm": 170,
+      "height_mm": 155.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    },
+    {
+      "figure": "Fig8_RF_available_rows",
+      "width_mm": 170,
+      "height_mm": 88.0,
+      "font_pt": 9,
+      "minimum_tick_font_pt": 8,
+      "png_dpi": 600
+    }
+  ],
+  "sources": {
+    "legacy_root": "Sparse_Transformer",
+    "stations_csv": "stations.csv",
+    "sensitivity_csv": "physical_sensitivity_station_table.csv",
+    "rf_csv": "random_forest_model_performance.csv",
+    "out": "revision_figures",
+    "examples": [
+      "01013500",
+      "03504000",
+      "01439500"
+    ]
+  },
+  "limits": "Redrawn legacy results retain their original scientific limitations; no new training or inference. Main-text replacement requires matching captions and subset identities. Basemap panels display basin coordinates, not region polygons."
+}

@@ -1,6 +1,5 @@
 outputs
 *.pyc
-scripts
 .streamlit_cache
 *.aux
 *.log
@@ -12,6 +11,18 @@ scripts
 *.blg
 *.bbl
 .github
+
+# Portable revision code is tracked; generated runs and local environments are not.
+__pycache__/
+.venv/
+.pytest_cache/
+*.pt
+*.npz
+*.tmp
+.DS_Store
+paper/revision_figures/*.png
+paper/revision_figures/*.svg
+paper/revision_figures/*.csv
 
 # Double-blind review private metadata files
 paper/v1/sections/author_info.tex

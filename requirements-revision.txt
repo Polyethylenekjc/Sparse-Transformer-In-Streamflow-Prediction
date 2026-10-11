@@ -1,0 +1,7 @@
+# Install the appropriate CPU/CUDA torch wheel separately for your server.
+torch>=2.1,<3
+numpy>=1.24,<3
+pandas>=2.0,<4
+matplotlib>=3.7,<4
+scipy>=1.10,<2
+scikit-learn>=1.3,<2

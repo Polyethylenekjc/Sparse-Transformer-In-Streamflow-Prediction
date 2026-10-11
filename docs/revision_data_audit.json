@@ -1,0 +1,434 @@
+[
+  {
+    "station": "01134500",
+    "counts": {
+      "train": 8933,
+      "val": 1918,
+      "test": 1918
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12784,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "02011460",
+    "counts": {
+      "train": 8933,
+      "val": 1918,
+      "test": 1918
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12784,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "03346000",
+    "counts": {
+      "train": 8933,
+      "val": 1918,
+      "test": 1918
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12784,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "03460000",
+    "counts": {
+      "train": 8933,
+      "val": 1918,
+      "test": 1918
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12784,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "04196800",
+    "counts": {
+      "train": 8900,
+      "val": 1910,
+      "test": 1911
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12736,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "05399500",
+    "counts": {
+      "train": 8931,
+      "val": 1917,
+      "test": 1917
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12780,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "05495500",
+    "counts": {
+      "train": 8933,
+      "val": 1918,
+      "test": 1918
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12784,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "05507600",
+    "counts": {
+      "train": 8933,
+      "val": 1918,
+      "test": 1918
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12784,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "06339100",
+    "counts": {
+      "train": 8933,
+      "val": 1918,
+      "test": 1918
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12784,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "08082700",
+    "counts": {
+      "train": 8933,
+      "val": 1918,
+      "test": 1918
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12784,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "08164600",
+    "counts": {
+      "train": 8933,
+      "val": 1918,
+      "test": 1918
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12784,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  },
+  {
+    "station": "08380500",
+    "counts": {
+      "train": 8933,
+      "val": 1918,
+      "test": 1918
+    },
+    "with_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa",
+      "target_q"
+    ],
+    "no_q_features": [
+      "dayl_s",
+      "prcp_mm_day",
+      "srad_w_m2",
+      "swe_mm",
+      "tmax_c",
+      "tmin_c",
+      "vp_pa"
+    ],
+    "paired_target_dates_equal": true,
+    "legacy_Q_copy_check": [
+      {
+        "forcing_column": "streamflow_cfs",
+        "paired_finite_days": 12784,
+        "maximum_absolute_difference": 0.0
+      }
+    ],
+    "target_status": "provided_CSV_may_include_imputation"
+  }
+]

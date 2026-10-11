@@ -1,5 +1,20 @@
 # Explainable Sparse Transformer for Flood Prediction
 
+## First-revision experiments and portable deployment
+
+Use `python run_revision.py prepare` to freeze the random basin sample without
+starting training. Use `python run_revision.py run` on your prepared server to run
+the with-Q/no-Q STEH, persistence/AR references, LSTM and bounded circuit checks.
+See [deployment and experimental protocol](docs/REVISION_DEPLOYMENT.md) and
+[figure corrections](docs/FIGURE_CHANGES.md). Linux/WSL and Windows launchers are
+included. Defaults do not train on all basins or run long-window experiments.
+
+The revision loader removes duplicate historical Q, fits scalers on training data
+only, and preserves calendar gaps. The legacy entry points below retain their
+original behavior for historical checkpoint reproducibility; they must not be
+confused with the corrected revision protocol. No full manuscript experiments
+were run while preparing this branch.
+
 This project implements an explainable sparse Transformer for streamflow/flood prediction. In addition to forecasting, it is designed to analyze whether the model learns physically meaningful hydrologic patterns.
 
 ## Features
