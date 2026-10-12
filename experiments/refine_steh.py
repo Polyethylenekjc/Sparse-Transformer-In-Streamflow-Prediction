@@ -106,7 +106,20 @@ def work(payload):
             base = binary_overrides(model, 'cuda')
             validation = subset(splits['val'], protocol['validation_days'], cfg['analysis_seed'])
             def score(mask): return metrics(predict(model, validation, cfg, mask), validation['y'])['nse']
-            core, search = backward_reduce(base, score, protocol['validation_tolerance'], protocol['rounds'])
+            if (old/'validation_selection.json').exists():
+                stored=json.loads((old/'validation_selection.json').read_text())
+                assert stored['selection_data']=='validation only' and not stored['test_used_for_selection']
+                assert stored['validation_dates_sha256']==digest(validation['dates'].tolist())
+                assert stored['method_script_sha256']==protocol['script_sha256']
+                core=clone_masks(base)
+                for key in ['head_mask_overrides','neuron_mask_overrides']:
+                    for layer,flags in core[key].items():
+                        flags.zero_();indices=stored['core_units'][f'{key}:{layer}']
+                        if indices:flags[indices]=1
+                search=stored['validation_search']
+                np.testing.assert_allclose(score(core),search['core_validation_nse'],rtol=2e-6,atol=1e-7)
+            else:
+                core, search = backward_reduce(base, score, protocol['validation_tolerance'], protocol['rounds'])
             # Circuit, budgets and input-effect ranking are frozen before reading test scores.
             frozen = {'core_units': {f'{key}:{layer}':[i for k,l,i in unit_list(core) if k==key and l==layer]
                                     for key in core if isinstance(core[key], dict) for layer in core[key]},
@@ -156,7 +169,7 @@ def work(payload):
                         best=min(differences); z=int(rng.choice([z for z,d in zip(available,differences) if d==best]))
                         available.remove(z); mask[key][layer][z]=1; overlaps+=int(z in chosen[group]);mismatch.append(best)
                 m=metrics(predict(model,test,cfg,mask)*meta['q_std']+meta['q_mean'],target)
-                controls.append({'repeat':repeat,'nse':m['nse'],'core_overlap_fraction':overlaps/search['core_units'],
+                controls.append({'repeat':repeat,'nse':m['nse'],'core_overlap_fraction':overlaps/max(1,search['core_units']),
                                  'mean_degree_mismatch':float(np.mean(mismatch)) if mismatch else None,
                                  'identical_core':overlaps==search['core_units']})
             independent=[r for r in controls if not r['identical_core'] and r['nse'] is not None]
@@ -190,7 +203,8 @@ def main():
               'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'training_config':manifest['config'],'jobs':jobs,'validation_days':512,'rounds':12,
               'validation_tolerance':.05,'random_controls':20,'selection_data':'validation only',
-              'test_used_for_selection':False,'status':'method-development; original 12 basins already evaluated',
+              'test_used_for_selection':False,'status':('frozen-method all-station evaluation; separate prespecified seed-confirmation subset'
+                  if 'confirmation_stations' in manifest else 'method-development; original 12 basins already evaluated'),
               'comparison':'same frozen checkpoint and all test dates; no retraining or raw-neuron ID matching'}
     path=out/'protocol.json'
     if path.exists(): assert json.loads(path.read_text())==protocol

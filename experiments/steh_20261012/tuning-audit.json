@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "candidate_fits": 144,
+  "candidates": 12,
+  "tuning_stations": [
+    "04224775",
+    "05291000",
+    "06278300",
+    "07167500",
+    "11381500",
+    "12092000"
+  ],
+  "selected_trial": 3,
+  "selected_mean_validation_nse": 0.5058959845976957,
+  "base_mean_validation_nse": 0.4793409458495092,
+  "protocol_sha256": "02be246b8f8bdcea48335623be3011e527f725e459846aaee89bcc57b47e24cd",
+  "test_used_for_selection": false,
+  "scope": "Best of 12 evaluated shared candidates; not a global optimality claim."
+}

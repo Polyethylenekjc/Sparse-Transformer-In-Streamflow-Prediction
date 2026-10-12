@@ -1,0 +1,73 @@
+# STEH population experiment, 2026-10-12
+
+This directory preserves method development, validation-only shared tuning and
+the frozen population experiment plan. Population training and the final
+scientific audit were still running when these records were first published.
+Do not interpret this plan as completed or scientifically successful results.
+
+## Frozen design
+
+- All 521 basins: one fresh seed42 STEH model with discharge history and one
+  without it. Compare the with-Q primary result to the existing single-seed LSTM
+  on identical target dates. The no-Q setting is an input ablation.
+- Twelve prespecified new basins sampled without replacement from the 503 basins
+  outside the original development and six tuning basins: additionally fit seeds
+  43 and 44 in both input settings. The total is 1,090 fresh training tasks.
+- 15-day history, next-day target, chronological 70/15/15 split, train-only
+  standardization, 10+10+10 training epochs and batch128 remain fixed.
+- Shared Optuna TPE search: 12 candidates on the same six random LSTM tuning
+  basins, equal weight for both STEH input settings, validation NSE only. The
+  selected trial3 mean validation NSE is 0.5058959846. This is the best evaluated
+  candidate, not proof of a global optimum.
+- Freeze the validation-selected circuit before any test score is read for each
+  fresh model. Joint backward reduction uses 512 validation days, tolerance .05,
+  and at most 12 rounds. Preserve all failed test outcomes.
+- Fixed circuit criterion: test NSE loss <=.05; removing the selected circuit
+  reduces NSE by >=.02; strict win fraction >=.8 against distinct structural
+  controls. Twenty controls match layer, type and count exactly, degree
+  approximately; disclose overlaps and identical controls.
+- Compare seeds using validation input-effect ranks and centered linear CKA,
+  not arbitrary neuron identifiers. Residual, embedding, input and readout
+  pathways remain present; this is not an isolated closed causal graph.
+
+## Preserved development records
+
+`development-records.tar.gz` contains all numerical records, validation
+predictions, logs, Optuna state, development circuit interventions and functional
+stability from `outputs/steh_tuning_20261012` and
+`outputs/steh_refined_20261012`, plus the frozen population manifest/config.
+It excludes model checkpoint files. SHA256:
+`e8039275cd6e579b10649b6ce8a3164583dfcadefb1e0743ee435f1ac53da764`.
+
+Original fixed-fraction circuits failed all72 development fits. Joint validation
+reduction passed9/72 (7 with-Q, 2 no-Q). These original12 basins had already been
+evaluated and remain **method development**, not independent confirmation.
+
+`frozen-source.tar.gz` preserves the exact server source bytes. A few unchanged
+files differ from the local checkout only by newline encoding; the archived
+bytes match the hashes in `population-manifest.json`. Legacy plotting modules
+are included even though the new population runner does not call them.
+
+Original 1,042 forcing/streamflow CSV inputs remain in the repository's
+[`data`](../../data) directory. LSTM final results are in
+[`lstm_global_20261012`](../lstm_global_20261012). Its 665 checkpoint files are
+backed up locally with all compressed/member SHA256 values verified; weights
+are not included here while separate public-upload authorization is pending.
+
+## Reproduction and reporting
+
+Run `experiments/run_steh_population.py --workers 14` on the documented server
+environment. It launches circuit evaluation after successful training.
+Run `experiments/report_steh_population.py` on completed training/circuit records
+and the LSTM raw records. The audit recomputes daily-prediction metrics, checks
+dates, frozen circuit identity, control outcomes and phase-checkpoint selection.
+`experiments/build_steh_workbook.mjs` creates the associated workbook.
+
+Population results describe all521 basins in this dataset. Between-basin SD is
+not seed uncertainty. Confirmation inference treats basin as the unit, requires
+all three fixed seeds to pass, and uses an exact finite-population SRS interval
+for the 503 eligible basins. No inference covers all possible initializations.
+
+Near-threshold gates and finite-epoch churn are reported separately; a completed
+run or decreasing loss is not proof of structural convergence. Do not revise
+test thresholds or hide extreme NSE values to improve manuscript figures.

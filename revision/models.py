@@ -107,6 +107,16 @@ def predict(model, split, cfg, overrides=None, hidden=False):
     return (pred, torch.cat(states).cpu().numpy()) if hidden else pred
 
 
+def structure_snapshot(model):
+    """Epoch diagnostics only; no RNG use and no parameter mutation."""
+    inputs, heads, neurons = model.get_mask_probabilities()
+    probabilities = torch.cat([inputs, *heads, *neurons]).float()
+    gates = probabilities >= .5
+    weights = torch.cat([(p.detach()!=0).flatten() for name,p in model.named_parameters()
+                         if p.ndim >= 2 and 'pos_embed' not in name]).cpu()
+    return gates, probabilities, weights
+
+
 def fit(model, splits, cfg, kind="steh", trial=None):
     model.to(cfg["device"])
     train = loader(splits["train"], cfg, shuffle=True)
@@ -123,6 +133,9 @@ def fit(model, splits, cfg, kind="steh", trial=None):
                                  weight_decay=cfg["weight_decay"],
                                  fused=cfg.get("adamw_fused", False) and cfg["device"].startswith("cuda"))
         best_loss, best = float("inf"), None
+        diagnostics = kind == "steh" and cfg.get("record_structural_diagnostics", False)
+        previous = None
+        phase_start, best_epoch = len(log), None
         for epoch in range(epochs):
             epoch_started = time.perf_counter()
             model.train()
@@ -164,12 +177,25 @@ def fit(model, splits, cfg, kind="steh", trial=None):
             val_loss = float(np.mean((predict(evaluated, splits["val"], cfg)-splits["val"]["y"])**2))
             log.append({"phase": phase, "epoch": epoch+1, "train_mse": float(squared/count), "val_mse": val_loss,
                         "seconds": time.perf_counter()-epoch_started, "training_samples": count})
+            if diagnostics:
+                gates, probabilities, support = structure_snapshot(evaluated)
+                log[-1].update({"gates_enabled":phase == "mask", "active_gates":int(gates.sum()),
+                                "total_gates":len(gates), "gate_mean_threshold_margin":float((probabilities-.5).abs().mean()),
+                                "gate_near_threshold_fraction":float(((probabilities-.5).abs()<.02).float().mean()),
+                                "weight_nonzero_fraction":float(support.float().mean()),
+                                "gate_epoch_churn":float((gates!=previous[0]).float().mean()) if previous else None,
+                                "weight_epoch_churn":float((support!=previous[1]).float().mean()) if previous else None})
+                previous = (gates, support)
             print(f"  {phase} {epoch+1}/{epochs} val_mse={val_loss:.6g}", flush=True)
             if np.isfinite(val_loss) and val_loss < best_loss:
                 best_loss, best = val_loss, copy.deepcopy(evaluated.state_dict())
+                best_epoch = epoch+1
         if best is None:
             raise RuntimeError("No finite validation checkpoint")
         model.load_state_dict(best)
+        if diagnostics:
+            for row in log[phase_start:]:
+                row["selected_phase_checkpoint"] = row["epoch"] == best_epoch
         if kind == "steh" and phase == "sparse":
             phase_switch(model, phase, cfg["target_activation_sparsity"])
     return model, log

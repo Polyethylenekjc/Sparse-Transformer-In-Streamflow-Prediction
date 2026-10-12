@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "checkpoint_members": 665,
+  "final_models": 521,
+  "search_models": 144,
+  "archive_parts": 40,
+  "bytes": 1748547295,
+  "all_compressed_and_member_sha256_verified": true,
+  "seconds": 12.085644960403442
+}
