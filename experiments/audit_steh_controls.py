@@ -21,16 +21,24 @@ def dump(p,v):p.write_text(json.dumps(clean(v),ensure_ascii=False,indent=2,allow
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ['input','circuits','output']:parser.add_argument('--'+name,type=Path,required=True)
+    parser.add_argument('--checkpoint-manifest',type=Path)
     args=parser.parse_args();root=args.input;out=args.output;out.mkdir(parents=True,exist_ok=True)
     protocol=read(root/'protocol.json');completion=read(root/'completion.json')
     assert completion['status']=='PASS' and completion['completed']==len(protocol['jobs'])
     assert protocol['calipers']==[1.,2.] and protocol['controls_per_caliper']==20
+    assert sha(ROOT/'experiments/steh_control_sensitivity.py')==protocol['script_sha256']
+    checkpoint_hashes={}
+    if args.checkpoint_manifest:
+        checkpoint_hashes={r['path']:r['sha256'] for r in read(args.checkpoint_manifest)['members']}
     sources=[];rows=[]
     for job in protocol['jobs']:
         relative=Path(job['station'])/f"seed_{job['seed']}"/'L15'/('steh_with_q' if job['with_q'] else 'steh_no_q')
         f=root/relative;result=read(f/'result.json');design=read(f/'control_design.json')
         controls=read(f/'control_membership.json');prior=read(args.circuits/relative/'result.json')
         assert result['identity_sha256']==digest({'job':job,'protocol':protocol})
+        if checkpoint_hashes:
+            key=(Path('outputs/steh_population_20261012')/relative/'trained.pt').as_posix()
+            assert result['source_checkpoint_sha256']==checkpoint_hashes[key]
         assert sha(f/'control_design.json')==result['control_design_sha256']
         assert design['selection_data']=='graph degrees and RNG only; no test performance'
         assert design['core_source']==read(args.circuits/relative/'validation_selection.json')['core_units']
@@ -67,7 +75,9 @@ def main():
             rows.append(job|recorded|{'nearest_degree_pass':prior['pass'],
                          'nearest_degree_win_fraction':prior['random_win_fraction'],
                          'mean_core_overlap':float(np.mean([r['core_overlap_fraction'] for r in bank])),
-                         'mean_standardized_degree_distance':float(np.mean([r['mean_standardized_degree_distance'] for r in bank]))})
+                         'mean_standardized_degree_distance':(float(np.mean([r['mean_standardized_degree_distance'] for r in bank
+                                                                 if r['mean_standardized_degree_distance'] is not None]))
+                                                             if any(r['mean_standardized_degree_distance'] is not None for r in bank) else None)})
         for name in ['result.json','control_design.json','control_membership.json','control_predictions.npz']:
             sources.append({'path':(relative/name).as_posix(),'sha256':sha(f/name)})
     frame=pd.DataFrame(rows);assert len(frame)==2*len(protocol['jobs'])
@@ -98,6 +108,8 @@ def main():
          'interval':{k:r[k] for k in ['confidence','success_count_bounds','success_fraction_bounds']}}
         for r in intervals]
     audit={'status':'PASS','models':len(protocol['jobs']),'stored_control_forecasts':40*len(protocol['jobs']),
+           'checkpoint_hashes_checked':len(protocol['jobs']) if checkpoint_hashes else 0,
+           'protocol_sha256':digest(protocol),'frozen_method_script_sha256':protocol['script_sha256'],
            'population_summary':summary.to_dict('records'),'confirmation':intervals,
            'limits':['Sensitivity analysis developed on the fixed first12 early-review basins; original protocol retained.',
                      'Both calipers reported; no selection based on test results.',

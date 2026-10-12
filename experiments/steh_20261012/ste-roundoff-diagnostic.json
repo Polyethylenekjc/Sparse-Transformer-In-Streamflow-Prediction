@@ -1,0 +1,17 @@
+{
+  "station": "01052500",
+  "with_q": true,
+  "checkpoint_sha256": "36beaba0d3db3eea35c9752eca38394911c54d5f991f93faf8411c1e19e016f3",
+  "gate_max_roundoff": 5.960464477539063e-08,
+  "nonexact_gate_values": 20,
+  "gates": 404,
+  "max_native_binary_difference_train_scaled": 7.724761962890625e-05,
+  "mean_native_binary_absolute_difference_train_scaled": 7.203959739854326e-08,
+  "max_parenthesized_native_binary_difference_train_scaled": 0.0,
+  "native_nse": 0.6913068341374009,
+  "binary_nse": 0.6913070051476192,
+  "parenthesized_nse": 0.6913070051476192,
+  "exact_expression_bitwise_equal_to_binary": true,
+  "scope": "Numerical diagnosis at one frozen development model; no training or primary-method change.",
+  "script_sha256": "f44e2a960aed16d851f015ad0d54b62586aac29ca8d400ccbb9fadaa06ade07c"
+}

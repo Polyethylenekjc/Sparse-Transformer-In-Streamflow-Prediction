@@ -74,7 +74,7 @@ def main():
     for relative, expected in plan['data_sha256'].items():
         assert sha(args.data_root/relative) == expected, relative
     assert plan['primary_seed'] == 42
-    records, curves, diagnostics, sources = [], [], [], []
+    records, curves, diagnostics, sources, probe_records = [], [], [], [], []
 
     def source(path, kind):
         sources.append({'root': kind, 'path': path.relative_to(getattr(args, kind)).as_posix(),
@@ -102,13 +102,21 @@ def main():
         assert not prediction.target_date.duplicated().any()
         assert prediction.target_date.tolist() == interventions.target_date.tolist()
         np.testing.assert_allclose(prediction.observed, interventions.observed)
-        np.testing.assert_allclose(prediction.predicted, interventions.full, rtol=3e-6, atol=3e-5)
+        normalized_full=(interventions.full.to_numpy()-meta['q_mean'])/meta['q_std']
+        normalized_trained=(prediction.predicted.to_numpy()-meta['q_mean'])/meta['q_std']
+        normalized_parity_max_abs=float(abs(normalized_trained-normalized_full).max())
+        # Native STE arithmetic can differ from exact binary gates in FP32;
+        # Top-K boundaries can amplify this. Audit both metric sets separately,
+        # disclose pointwise differences rather than silently widening tolerance.
+        parity_exceedances=int((abs(normalized_trained-normalized_full)>
+                                3e-6+3e-5*abs(normalized_full)).sum())
         assert digest(prediction.target_date.tolist()) == trained['test_dates_sha256'] == result['test_dates_sha256']
         for variant in ['full', 'core', 'removed']:
             recomputed = metrics(interventions[variant], interventions.observed)
             for name in METRICS:
                 same(recomputed[name], result['metrics'][variant][name])
-                if variant == 'full': same(recomputed[name], trained['metrics'][name])
+                if variant == 'full':same(metrics(prediction.predicted,prediction.observed)[name],trained['metrics'][name])
+        same(result['metrics']['full']['nse'],trained['metrics']['nse'])
         controls = read(c/'random_controls.json')
         assert len(controls) == protocol['random_controls']
         distinct = [r for r in controls if not r['identical_core'] and r['nse'] is not None]
@@ -126,10 +134,13 @@ def main():
             best = group[group.selected_phase_checkpoint.astype(bool)].iloc[0]
             same(best.val_mse, group.val_mse.min())
         mask_log = log[log.phase == 'mask']; tail = mask_log.tail(3)
+        selected_mask=mask_log[mask_log.selected_phase_checkpoint.astype(bool)].iloc[0]
         diagnostics.append(job|{
             'mask_tail_gate_churn':tail.gate_epoch_churn.mean(),
             'mask_tail_weight_churn':tail.weight_epoch_churn.mean(),
             'mask_final_near_threshold_fraction':mask_log.iloc[-1].gate_near_threshold_fraction,
+            'mask_selected_near_threshold_fraction':selected_mask.gate_near_threshold_fraction,
+            'mask_selected_weight_nonzero_fraction':selected_mask.weight_nonzero_fraction,
             'mask_selected_epoch':int(mask_log[mask_log.selected_phase_checkpoint.astype(bool)].epoch.iloc[0]),
             'mask_best_validation_mse':mask_log.val_mse.min(),
             'mask_final_validation_mse':mask_log.iloc[-1].val_mse,
@@ -142,11 +153,26 @@ def main():
                         'random_win_fraction':win, 'distinct_control_count':len(distinct),
                         'criterion_pass':criterion,
                         'negative_prediction_days':int((prediction.predicted<0).sum()),
+                        'full_prediction_parity_max_abs_train_scaled':normalized_parity_max_abs,
+                        'full_prediction_parity_exceeding_standard_tolerance_days':parity_exceedances,
+                        'binary_full_nse':result['metrics']['full']['nse'],
+                        'binary_minus_native_full_nse':result['metrics']['full']['nse']-trained['metrics']['nse'],
                         'test_observed_mean_cfs':float(prediction.observed.mean()),
                         'test_observed_std_cfs':float(prediction.observed.std(ddof=0)),
                         'train_observed_mean_cfs':meta['q_mean'],
                         'train_observed_std_cfs':meta['q_std'],
                         **result['validation_search']})
+        probe=read(f/'probes.json')
+        assert probe['status']=='computed' and len(probe['results'])==6
+        assert {(r['target'],r['representation']) for r in probe['results']}=={
+            (t,k) for t in ['CUM','API','CHG'] for k in ['trained_hidden','input_history']}
+        for row in probe['results']:
+            assert row['r2'] is None or np.isfinite(row['r2'])
+            if row['status']=='failed':assert 'reason' in row and row['r2'] is None
+            else:
+                assert row['n_train']==min(plan['config']['probe_train_samples'],log.training_samples.iloc[0])
+                assert row['n_test']==min(plan['config']['analysis_test_samples'],len(prediction))
+            probe_records.append(job|row)
         if job['seed'] == plan['primary_seed']:
             lf = args.lstm/'final'/'models'/job['station']
             lp = pd.read_csv(lf/'predictions.csv')
@@ -154,7 +180,7 @@ def main():
             np.testing.assert_allclose(prediction.observed, lp.observed)
             for name in ['summary.json', 'predictions.csv']: source(lf/name, 'lstm')
         for name in ['summary.json','predictions.csv','training_log.csv','performance.json',
-                     'run_config.json','preprocessing.json','validation_selection.json']:
+                     'run_config.json','preprocessing.json','validation_selection.json','probes.json']:
             source(f/name, 'training')
         for name in ['result.json','predictions.csv','random_controls.json',
                      'validation_selection.json','feature_effects.json','validation_hidden.npy']:
@@ -175,6 +201,16 @@ def main():
         lm = metrics(p.predicted,p.observed)
         paired.loc[station, 'lstm_nse'] = lm['nse']
         paired.loc[station, 'lstm_kge'] = lm['kge']
+        reference=pd.read_csv(lf/'baseline_predictions.csv')
+        assert reference.target_date.tolist()==p.target_date.tolist()
+        np.testing.assert_allclose(reference.observed,p.observed)
+        saved_reference=read(lf/'baselines.json')['metrics']
+        for name in ['persistence','ar']:
+            score=metrics(reference[name],reference.observed)
+            for key in METRICS:same(score[key],saved_reference[name][key])
+            paired.loc[station,name+'_nse']=score['nse']
+            paired.loc[station,name+'_kge']=score['kge']
+        for name in ['baseline_predictions.csv','baselines.json']:source(lf/name,'lstm')
     paired['with_q_minus_lstm'] = paired.steh_with_q_nse-paired.lstm_nse
     paired['with_q_minus_no_q'] = paired.steh_with_q_nse-paired.steh_no_q_nse
     paired = paired.reset_index()
@@ -202,14 +238,30 @@ def main():
                              'outcome':'all three prespecified seed circuits satisfy fixed criterion'})
     summary = []
     for name in ['steh_with_q_nse','steh_no_q_nse','lstm_nse','with_q_minus_lstm','with_q_minus_no_q',
-                 'steh_with_q_kge','steh_no_q_kge','lstm_kge']:
+                 'steh_with_q_kge','steh_no_q_kge','lstm_kge',
+                 'persistence_nse','ar_nse','persistence_kge','ar_kge']:
         summary.append({'measure':name, **describe(paired,name)})
     summary.extend({'measure':f"core_{q}_loss", **describe(primary[primary.with_q == q],'core_delta_nse')}
                    for q in [True,False])
+    probes=pd.DataFrame(probe_records);probe_summary=[]
+    for (q,target,representation),group in probes[probes.seed==42].groupby(['with_q','target','representation']):
+        probe_summary.append({'with_q':bool(q),'target':target,'representation':representation,
+                              'basins':len(group),'negative_r2':int((group.r2<0).sum()),
+                              'failed_or_undefined':int(group.r2.isna().sum()),**describe(group,'r2')})
     quality = {'status':'PASS', 'trained_models':len(records), 'population_basins':len(paired),
                'confirmation_basins':len(plan['confirmation_stations']),
                'primary_passes':{str(q):int(primary[primary.with_q == q].criterion_pass.sum()) for q in [True,False]},
                'primary_with_q_beats_lstm':int((paired.with_q_minus_lstm>0).sum()),
+               'primary_with_q_beats_persistence':int((paired.steh_with_q_nse>paired.persistence_nse).sum()),
+               'primary_with_q_beats_ar':int((paired.steh_with_q_nse>paired.ar_nse).sum()),
+               'probe_summary':probe_summary,
+               'probe_audit_scope':'Frozen unfiltered probe scores imported and count/status/source checked; hidden/sample forecasts not saved, so R2 was not independently recomputed.',
+               'native_binary_forward_difference':{
+                   'models_exceeding_pointwise_tolerance':int((all_runs.full_prediction_parity_exceeding_standard_tolerance_days>0).sum()),
+                   'maximum_train_scaled_prediction_difference':float(all_runs.full_prediction_parity_max_abs_train_scaled.max()),
+                   'maximum_absolute_nse_difference':float(all_runs.binary_minus_native_full_nse.abs().max()),
+                   'pointwise_reference_tolerance':'3e-6 + 3e-5*abs(train-scaled binary prediction); differences disclosed, not removed',
+                   'metric_audit':'Native and binary predictions audited against their own saved metrics; full NSE agreement checked separately.'},
                'primary_failure_components':{
                    str(q):{'core_loss_above_005':int((primary[primary.with_q==q].core_delta_nse>.05).sum()),
                            'removal_loss_below_002':int((primary[primary.with_q==q].remove_delta_nse<.02).sum()),
@@ -226,10 +278,17 @@ def main():
                          'Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.',
                          'Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.',
                          'Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.']}
+    quality['limits'].extend([
+        'Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.',
+        'Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.',
+        'KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.'])
+    quality['limits'].append('Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.')
+    quality['limits'].append('CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained.')
     tables = {'all_runs':all_runs,'paired_primary':paired,'convergence_diagnostics':diag,
               'phase_training_curves':pd.concat(curves,ignore_index=True),
               'stability_basin':stability_basin,'confirmation_basin':confirm_basin,
-              'model_summary':pd.DataFrame(summary)}
+              'model_summary':pd.DataFrame(summary),'probe_records':probes,
+              'probe_summary':pd.DataFrame(probe_summary)}
     for name,frame in tables.items():frame.to_csv(out/(name+'.csv'),index=False)
     dump(out/'audit.json',quality);dump(out/'source_manifest.json',sources)
     plt.rcParams.update({'font.family':'DejaVu Sans','font.size':8.5,'axes.labelsize':9,
@@ -263,7 +322,7 @@ def main():
     axes[1].set_xscale('asinh',linear_width=.1);axes[1].set_xlabel('Paired NSE: STEH with Q - LSTM');axes[1].set_ylabel('Fraction of basins')
     plain_ticks(axes[1],True)
     save(fig,'fig1_paired_prediction',['paired_primary.csv'],
-         'Complete basin distributions and within-basin test differences under the frozen protocol.',quality['limits'][:3])
+         'Complete basin distributions and within-basin test differences under the frozen protocol.',quality['limits'][:3]+[quality['limits'][8]])
     fig,axes=plt.subplots(1,3,figsize=(175/25.4,66/25.4))
     for q,color,style in [(True,COLORS[0],'-'),(False,COLORS[1],'--')]:
         frame=primary[primary.with_q==q];label='With Q' if q else 'No Q'
@@ -285,7 +344,7 @@ def main():
     axes[1].set_xlabel('Gate churn: final three mask epochs');axes[1].set_ylabel('Fraction of primary basins')
     save(fig,'fig3_functional_stability',['stability_basin.csv','convergence_diagnostics.csv'],
          'Initialization sensitivity is assessed within basins using function-level evidence; epoch churn reports finite-budget stability.',
-         ['12 prespecified new basins, three fixed seeds; sample size is 12, not 36.',quality['limits'][-1]])
+         ['12 prespecified new basins, three fixed seeds; sample size is 12, not 36.',quality['limits'][6]])
     training=tables['phase_training_curves'];training=training[training.seed==42]
     fig,axes=plt.subplots(1,3,figsize=(175/25.4,66/25.4))
     for ax,phase,title in zip(axes,['dense','sparse','mask'],['I: dense','II: dynamic sparsity','III: learned gates']):
@@ -332,6 +391,21 @@ def main():
     dump(out/'illustration_selection.json',{'representative_basin':representative,
          'rule':'closest to median primary with-Q STEH NSE; lexicographic basin-ID tie break',
          'preidentified_lstm_extreme':'08190500','selection_role':'descriptive illustrations only'})
+    fig,axes=plt.subplots(1,3,figsize=(175/25.4,68/25.4))
+    for ax,target in zip(axes,['CUM','API','CHG']):
+        for q,color in [(True,COLORS[0]),(False,COLORS[1])]:
+            for representation,style,label in [('trained_hidden','-','hidden'),('input_history','--','input')]:
+                group=probes[(probes.seed==42)&(probes.with_q==q)&(probes.target==target)&(probes.representation==representation)]
+                values=np.sort(group.r2.dropna());ax.plot(values,np.arange(1,len(values)+1)/len(values),
+                    color=color,ls=style,label=f"{'With Q' if q else 'No Q'} {label}")
+        ax.set_xscale('asinh',linear_width=1);plain_ticks(ax)
+        ax.set_title(target);ax.set_xlabel('Held-out proxy R2 (asinh scale)');ax.set_ylabel('Fraction of defined basins')
+        ax.axvline(0,color='#666666',ls=':',lw=.8)
+    axes[0].legend(loc='best',fontsize=8)
+    save(fig,'fig7_proxy_decodability',['probe_records.csv','probe_summary.csv'],
+         'Unfiltered input-derived proxy decodability compared between trained hidden states and input history.',
+         [quality['limits'][-1],quality['probe_audit_scope'],
+          'Probes fit on a fixed training subset and evaluate a fixed held-out test subset; not all daily forecasts.'])
     for name in tables:
         traces.append({'artifact_id':name,'source_data':'source_manifest.json',
                        'transformation':{'script':'experiments/report_steh_population.py','sha256':sha(Path(__file__))},
@@ -343,6 +417,7 @@ def main():
         f"训练和回路分析均完成 {len(records)} 个任务；全站点主要结果每站点每设置使用 seed42。",
         f"主要回路固定判据通过数：with-Q {quality['primary_passes']['True']}／{len(paired)}，no-Q {quality['primary_passes']['False']}／{len(paired)}。",
         f"STEH with-Q 的 NSE 高于同站点 LSTM：{quality['primary_with_q_beats_lstm']}／{len(paired)}。",
+        f"with-Q 相对持久性／AR参考的NSE胜出站点数：{quality['primary_with_q_beats_persistence']}／{quality['primary_with_q_beats_ar']}（总计{len(paired)}）。",
         '所有极端值、负 NSE 和回路失败均保留。平均值、标准差、中位数及四分位数同时列于 model_summary.csv。',
         '全站点是当前 521 个流域的总体描述，不用流域间标准差冒充多种子不确定性。',
         '12 个确认流域在 503 个未参与开发或调参的流域中预先简单随机抽样。',
@@ -351,6 +426,13 @@ def main():
         '不能以隐藏神经元编号重叠、少量随机对照胜率或计算核验 PASS 单独证明普遍存在唯一、闭合、因果回路。',
         '若固定判据通过率有限，应将论文结论限定为局部可提取的忠实回路，报告失败机制；不按测试结果反复调整阈值。',
         '门控近阈值比例和末期翻转比例单独报告。有限轮次的损失下降不等于结构已经收敛。',
+        '主预测采用原生直通门控，回路干预采用精确二值门控；两种前向的逐日差异和NSE差异单独核验并保留。',
+        '物理探测完整保留负R²、未定义及失败记录，并以输入历史为参考。CUM/API/CHG由降雨输入构造，只能支持可解码性，不能证明独立物理状态或因果回路。',
+        '探测汇总核查记录数量、状态和来源；未保存的隐藏表示及探测预测无法独立重算R²，该限制明确保留。',
+        '逐流域单种子LSTM用于当前匹配的本地训练基线；不据此宣称超过跨流域联合训练或集成LSTM。',
+        'KGE=0不具有NSE=0的固有基准含义；应结合明示的持久性和AR参考模型解释。',
+        'KGE解释来源：https://hess.copernicus.org/articles/23/4323/2019/',
+        '本地与跨流域LSTM比较来源：https://hess.copernicus.org/articles/28/4187/2024/',
         'CKA 方法来源：https://proceedings.mlr.press/v97/kornblith19a.html',
         '原始观测标记缺失，不能宣称评估目标全是未经填补的原始观测。'])
     (out/'实验核验与论文展示.md').write_text(report,encoding='utf-8')

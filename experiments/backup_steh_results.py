@@ -46,11 +46,11 @@ def main():
     for job in plan['jobs']:
         f=population/job['station']/f"seed_{job['seed']}"/'L15'/('steh_with_q' if job['with_q'] else 'steh_no_q')
         assert all((f/name).exists() for name in ['trained.pt','summary.json','validation_selection.json'])
-    roots=[population,circuits,Path('outputs/steh_population_early_review'),
+    roots=[population,circuits,Path('outputs/revision_3090'),Path('outputs/steh_population_early_review'),
            Path('outputs/steh_tuning_20261012'),Path('outputs/steh_refined_20261012'),
            Path('outputs/steh_control_sensitivity_20261012_v2')]
-    if roots[-1].exists():
-        assert json.loads((roots[-1]/'completion.json').read_text())['status']=='PASS'
+    caliper_completion=json.loads((roots[-1]/'completion.json').read_text())
+    assert caliper_completion['status']=='PASS' and caliper_completion['completed']==len(plan['jobs'])
     roots.extend([Path('outputs/steh_control_sensitivity_20261012'),
                   Path('outputs/steh_control_caliper_smoke'),Path('outputs/steh_control_caliper_v2_smoke')])
     numerical=[]
@@ -59,7 +59,9 @@ def main():
                          not p.is_symlink() and p.suffix not in ['.pt','.tmp'] and '__pycache__' not in p.parts)
     allowed_telemetry={'steh-gpu-telemetry.csv','steh-cpu-memory-telemetry.csv',
                        'vmap-benchmark.json','vmap-benchmark.log','benchmark_vmap.py',
-                       'early-review.log','population.log'}
+                       'early-review.log','population.log','control-smoke.log','control-v2-smoke.log',
+                       'control-sensitivity.log','refine_steh_v1.py','monitor_steh_system.py'}
+    allowed_telemetry.update({'ste-roundoff-diagnostic.json','ste-roundoff-diagnostic-confirmed.json','architecture-counts.json'})
     numerical.extend(p for p in Path('/root/autodl-tmp/steh-performance').iterdir() if p.name in allowed_telemetry)
     # Absolute monitoring paths get a relative reproducible archive name.
     numerical=[p for p in numerical if not p.is_absolute()]
@@ -82,9 +84,15 @@ def main():
     monitor_files=sorted(p for p in Path('/root/autodl-tmp/steh-performance').iterdir() if p.name in allowed_telemetry)
     with tarfile.open(out/'performance-records.tar.gz','w:gz') as tar:
         for p in monitor_files:tar.add(p,arcname=p.name,recursive=False)
+    performance={'archive':'performance-records.tar.gz',
+                 'bytes':(out/'performance-records.tar.gz').stat().st_size,
+                 'sha256':sha(out/'performance-records.tar.gz'),
+                 'members':[{'path':p.name,'bytes':p.stat().st_size,'sha256':sha(p)} for p in monitor_files]}
+    write(out/'performance-manifest.json',performance)
     summary={'status':'PASS','population_models':len(plan['jobs']),'all_checkpoint_members':len(weights),
              'numerical_files':len(numerical),'numerical_parts':len(parts),
              'numerical_archive_sha256':records['sha256'],'checkpoint_archive_sha256':checkpoints['sha256'],
+             'performance_archive_sha256':performance['sha256'],
              'seconds':time.time()-start,
              'limits':'Export integrity only. Public model-weight upload requires its separate user authorization.'}
     write(out/'export-completion.json',summary);print(json.dumps(summary))

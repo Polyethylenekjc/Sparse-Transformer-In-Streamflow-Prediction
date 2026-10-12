@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "models_checked": 24,
+  "raw_input_files_checked": 1042,
+  "predictions_per_model": 1918,
+  "source_files_checked": 384,
+  "report_script_sha256": "392b8ddec2662b1c18127bfbb36b278bdae834df406b73991a88ef5ec04cda49",
+  "scope": "First24 completed models only; no population completion flag or scientific confirmation claim."
+}

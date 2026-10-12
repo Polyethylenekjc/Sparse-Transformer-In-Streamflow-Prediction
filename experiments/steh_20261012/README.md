@@ -97,3 +97,34 @@ Run `experiments/steh_control_sensitivity.py` with the explicit output
 `outputs/steh_control_sensitivity_20261012_v2` after primary circuit completion,
 then `experiments/audit_steh_controls.py`. Computational integrity does not
 imply that either scientific criterion will pass.
+
+The development refinement used archived `development_refinement_v1.py`,
+SHA256 2de2a9586762ef8663c2068c21b0ff646f1d842a460ca18d33b762109edc6a0a,
+which matches its development protocol. It is a source snapshot; use the main
+experiment script for the frozen population analysis. Final export preserves
+original development predictions/failures, control sensitivity records,
+performance telemetry and checkpoint backups, with per-member SHA256 manifests.
+
+## Numerical forward diagnostic
+
+`ste-roundoff-diagnostic.json` documents a read-only check at development basin
+01052500, with-Q. Native FP32 evaluation of `hard + probs - probs.detach()`
+produces gate roundoff up to5.96046e-8; exact binary overrides can consequently
+produce a small forecast difference. The maximum train-scaled prediction
+change was7.72476e-5 and NSE difference1.70734e-7. Evaluating the mathematical
+equivalent `hard + (probs - probs.detach())` **in memory only** produced
+bitwise equality with binary overrides. Frozen training source was not edited.
+The report audits native and binary metrics separately and discloses pointwise
+differences instead of silently widening tolerances. Primary forecasting uses
+native gates; circuit interventions and their full reference use binary gates.
+
+`partial-report-audit.json` and `partial-report-records.csv` describe only the
+first24 completed development-review models. They are not population results
+or independent confirmation. `architecture-counts.json` distinguishes all
+allocated parameters, matrix parameters and parameters used by15day inputs.
+Positional embeddings allocate2048positions; only15are used here. Matrix
+sparsity does not itself establish inference speed with dense kernels.
+The requested local LSTM comparison does not establish superiority over pooled
+regional or ensemble LSTMs; see https://hess.copernicus.org/articles/28/4187/2024/.
+KGE=0 is not an inherent skill threshold; benchmarks are explicit, as discussed
+at https://hess.copernicus.org/articles/23/4323/2019/.

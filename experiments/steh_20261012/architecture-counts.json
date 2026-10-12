@@ -1,0 +1,22 @@
+{
+  "steh_with_q": {
+    "parameters": 232661,
+    "matrix_parameters": 98880,
+    "note": "Architecture count only; unstructured zero weights still use dense kernels.",
+    "allocated_positional_parameters": 131072,
+    "parameters_used_by_15_day_forward": 102549,
+    "targeted_matrix_sparsity": 0.9
+  },
+  "steh_no_q": {
+    "parameters": 232596,
+    "matrix_parameters": 98816,
+    "note": "Architecture count only; unstructured zero weights still use dense kernels.",
+    "allocated_positional_parameters": 131072,
+    "parameters_used_by_15_day_forward": 102484,
+    "targeted_matrix_sparsity": 0.9
+  },
+  "lstm": {
+    "parameters": 798977,
+    "note": "Matched per-basin single-seed local baseline."
+  }
+}
