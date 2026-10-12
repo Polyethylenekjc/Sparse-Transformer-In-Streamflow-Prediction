@@ -58,6 +58,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ['training', 'circuits', 'lstm', 'output']:
         parser.add_argument('--'+name, type=Path, required=True)
+    parser.add_argument('--data-root', type=Path, default=ROOT/'data')
     args = parser.parse_args()
     out = args.output; out.mkdir(parents=True, exist_ok=True)
     plan = read(args.training/'manifest.json')
@@ -68,7 +69,10 @@ def main():
     assert completion['completed'] == circuit_completion['completed'] == len(plan['jobs'])
     assert protocol['script_sha256'] == plan['refinement_script_sha256']
     assert protocol['source_manifest_sha256'] == digest(plan)
-    assert set(plan['population']) == set(read(args.lstm/'tuning_protocol.json')['final_stations'])
+    lstm_protocol = read(args.lstm/'tuning_protocol.json')
+    assert set(plan['population']) == set(lstm_protocol['final_stations'])
+    for relative, expected in plan['data_sha256'].items():
+        assert sha(args.data_root/relative) == expected, relative
     assert plan['primary_seed'] == 42
     records, curves, diagnostics, sources = [], [], [], []
 
@@ -83,6 +87,9 @@ def main():
         assert trained['run_sha256'] == digest({'job': job, 'manifest': plan})
         assert result['identity_sha256'] == digest({'job': job, 'protocol': protocol})
         assert trained['selected_hyperparameters'] == plan['selected_hyperparameters']
+        meta = read(f/'preprocessing.json')
+        assert meta['source_sha256'] == lstm_protocol['basin_source_hashes'][job['station']]
+        assert ('target_q' in meta['feature_names']) == job['with_q']
         assert read(f/'validation_selection.json')['test_used_for_selection'] is False
         frozen = read(f/'validation_selection.json')
         reproduced = read(c/'validation_selection.json')
@@ -91,6 +98,7 @@ def main():
         assert frozen['method_script_sha256'] == protocol['script_sha256']
         prediction = pd.read_csv(f/'predictions.csv')
         interventions = pd.read_csv(c/'predictions.csv')
+        assert np.isfinite(interventions[['observed','full','core','removed']]).all().all()
         assert not prediction.target_date.duplicated().any()
         assert prediction.target_date.tolist() == interventions.target_date.tolist()
         np.testing.assert_allclose(prediction.observed, interventions.observed)
@@ -134,6 +142,10 @@ def main():
                         'random_win_fraction':win, 'distinct_control_count':len(distinct),
                         'criterion_pass':criterion,
                         'negative_prediction_days':int((prediction.predicted<0).sum()),
+                        'test_observed_mean_cfs':float(prediction.observed.mean()),
+                        'test_observed_std_cfs':float(prediction.observed.std(ddof=0)),
+                        'train_observed_mean_cfs':meta['q_mean'],
+                        'train_observed_std_cfs':meta['q_std'],
                         **result['validation_search']})
         if job['seed'] == plan['primary_seed']:
             lf = args.lstm/'final'/'models'/job['station']
@@ -198,6 +210,12 @@ def main():
                'confirmation_basins':len(plan['confirmation_stations']),
                'primary_passes':{str(q):int(primary[primary.with_q == q].criterion_pass.sum()) for q in [True,False]},
                'primary_with_q_beats_lstm':int((paired.with_q_minus_lstm>0).sum()),
+               'primary_failure_components':{
+                   str(q):{'core_loss_above_005':int((primary[primary.with_q==q].core_delta_nse>.05).sum()),
+                           'removal_loss_below_002':int((primary[primary.with_q==q].remove_delta_nse<.02).sum()),
+                           'win_below_08':int((primary[primary.with_q==q].random_win_fraction<.8).sum()),
+                           'undefined_control_win':int(primary[primary.with_q==q].random_win_fraction.isna().sum())}
+                   for q in [True,False]},
                'summary':summary, 'confirmation':confirmation,
                'scope':'Census descriptions of these 521 basins; no sampling confidence interval for the census. '
                        'SRS confirmation interval targets the 503 eligible basins and three fixed seeds only.',
@@ -205,7 +223,8 @@ def main():
                          'LSTM has one seed and receives Q history; no-Q STEH is an input ablation.',
                          'Original-observation flags are unavailable; supplied CSV targets may contain imputation.',
                          'Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.',
-                         '20 potentially overlapping controls do not establish a significance level.',
+                         'Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.',
+                         'Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.',
                          'Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.']}
     tables = {'all_runs':all_runs,'paired_primary':paired,'convergence_diagnostics':diag,
               'phase_training_curves':pd.concat(curves,ignore_index=True),
@@ -218,6 +237,13 @@ def main():
                          'axes.spines.top':False,'axes.spines.right':False,
                          'pdf.fonttype':42,'svg.fonttype':'none'})
     traces = []
+
+    def plain_ticks(ax, small=False):
+        lo,hi=ax.get_xlim()
+        ticks=[-1000000,-100000,-10000,-1000,-100,-10,-1,0,1,10,100,1000,10000,100000,1000000]
+        if small:ticks.extend([-.1,.1])
+        ticks=sorted(t for t in ticks if lo<=t<=hi)
+        ax.set_xticks(ticks,[f'{t:g}' for t in ticks])
 
     def save(fig, ident, files, claim, limits):
         fig.tight_layout(pad=.9)
@@ -232,8 +258,10 @@ def main():
         v=np.sort(paired[col].dropna());axes[0].plot(v,np.arange(1,len(v)+1)/len(v),
                     color=COLORS[index],linestyle=['-','--',':'][index],label=label)
     axes[0].set_xscale('asinh',linear_width=1);axes[0].set_xlabel('Test NSE (asinh scale)');axes[0].set_ylabel('Fraction of basins');axes[0].legend(loc='upper left')
+    plain_ticks(axes[0])
     d=np.sort(paired.with_q_minus_lstm.dropna());axes[1].plot(d,np.arange(1,len(d)+1)/len(d),color=COLORS[0]);axes[1].axvline(0,color='#666666',ls='--',lw=.8)
     axes[1].set_xscale('asinh',linear_width=.1);axes[1].set_xlabel('Paired NSE: STEH with Q - LSTM');axes[1].set_ylabel('Fraction of basins')
+    plain_ticks(axes[1],True)
     save(fig,'fig1_paired_prediction',['paired_primary.csv'],
          'Complete basin distributions and within-basin test differences under the frozen protocol.',quality['limits'][:3])
     fig,axes=plt.subplots(1,3,figsize=(175/25.4,66/25.4))
@@ -241,9 +269,10 @@ def main():
         frame=primary[primary.with_q==q];label='With Q' if q else 'No Q'
         for ax,col in zip(axes,['core_delta_nse','remove_delta_nse','random_win_fraction']):
             v=np.sort(frame[col].dropna());ax.plot(v,np.arange(1,len(v)+1)/len(v),color=color,ls=style,label=label)
-    for ax,threshold,label in zip(axes,[.05,.02,.8],['Full - core NSE','Full - removed NSE','Win fraction vs distinct controls']):
+    for ax,threshold,label in zip(axes,[.05,.02,.8],['Full - core NSE','Full - removed NSE','Win vs nonidentical draws']):
         ax.axvline(threshold,color='#666666',ls=':',lw=.8);ax.set_xlabel(label);ax.set_ylabel('Fraction of defined basins')
-    for ax in axes[:2]:ax.set_xscale('asinh',linear_width=.1)
+    for ax in axes[:2]:
+        ax.set_xscale('asinh',linear_width=.1);plain_ticks(ax,True)
     axes[0].legend(loc='best')
     save(fig,'fig2_circuit_validity',['all_runs.csv'],'Separate sufficiency, necessity and structural-control evidence; failures retained.',quality['limits'][3:5])
     fig,axes=plt.subplots(1,2,figsize=(175/25.4,65/25.4))
@@ -257,6 +286,52 @@ def main():
     save(fig,'fig3_functional_stability',['stability_basin.csv','convergence_diagnostics.csv'],
          'Initialization sensitivity is assessed within basins using function-level evidence; epoch churn reports finite-budget stability.',
          ['12 prespecified new basins, three fixed seeds; sample size is 12, not 36.',quality['limits'][-1]])
+    training=tables['phase_training_curves'];training=training[training.seed==42]
+    fig,axes=plt.subplots(1,3,figsize=(175/25.4,66/25.4))
+    for ax,phase,title in zip(axes,['dense','sparse','mask'],['I: dense','II: dynamic sparsity','III: learned gates']):
+        for q,color in [(True,COLORS[0]),(False,COLORS[1])]:
+            group=training[(training.with_q==q)&(training.phase==phase)]
+            for name,style in [('train_mse','-'),('val_mse','--')]:
+                values=group.groupby('epoch')[name];median=values.median();low=values.quantile(.25);high=values.quantile(.75)
+                ax.plot(median.index,median,color=color,ls=style,
+                        label=f"{'With Q' if q else 'No Q'} {'train' if name=='train_mse' else 'val'}")
+                ax.fill_between(median.index,low,high,color=color,alpha=.08)
+        ax.set_title(title);ax.set_xlabel('Epoch within phase');ax.set_ylabel('Train-scaled target MSE')
+        ax.set_xticks([1,5,10])
+    axes[0].legend(loc='best',fontsize=8)
+    save(fig,'fig5_phase_training',['phase_training_curves.csv'],
+         'Median and interquartile training/validation loss across 521 primary basins under the fixed three-phase budget.',
+         ['Bands are between-basin IQR, not confidence intervals.',
+          'Stage-II training uses dynamic sparsity; validation evaluates the final sparsity budget.',
+          'Finite loss curves do not prove structural convergence.'])
+    median=float(paired.steh_with_q_nse.median())
+    ranked=paired.assign(distance_to_median=(paired.steh_with_q_nse-median).abs()).sort_values(['distance_to_median','station'])
+    representative=str(ranked.iloc[0].station)
+    illustrated=[representative,'08190500'];hydrographs=[]
+    fig,axes=plt.subplots(2,1,figsize=(175/25.4,100/25.4))
+    for ax,station in zip(axes,illustrated):
+        job={'station':station,'seed':42,'with_q':True};p=pd.read_csv(folder(args.training,job)/'predictions.csv')
+        l=pd.read_csv(args.lstm/'final'/'models'/station/'predictions.csv')
+        no=pd.read_csv(folder(args.training,job|{'with_q':False})/'predictions.csv')
+        assert p.target_date.tolist()==l.target_date.tolist()==no.target_date.tolist()
+        table=pd.DataFrame({'station':station,'target_date':p.target_date,'observed':p.observed,
+                            'steh_with_q':p.predicted,'lstm':l.predicted,'steh_no_q':no.predicted})
+        hydrographs.append(table);dates=pd.to_datetime(p.target_date)
+        for col,color,style,label in [('observed','#222222','-','Observed'),('steh_with_q',COLORS[0],'-','STEH with Q'),
+                                     ('lstm',COLORS[1],'--','LSTM'),('steh_no_q',COLORS[2],':','STEH no Q')]:
+            ax.plot(dates,table[col],color=color,ls=style,lw=.65,label=label)
+        ax.set_yscale('asinh',linear_width=1);ax.set_ylabel('Discharge (cfs; asinh scale)')
+        ax.set_title(f"{station}: {'closest to median primary STEH NSE' if station==representative else 'previously identified LSTM extreme'}")
+    axes[0].legend(loc='upper right',ncols=4,fontsize=8);axes[1].set_xlabel('Test target date')
+    pd.concat(hydrographs,ignore_index=True).to_csv(out/'illustrative_hydrographs.csv',index=False)
+    save(fig,'fig6_illustrative_hydrographs',['illustrative_hydrographs.csv','paired_primary.csv'],
+         'Full test hydrographs at a disclosed median-performance example and the retained LSTM extreme case.',
+         ['Illustrations are descriptive, not a random sample or evidence of universal superiority.',
+          'Median example selected after performance aggregation; tie broken by basin ID.',
+          'Station08190500 was identified before final STEH analysis; no test-driven retraining or clipping.'])
+    dump(out/'illustration_selection.json',{'representative_basin':representative,
+         'rule':'closest to median primary with-Q STEH NSE; lexicographic basin-ID tie break',
+         'preidentified_lstm_extreme':'08190500','selection_role':'descriptive illustrations only'})
     for name in tables:
         traces.append({'artifact_id':name,'source_data':'source_manifest.json',
                        'transformation':{'script':'experiments/report_steh_population.py','sha256':sha(Path(__file__))},

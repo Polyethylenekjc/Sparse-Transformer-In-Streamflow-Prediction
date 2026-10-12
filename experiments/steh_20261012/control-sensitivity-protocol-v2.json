@@ -1,0 +1,8250 @@
+{
+  "method": "robust-degree caliper random structural controls; sensitivity only",
+  "source_manifest_sha256": "c2b022e807d5de1449d03f0118a43979ae83b51639211a1687cf7306d35df090",
+  "training_config": {
+    "protocol_version": "revision-v1",
+    "data_root": "data",
+    "output_root": "outputs/steh_population_20261012",
+    "sample_size": 521,
+    "sample_seed": 20261011,
+    "seeds": [
+      42
+    ],
+    "seq_len": 15,
+    "pred_horizon": 1,
+    "train_ratio": 0.7,
+    "val_ratio": 0.15,
+    "observation_mask_dir": null,
+    "exclude_imputed_q_history": false,
+    "device": "auto",
+    "batch_size": 128,
+    "num_workers": 0,
+    "torch_threads": 1,
+    "learning_rate": 0.001977905266889418,
+    "weight_decay": 1e-05,
+    "d_model": 64,
+    "n_heads": 4,
+    "num_layers": 3,
+    "d_ff": 128,
+    "dropout": 0.1,
+    "epochs_dense": 10,
+    "epochs_sparse": 10,
+    "epochs_mask": 10,
+    "target_weight_sparsity": 0.9,
+    "target_activation_sparsity": 0.5,
+    "minimum_alive_per_neuron": 2,
+    "lambda_mask_l1": 1e-05,
+    "lambda_input_mask_l1": 1e-05,
+    "lstm_trials": [
+      {
+        "hidden_size": 64,
+        "num_layers": 1,
+        "learning_rate": 0.001
+      },
+      {
+        "hidden_size": 128,
+        "num_layers": 1,
+        "learning_rate": 0.001
+      },
+      {
+        "hidden_size": 64,
+        "num_layers": 2,
+        "learning_rate": 0.001
+      },
+      {
+        "hidden_size": 128,
+        "num_layers": 2,
+        "learning_rate": 0.0003
+      }
+    ],
+    "epochs_lstm": 30,
+    "analysis_val_samples": 256,
+    "analysis_test_samples": 512,
+    "probe_train_samples": 2048,
+    "analysis_seed": 1107,
+    "max_neuron_candidates_per_layer": 32,
+    "core_fraction": 0.25,
+    "random_controls": 20,
+    "core_max_delta_nse": 0.05,
+    "remove_min_delta_nse": 0.02,
+    "random_min_win_fraction": 0.8,
+    "ar_ridge": 1.0,
+    "probe_ridge": 1.0,
+    "api_decay": 0.9,
+    "chg_epsilon_mm": 1.0,
+    "optional_window_lengths": [],
+    "gpu_resident_data": true,
+    "adamw_fused": true,
+    "record_structural_diagnostics": true
+  },
+  "script_sha256": "34bac78acc39f7712f79674ec9dfa240d653f567981728a6b42efa28f802ddc3",
+  "jobs": [
+    {
+      "station": "01013500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01013500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01022500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01022500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01030500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01030500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01031500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01031500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01047000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01047000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01052500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01052500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01054200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01054200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01055000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01055000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01057000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01057000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01073000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01073000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01078000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01078000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01134500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01134500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01137500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01137500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01139000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01139000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01139800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01139800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01142500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01142500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01144000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01144000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01162500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01162500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01169000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01169000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01170100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01170100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01181000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01181000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01333000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01333000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01439500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01439500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01440000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01440000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01440400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01440400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01451800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01451800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01484100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01484100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01485500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01485500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01486000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01486000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01487000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01487000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01491000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01491000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01510000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01510000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01516500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01516500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01532000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01532000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01539000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01539000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01542810",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01542810",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01543000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01543000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01543500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01543500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01544500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01544500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01545600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01545600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01547700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01547700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01548500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01548500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01549500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01549500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01550000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01550000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01552000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01552000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01552500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01552500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01557500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01557500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01567500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01567500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01568000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01568000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01580000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01580000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01583500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01583500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01591400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01591400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01596500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01596500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01613050",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01613050",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01620500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01620500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01634500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01634500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01638480",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01638480",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01639500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01639500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01644000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01644000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01658500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01658500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01664000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01664000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01666500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01666500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01667500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01667500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01669000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01669000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02011400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02011400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02011460",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02011460",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02013000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02013000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02014000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02014000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02015700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02015700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02016000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02016000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02017500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02017500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02018000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02018000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02027000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02027000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02027500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02027500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02028500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02028500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02038850",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02038850",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02046000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02046000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02051500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02051500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02053200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02053200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02053800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02053800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02055100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02055100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02056900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02056900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02059500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02059500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02064000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02064000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02065500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02065500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02069700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02069700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02070000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02070000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02074500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02074500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02077200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02077200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02081500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02081500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02082950",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02082950",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02092500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02092500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02102908",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02102908",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02108000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02108000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02111180",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02111180",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02112120",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02112120",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02112360",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02112360",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02118500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02118500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02128000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02128000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02143000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02143000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02143040",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02143040",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02149000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02149000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02152100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02152100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02177000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02177000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02202600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02202600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02212600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02212600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02221525",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02221525",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02231000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02231000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02231342",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02231342",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02245500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02245500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02246000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02246000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02296500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02296500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02297155",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02297155",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02297310",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02297310",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02298123",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02298123",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02298608",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02298608",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02299950",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02299950",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02300700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02300700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02312200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02312200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02314500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02314500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02315500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02315500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02324400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02324400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02327100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02327100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02349900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02349900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02361000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02361000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02369800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02369800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02371500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02371500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02372250",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02372250",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02374500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02374500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02381600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02381600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02422500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02422500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02430085",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02430085",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02450250",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02450250",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02464000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02464000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02465493",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02465493",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02469800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02469800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02472000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02472000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02472500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02472500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02479155",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02479155",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02479300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02479300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02479560",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02479560",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02481000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02481000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02481510",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02481510",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03010655",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03010655",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03011800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03011800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03015500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03015500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03021350",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03021350",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03026500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03026500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03028000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03028000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03049000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03049000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03049800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03049800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03076600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03076600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03078000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03078000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03140000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03140000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03144000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03144000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03159540",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03159540",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03161000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03161000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03164000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03164000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03165000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03165000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03170000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03170000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03173000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03173000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03237280",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03237280",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03237500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03237500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03241500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03241500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03291780",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03291780",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03346000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03346000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03384450",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03384450",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03439000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03439000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03455500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03455500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03456500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03456500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03460000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03460000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03463300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03463300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03471500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03471500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03473000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03473000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03479000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03479000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03488000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03488000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03498500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03498500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03500000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03500000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03500240",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03500240",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03504000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03504000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03574500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03574500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03604000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03604000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04015330",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04015330",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04024430",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04024430",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04027000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04027000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04040500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04040500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04043050",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04043050",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04045500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04045500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04056500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04056500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04057510",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04057510",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04057800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04057800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04059500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04059500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04063700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04063700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04105700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04105700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04122200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04122200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04122500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04122500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04124000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04124000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04127997",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04127997",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04185000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04185000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04196800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04196800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04197100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04197100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04213000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04213000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04216418",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04216418",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04221000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04221000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04224775",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04224775",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04256000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04256000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04296000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04296000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05056000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05056000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05057000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05057000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05057200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05057200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05120500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05120500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05123400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05123400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05129115",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05129115",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05131500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05131500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05291000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05291000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05362000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05362000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05393500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05393500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05399500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05399500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05408000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05408000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05412500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05412500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05413500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05413500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05414000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05414000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05444000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05444000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05454000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05454000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05458000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05458000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05466500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05466500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05487980",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05487980",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05489000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05489000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05495000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05495000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05495500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05495500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05501000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05501000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05503800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05503800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05507600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05507600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05508805",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05508805",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05514500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05514500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05525500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05525500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05556500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05556500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05584500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05584500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05585000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05585000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05591550",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05591550",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05592050",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05592050",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05593575",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05593575",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05593900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05593900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05595730",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05595730",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06191500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06191500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06224000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06224000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06278300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06278300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06280300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06280300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06289000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06289000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06311000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06311000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06332515",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06332515",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06339100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06339100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06339500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06339500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06344600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06344600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06350000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06350000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06352000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06352000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06353000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06353000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06354000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06354000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06360500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06360500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06404000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06404000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06406000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06406000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06409000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06409000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06431500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06431500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06447000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06447000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06447500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06447500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06450500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06450500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06452000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06452000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06453600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06453600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06464500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06464500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06468170",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06468170",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06470800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06470800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06477500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06477500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06479438",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06479438",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06601000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06601000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06614800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06614800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06622700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06622700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06623800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06623800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06632400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06632400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06746095",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06746095",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06784000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06784000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06803510",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06803510",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06803530",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06803530",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06814000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06814000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06847900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06847900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06853800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06853800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06876700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06876700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06878000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06878000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06879650",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06879650",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06885500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06885500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06888500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06888500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06889200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06889200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06889500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06889500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06892000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06892000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06903400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06903400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06910800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06910800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06911900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06911900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06917000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06917000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06918460",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06918460",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06919500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06919500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06921070",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06921070",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06921200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06921200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07014500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07014500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07056000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07056000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07057500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07057500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07060710",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07060710",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07066000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07066000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07067000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07067000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07068000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07068000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07071500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07071500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07083000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07083000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07142300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07142300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07145700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07145700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07148400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07148400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07149000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07149000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07151500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07151500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07167500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07167500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07180500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07180500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07184000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07184000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07195800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07195800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07196900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07196900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07197000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07197000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07208500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07208500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07261000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07261000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07291000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07291000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07292500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07292500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07299670",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07299670",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07301410",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07301410",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07301500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07301500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07315200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07315200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07315700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07315700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07335700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07335700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07340300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07340300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07346045",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07346045",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07362100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07362100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07373000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07373000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "07375000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "07375000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08013000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08013000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08014500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08014500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08023080",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08023080",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08029500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08029500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08066200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08066200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08066300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08066300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08070000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08070000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08079600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08079600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08082700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08082700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08086212",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08086212",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08086290",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08086290",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08101000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08101000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08103900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08103900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08104900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08104900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08109700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08109700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08150800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08150800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08158700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08158700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08158810",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08158810",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08164000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08164000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08164300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08164300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08164600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08164600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08165300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08165300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08171300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08171300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08175000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08175000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08189500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08189500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08190000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08190000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08190500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08190500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08194200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08194200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08195000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08195000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08196000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08196000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08198500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08198500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08200000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08200000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08202700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08202700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08267500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08267500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08269000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08269000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08271000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08271000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08324000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08324000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08377900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08377900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08378500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08378500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08380500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08380500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09034900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09034900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09035900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09035900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09047700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09047700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09065500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09065500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09066000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09066000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09066200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09066200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09066300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09066300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09081600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09081600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09210500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09210500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09223000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09223000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09306242",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09306242",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09312600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09312600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09352900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09352900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09378630",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09378630",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09386900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09386900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09404450",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09404450",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09430500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09430500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09430600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09430600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09492400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09492400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09494000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09494000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09497980",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09497980",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09505350",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09505350",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09505800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09505800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09508300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09508300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09510200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09510200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "09513780",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "09513780",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10172700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10172700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10172800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10172800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10173450",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10173450",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10205030",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10205030",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10234500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10234500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10242000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10242000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10244950",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10244950",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10249300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10249300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10258500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10258500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10259000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10259000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10259200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10259200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10263500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10263500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10316500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10316500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10329500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10329500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10336660",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10336660",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10343500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10343500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10396000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10396000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11098000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11098000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11124500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11124500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11141280",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11141280",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11143000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11143000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11148900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11148900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11151300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11151300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11162500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11162500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11176400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11176400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11180500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11180500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11180960",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11180960",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11224500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11224500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11230500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11230500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11237500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11237500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11253310",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11253310",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11264500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11264500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11266500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11266500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11274500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11274500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11274630",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11274630",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11284400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11284400",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11381500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11381500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11383500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11383500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11451100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11451100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11468500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11468500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11473900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11473900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11475560",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11475560",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11476600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11476600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11478500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11478500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11481200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11481200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11482500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11482500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11522500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11522500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11523200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11523200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11528700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11528700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "11532500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "11532500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12010000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12010000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12013500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12013500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12020000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12020000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12025700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12025700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12035000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12035000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12040500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12040500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12041200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12041200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12048000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12048000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12054000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12054000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12056500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12056500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12073500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12073500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12082500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12082500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12092000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12092000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12114500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12114500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12115000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12115000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12115500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12115500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12117000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12117000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12145500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12145500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12147500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12147500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12147600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12147600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12167000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12167000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12175500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12175500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12178100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12178100",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12186000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12186000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12189500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12189500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12358500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12358500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12390700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12390700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12411000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12411000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12414500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12414500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12447390",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12447390",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12451000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12451000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12488500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12488500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13011500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13011500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13011900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13011900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13018300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13018300",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13023000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13023000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13083000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13083000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13161500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13161500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13235000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13235000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13240000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13240000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13313000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13313000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13331500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13331500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13337000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13337000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13338500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13338500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13340000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13340000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "13340600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "13340600",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14020000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14020000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14137000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14137000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14138800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14138800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14138870",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14138870",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14138900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14138900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14139800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14139800",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14141500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14141500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14154500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14154500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14158500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14158500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14158790",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14158790",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14166500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14166500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14182500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14182500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14185000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14185000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14185900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14185900",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14222500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14222500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14236200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14236200",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14301000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14301000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14305500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14305500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14306500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14306500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14309500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14309500",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14316700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14316700",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14325000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14325000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "14400000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "14400000",
+      "seed": 42,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01552500",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01552500",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01552500",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01552500",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01634500",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01634500",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "01634500",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "01634500",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02312200",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02312200",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "02312200",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "02312200",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03604000",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03604000",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "03604000",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "03604000",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04127997",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04127997",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "04127997",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "04127997",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05393500",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05393500",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "05393500",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "05393500",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06601000",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06601000",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "06601000",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "06601000",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08158700",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08158700",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "08158700",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "08158700",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10172700",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10172700",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10172700",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10172700",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10234500",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10234500",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10234500",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10234500",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10343500",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10343500",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "10343500",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "10343500",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12035000",
+      "seed": 43,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12035000",
+      "seed": 43,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    },
+    {
+      "station": "12035000",
+      "seed": 44,
+      "model": "steh",
+      "with_q": true,
+      "seq_len": 15
+    },
+    {
+      "station": "12035000",
+      "seed": 44,
+      "model": "steh",
+      "with_q": false,
+      "seq_len": 15
+    }
+  ],
+  "calipers": [
+    1.0,
+    2.0
+  ],
+  "controls_per_caliper": 20,
+  "vmap_chunk": 4,
+  "near_tie_policy": "Recompute sequentially when the NSE ordering is inside a propagated prediction-tolerance error bound.",
+  "degree_distance": "sum absolute in/out degree difference divided by max(1,pool median absolute deviation)",
+  "sampling": "without replacement within each group; random among distance <= nearest + caliper",
+  "circuit_selection": "reuse exact validation-frozen core; no model retraining",
+  "caliper_selection": "both prespecified; no selection by test performance",
+  "early_method_development_basins": [
+    "01013500",
+    "01022500",
+    "01030500",
+    "01031500",
+    "01047000",
+    "01052500",
+    "01054200",
+    "01055000",
+    "01057000",
+    "01073000",
+    "01078000",
+    "01134500"
+  ],
+  "confirmation_stations": [
+    "01552500",
+    "01634500",
+    "02312200",
+    "03604000",
+    "04127997",
+    "05393500",
+    "06601000",
+    "08158700",
+    "10172700",
+    "10234500",
+    "10343500",
+    "12035000"
+  ],
+  "conditional_confirmation_population": [
+    "01137500",
+    "01139000",
+    "01139800",
+    "01142500",
+    "01144000",
+    "01162500",
+    "01169000",
+    "01170100",
+    "01181000",
+    "01333000",
+    "01439500",
+    "01440000",
+    "01440400",
+    "01451800",
+    "01484100",
+    "01485500",
+    "01486000",
+    "01487000",
+    "01491000",
+    "01510000",
+    "01516500",
+    "01532000",
+    "01539000",
+    "01542810",
+    "01543000",
+    "01543500",
+    "01544500",
+    "01545600",
+    "01547700",
+    "01548500",
+    "01549500",
+    "01550000",
+    "01552000",
+    "01552500",
+    "01557500",
+    "01567500",
+    "01568000",
+    "01580000",
+    "01583500",
+    "01591400",
+    "01596500",
+    "01613050",
+    "01620500",
+    "01634500",
+    "01638480",
+    "01639500",
+    "01644000",
+    "01658500",
+    "01664000",
+    "01666500",
+    "01667500",
+    "01669000",
+    "02011400",
+    "02013000",
+    "02014000",
+    "02015700",
+    "02016000",
+    "02017500",
+    "02018000",
+    "02027000",
+    "02027500",
+    "02028500",
+    "02038850",
+    "02046000",
+    "02051500",
+    "02053200",
+    "02053800",
+    "02055100",
+    "02056900",
+    "02059500",
+    "02064000",
+    "02065500",
+    "02069700",
+    "02070000",
+    "02074500",
+    "02077200",
+    "02081500",
+    "02082950",
+    "02092500",
+    "02102908",
+    "02108000",
+    "02111180",
+    "02112120",
+    "02112360",
+    "02118500",
+    "02128000",
+    "02143000",
+    "02143040",
+    "02149000",
+    "02152100",
+    "02177000",
+    "02202600",
+    "02212600",
+    "02221525",
+    "02231000",
+    "02231342",
+    "02245500",
+    "02246000",
+    "02296500",
+    "02297155",
+    "02297310",
+    "02298123",
+    "02298608",
+    "02299950",
+    "02300700",
+    "02312200",
+    "02314500",
+    "02315500",
+    "02324400",
+    "02327100",
+    "02349900",
+    "02361000",
+    "02369800",
+    "02371500",
+    "02372250",
+    "02374500",
+    "02381600",
+    "02422500",
+    "02430085",
+    "02450250",
+    "02464000",
+    "02465493",
+    "02469800",
+    "02472000",
+    "02472500",
+    "02479155",
+    "02479300",
+    "02479560",
+    "02481000",
+    "02481510",
+    "03010655",
+    "03011800",
+    "03015500",
+    "03021350",
+    "03026500",
+    "03028000",
+    "03049000",
+    "03049800",
+    "03076600",
+    "03078000",
+    "03140000",
+    "03144000",
+    "03159540",
+    "03161000",
+    "03164000",
+    "03165000",
+    "03170000",
+    "03173000",
+    "03237280",
+    "03237500",
+    "03241500",
+    "03291780",
+    "03384450",
+    "03439000",
+    "03455500",
+    "03456500",
+    "03463300",
+    "03471500",
+    "03473000",
+    "03479000",
+    "03488000",
+    "03498500",
+    "03500000",
+    "03500240",
+    "03504000",
+    "03574500",
+    "03604000",
+    "04015330",
+    "04024430",
+    "04027000",
+    "04040500",
+    "04043050",
+    "04045500",
+    "04056500",
+    "04057510",
+    "04057800",
+    "04059500",
+    "04063700",
+    "04105700",
+    "04122200",
+    "04122500",
+    "04124000",
+    "04127997",
+    "04185000",
+    "04197100",
+    "04213000",
+    "04216418",
+    "04221000",
+    "04256000",
+    "04296000",
+    "05056000",
+    "05057000",
+    "05057200",
+    "05120500",
+    "05123400",
+    "05129115",
+    "05131500",
+    "05362000",
+    "05393500",
+    "05408000",
+    "05412500",
+    "05413500",
+    "05414000",
+    "05444000",
+    "05454000",
+    "05458000",
+    "05466500",
+    "05487980",
+    "05489000",
+    "05495000",
+    "05501000",
+    "05503800",
+    "05508805",
+    "05514500",
+    "05525500",
+    "05556500",
+    "05584500",
+    "05585000",
+    "05591550",
+    "05592050",
+    "05593575",
+    "05593900",
+    "05595730",
+    "06191500",
+    "06224000",
+    "06280300",
+    "06289000",
+    "06311000",
+    "06332515",
+    "06339500",
+    "06344600",
+    "06350000",
+    "06352000",
+    "06353000",
+    "06354000",
+    "06360500",
+    "06404000",
+    "06406000",
+    "06409000",
+    "06431500",
+    "06447000",
+    "06447500",
+    "06450500",
+    "06452000",
+    "06453600",
+    "06464500",
+    "06468170",
+    "06470800",
+    "06477500",
+    "06479438",
+    "06601000",
+    "06614800",
+    "06622700",
+    "06623800",
+    "06632400",
+    "06746095",
+    "06784000",
+    "06803510",
+    "06803530",
+    "06814000",
+    "06847900",
+    "06853800",
+    "06876700",
+    "06878000",
+    "06879650",
+    "06885500",
+    "06888500",
+    "06889200",
+    "06889500",
+    "06892000",
+    "06903400",
+    "06910800",
+    "06911900",
+    "06917000",
+    "06918460",
+    "06919500",
+    "06921070",
+    "06921200",
+    "07014500",
+    "07056000",
+    "07057500",
+    "07060710",
+    "07066000",
+    "07067000",
+    "07068000",
+    "07071500",
+    "07083000",
+    "07142300",
+    "07145700",
+    "07148400",
+    "07149000",
+    "07151500",
+    "07180500",
+    "07184000",
+    "07195800",
+    "07196900",
+    "07197000",
+    "07208500",
+    "07261000",
+    "07291000",
+    "07292500",
+    "07299670",
+    "07301410",
+    "07301500",
+    "07315200",
+    "07315700",
+    "07335700",
+    "07340300",
+    "07346045",
+    "07362100",
+    "07373000",
+    "07375000",
+    "08013000",
+    "08014500",
+    "08023080",
+    "08029500",
+    "08066200",
+    "08066300",
+    "08070000",
+    "08079600",
+    "08086212",
+    "08086290",
+    "08101000",
+    "08103900",
+    "08104900",
+    "08109700",
+    "08150800",
+    "08158700",
+    "08158810",
+    "08164000",
+    "08164300",
+    "08165300",
+    "08171300",
+    "08175000",
+    "08189500",
+    "08190000",
+    "08190500",
+    "08194200",
+    "08195000",
+    "08196000",
+    "08198500",
+    "08200000",
+    "08202700",
+    "08267500",
+    "08269000",
+    "08271000",
+    "08324000",
+    "08377900",
+    "08378500",
+    "09034900",
+    "09035900",
+    "09047700",
+    "09065500",
+    "09066000",
+    "09066200",
+    "09066300",
+    "09081600",
+    "09210500",
+    "09223000",
+    "09306242",
+    "09312600",
+    "09352900",
+    "09378630",
+    "09386900",
+    "09404450",
+    "09430500",
+    "09430600",
+    "09492400",
+    "09494000",
+    "09497980",
+    "09505350",
+    "09505800",
+    "09508300",
+    "09510200",
+    "09513780",
+    "10172700",
+    "10172800",
+    "10173450",
+    "10205030",
+    "10234500",
+    "10242000",
+    "10244950",
+    "10249300",
+    "10258500",
+    "10259000",
+    "10259200",
+    "10263500",
+    "10316500",
+    "10329500",
+    "10336660",
+    "10343500",
+    "10396000",
+    "11098000",
+    "11124500",
+    "11141280",
+    "11143000",
+    "11148900",
+    "11151300",
+    "11162500",
+    "11176400",
+    "11180500",
+    "11180960",
+    "11224500",
+    "11230500",
+    "11237500",
+    "11253310",
+    "11264500",
+    "11266500",
+    "11274500",
+    "11274630",
+    "11284400",
+    "11383500",
+    "11451100",
+    "11468500",
+    "11473900",
+    "11475560",
+    "11476600",
+    "11478500",
+    "11481200",
+    "11482500",
+    "11522500",
+    "11523200",
+    "11528700",
+    "11532500",
+    "12010000",
+    "12013500",
+    "12020000",
+    "12025700",
+    "12035000",
+    "12040500",
+    "12041200",
+    "12048000",
+    "12054000",
+    "12056500",
+    "12073500",
+    "12082500",
+    "12114500",
+    "12115000",
+    "12115500",
+    "12117000",
+    "12145500",
+    "12147500",
+    "12147600",
+    "12167000",
+    "12175500",
+    "12178100",
+    "12186000",
+    "12189500",
+    "12358500",
+    "12390700",
+    "12411000",
+    "12414500",
+    "12447390",
+    "12451000",
+    "12488500",
+    "13011500",
+    "13011900",
+    "13018300",
+    "13023000",
+    "13083000",
+    "13161500",
+    "13235000",
+    "13240000",
+    "13313000",
+    "13331500",
+    "13337000",
+    "13338500",
+    "13340000",
+    "13340600",
+    "14020000",
+    "14137000",
+    "14138800",
+    "14138870",
+    "14138900",
+    "14139800",
+    "14141500",
+    "14154500",
+    "14158500",
+    "14158790",
+    "14166500",
+    "14182500",
+    "14185000",
+    "14185900",
+    "14222500",
+    "14236200",
+    "14301000",
+    "14305500",
+    "14306500",
+    "14309500",
+    "14316700",
+    "14325000",
+    "14400000"
+  ],
+  "confirmation_design": "Original SRS conditioned on avoiding fixed first12 development basins; N492, n12.",
+  "confidence": 0.9875,
+  "interval_family": "Bonferroni four marginal bounds: 2calipers x 2Qsettings, joint coverage >=95%",
+  "limits": "Original nearest-degree protocol preserved as primary. No p-value or globally minimal/causal circuit claim."
+}

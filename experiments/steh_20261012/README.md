@@ -23,8 +23,8 @@ Do not interpret this plan as completed or scientifically successful results.
   fresh model. Joint backward reduction uses 512 validation days, tolerance .05,
   and at most 12 rounds. Preserve all failed test outcomes.
 - Fixed circuit criterion: test NSE loss <=.05; removing the selected circuit
-  reduces NSE by >=.02; strict win fraction >=.8 against distinct structural
-  controls. Twenty controls match layer, type and count exactly, degree
+  reduces NSE by >=.02; strict win fraction >=.8 against structural-control
+  draws excluding the core itself. Draws may repeat each other. Twenty controls match layer, type and count exactly, degree
   approximately; disclose overlaps and identical controls.
 - Compare seeds using validation input-effect ranks and centered linear CKA,
   not arbitrary neuron identifiers. Residual, embedding, input and readout
@@ -71,3 +71,29 @@ for the 503 eligible basins. No inference covers all possible initializations.
 Near-threshold gates and finite-epoch churn are reported separately; a completed
 run or decreasing loss is not proof of structural convergence. Do not revise
 test thresholds or hide extreme NSE values to improve manuscript figures.
+
+## Fixed control sensitivity protocol
+
+The early review of the first 12 ordered basins identified a limitation of
+nearest-degree controls: the same retained units can be selected repeatedly.
+The original primary criterion remains unchanged. An additional sensitivity
+analysis reports **both** fixed robust-degree calipers 1 and 2, with 20 draws
+per caliper, exact layer/type/count matching, and the same validation-frozen
+core. Neither caliper is selected using test performance. Control designs are
+saved before forecasts, and every individual control forecast is retained.
+Overlaps, repeated masks, nonidentical-draw wins and unique-mask wins are
+reported separately. GPU-vectorized predictions are checked against sequential
+predictions; numerically ambiguous comparisons are recomputed sequentially.
+
+For this added method, the first 12 early-review basins are development data.
+Conditional on avoiding those basins, the same prespecified random confirmation
+sample is an SRS from 492 eligible basins. Success still requires all three
+fixed seeds to pass. Four exact hypergeometric 98.75% marginal intervals
+(two input settings by two calipers) provide at least 95% joint coverage.
+This sensitivity family is reported alongside the original primary analysis.
+
+The complete added protocol is `control-sensitivity-protocol-v2.json`.
+Run `experiments/steh_control_sensitivity.py` with the explicit output
+`outputs/steh_control_sensitivity_20261012_v2` after primary circuit completion,
+then `experiments/audit_steh_controls.py`. Computational integrity does not
+imply that either scientific criterion will pass.

@@ -33,11 +33,12 @@ function sheetTable(name, rows, columns, note){
  return sheet;
 }
 
-sheetTable('Population summary',data.model_summary,[
+const populationSummarySheet=sheetTable('Population summary',data.model_summary,[
  ['measure','Measure','@'],['defined','Defined basins','0'],['mean','Mean'],['median','Median'],
  ['sd_between_basins','Between-basin SD'],['q25','25th percentile'],['q75','75th percentile'],
  ['min','Minimum'],['max','Maximum']],
  'All 521 basins retained. Census descriptions; between-basin SD is not seed uncertainty.');
+populationSummarySheet.getRange('A1:A14').format.columnWidth=30;
 sheetTable('Paired primary',data.paired_primary,[
  ['station','Basin ID'],['steh_with_q_nse','STEH with Q NSE'],['lstm_nse','LSTM NSE'],
  ['steh_no_q_nse','STEH no Q NSE'],['with_q_minus_lstm','STEH Q - LSTM'],
@@ -46,10 +47,10 @@ sheetTable('Paired primary',data.paired_primary,[
 sheetTable('Circuits',data.all_runs,[
  ['station','Basin ID'],['seed','Seed','0'],['with_q','Q history'],['nse','Full NSE'],
  ['core_nse','Core NSE'],['removed_nse','Removed NSE'],['core_delta_nse','Full - core'],
- ['remove_delta_nse','Full - removed'],['random_win_fraction','Distinct control win'],
- ['distinct_control_count','Distinct controls','0'],['criterion_pass','Fixed criterion pass'],
+ ['remove_delta_nse','Full - removed'],['random_win_fraction','Nonidentical-draw win'],
+ ['distinct_control_count','Nonidentical draws','0'],['criterion_pass','Fixed criterion pass'],
  ['active_units','Active units','0'],['core_units','Retained units','0']],
- 'Fixed criterion: core loss <= .05; removal loss >= .02; distinct-control win >= .8.');
+ 'Core loss <= .05; removal loss >= .02; win >= .8. Draws exclude the core itself and may repeat.');
 sheetTable('Convergence',data.convergence_diagnostics,[
  ['station','Basin ID'],['seed','Seed','0'],['with_q','Q history'],
  ['mask_tail_gate_churn','Last 3 gate churn'],['mask_tail_weight_churn','Last 3 weight churn'],
@@ -74,6 +75,24 @@ sheetTable('Confirmation interval',intervalRows,[
  ['with_q','Q history'],['sample','Sample basins','0'],['population','Eligible population','0'],
  ['success','All 3 pass basins','0'],['lower','95% lower fraction'],['upper','95% upper fraction']],
  'Exact hypergeometric SRS interval: 503 eligible basins, three fixed seeds; not all initializations.');
+let caliperData=null;
+try{caliperData=JSON.parse(await fs.readFile(path.join(out,'caliper-audit.json'),'utf8'));}
+catch(error){if(error.code!=='ENOENT')throw error;}
+if(caliperData){
+ sheetTable('Control sensitivity',caliperData.population_summary,[
+  ['with_q','Q history'],['caliper','Fixed caliper','0'],['basins','Basins','0'],
+  ['nearest_degree_passes','Primary passes','0'],['caliper_passes','Caliper passes','0'],
+  ['undefined_control_win','No valid control win','0'],['median_unique_control_masks','Median unique controls','0'],
+  ['median_core_overlap','Median core overlap']],
+  'Original nearest-degree criterion retained. Both calipers reported; neither chosen using test results.');
+ const intervals=caliperData.confirmation.map(r=>({...r,
+  lower:r.success_fraction_bounds[0],upper:r.success_fraction_bounds[1]}));
+ sheetTable('Caliper confirmation',intervals,[
+  ['with_q','Q history'],['caliper','Fixed caliper','0'],['sample_successes','All 3 pass basins','0'],
+  ['sample_basins','Sample basins','0'],['population','Eligible population','0'],
+  ['lower','98.75% lower fraction'],['upper','98.75% upper fraction']],
+  'Conditional SRS: 492 basins. Four Bonferroni intervals have >=95% joint coverage; three fixed seeds.');
+}
 await wb.recalculate();
 console.log((await wb.inspect({kind:'match',searchTerm:'#REF!|#DIV/0!|#VALUE!|#NAME\\?|#NUM!|#NULL!|#SPILL!|#CALC!',options:{useRegex:true,maxResults:20}})).ndjson);
 for(const [sheet,range,id] of [
