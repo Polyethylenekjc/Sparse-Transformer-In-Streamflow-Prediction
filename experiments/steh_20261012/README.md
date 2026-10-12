@@ -128,3 +128,13 @@ The requested local LSTM comparison does not establish superiority over pooled
 regional or ensemble LSTMs; see https://hess.copernicus.org/articles/28/4187/2024/.
 KGE=0 is not an inherent skill threshold; benchmarks are explicit, as discussed
 at https://hess.copernicus.org/articles/23/4323/2019/.
+
+The final reporting layer additionally rechecks stored input-effect ranks and
+FP32 CKA, and reports CKA recomputed in FP64 after translating by the first
+sample before centering. Exact constant representations are undefined.
+The72development pairs in `development-cka-numeric-audit.csv` have maximum
+absolute FP32/FP64 difference2.21748e-7 and no undefined robust score; a constant
+FP32 fixture yields originalCKA1 but robustCKAundefined. Original scores remain
+available. Full/core forecast correlations are separate descriptive measures.
+None of these numerical checks alter training, circuit selection or fixed
+pass criteria. Reporting updates are frozen before new-seed confirmation.

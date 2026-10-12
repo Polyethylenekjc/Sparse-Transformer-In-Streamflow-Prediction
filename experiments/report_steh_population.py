@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from revision.common import clean, digest, metrics, finite_population_interval
+from experiments.stability_numerics import linear_cka_fp64,correlation_fp64
 
 METRICS = ['nse', 'kge', 'rmse', 'mae', 'bias']
 COLORS = ['#0077BB', '#EE7733', '#009988', '#CC3311']
@@ -218,11 +219,43 @@ def main():
     expected_pairs = 2*len(plan['confirmation_stations'])*3
     assert len(stability) == expected_pairs
     assert set(stability.station) == set(plan['confirmation_stations'])
+    stability_rows=[];pair_keys=set()
+    for row in stability.to_dict('records'):
+        key=(row['station'],row['with_q'],tuple(sorted([int(row['seed_a']),int(row['seed_b'])])))
+        assert key not in pair_keys;pair_keys.add(key)
+        assert set(key[2])<=set([42,43,44]) and len(set(key[2]))==2
+        folders=[folder(args.circuits,{'station':row['station'],'with_q':row['with_q'],'seed':int(row[s])})
+                 for s in ['seed_a','seed_b']]
+        selections=[read(f/'validation_selection.json') for f in folders]
+        assert selections[0]['validation_dates_sha256']==selections[1]['validation_dates_sha256']
+        a,b=[np.load(f/'validation_hidden.npy',allow_pickle=False) for f in folders]
+        assert a.shape==b.shape==(protocol['validation_days'],plan['config']['d_model'])
+        x,y=a-a.mean(axis=0),b-b.mean(axis=0)
+        denominator=np.linalg.norm(x.T@x,'fro')*np.linalg.norm(y.T@y,'fro')
+        fp32=float(np.linalg.norm(x.T@y,'fro')**2/denominator) if denominator else None
+        recorded=row['validation_hidden_linear_cka']
+        if pd.isna(recorded):assert fp32 is None
+        else:same(fp32,recorded)
+        effects=[pd.DataFrame(read(f/'feature_effects.json')).set_index('feature') for f in folders]
+        rank_a=effects[0].validation_delta_nse.rank()
+        rank_b=effects[1].loc[rank_a.index].validation_delta_nse.rank()
+        rank=correlation_fp64(rank_a,rank_b)
+        if pd.isna(row['validation_input_effect_spearman']):assert rank is None
+        else:same(rank,row['validation_input_effect_spearman'])
+        pa,pb=[pd.read_csv(f/'predictions.csv') for f in folders]
+        assert pa.target_date.tolist()==pb.target_date.tolist()
+        stability_rows.append(row|{'validation_hidden_linear_cka_fp64':linear_cka_fp64(a,b),
+                                  'full_prediction_correlation':correlation_fp64(pa.full,pb.full),
+                                  'core_prediction_correlation':correlation_fp64(pa.core,pb.core)})
+    stability=pd.DataFrame(stability_rows)
     stability_basin = stability.groupby(['station','with_q'],as_index=False).agg(
         input_rank_mean=('validation_input_effect_spearman','mean'),
         input_rank_min=('validation_input_effect_spearman','min'),
-        hidden_cka_mean=('validation_hidden_linear_cka','mean'),
-        hidden_cka_min=('validation_hidden_linear_cka','min'))
+        hidden_cka_mean=('validation_hidden_linear_cka_fp64','mean'),
+        hidden_cka_min=('validation_hidden_linear_cka_fp64','min'),
+        hidden_cka_original_mean=('validation_hidden_linear_cka','mean'),
+        full_prediction_correlation_mean=('full_prediction_correlation','mean'),
+        core_prediction_correlation_mean=('core_prediction_correlation','mean'))
     confirm = all_runs[all_runs.station.isin(plan['confirmation_stations'])].copy()
     assert len(confirm) == 6*len(plan['confirmation_stations'])
     confirm_basin = confirm.groupby(['station','with_q'],as_index=False).agg(
@@ -256,6 +289,11 @@ def main():
                'primary_with_q_beats_ar':int((paired.steh_with_q_nse>paired.ar_nse).sum()),
                'probe_summary':probe_summary,
                'probe_audit_scope':'Frozen unfiltered probe scores imported and count/status/source checked; hidden/sample forecasts not saved, so R2 was not independently recomputed.',
+               'stability_numeric_audit':{
+                   'pairs_checked':len(stability),'robust_cka_undefined':int(stability.validation_hidden_linear_cka_fp64.isna().sum()),
+                   'max_fp32_fp64_cka_difference':float((stability.validation_hidden_linear_cka_fp64-stability.validation_hidden_linear_cka).abs().max()),
+                   'numerical_helper_sha256':sha(ROOT/'experiments/stability_numerics.py'),
+                   'method':'Recompute original FP32 CKA and input ranks; center FP64 after first-row translation for robust CKA; constant representations remain undefined.'},
                'native_binary_forward_difference':{
                    'models_exceeding_pointwise_tolerance':int((all_runs.full_prediction_parity_exceeding_standard_tolerance_days>0).sum()),
                    'maximum_train_scaled_prediction_difference':float(all_runs.full_prediction_parity_max_abs_train_scaled.max()),
@@ -287,9 +325,34 @@ def main():
     tables = {'all_runs':all_runs,'paired_primary':paired,'convergence_diagnostics':diag,
               'phase_training_curves':pd.concat(curves,ignore_index=True),
               'stability_basin':stability_basin,'confirmation_basin':confirm_basin,
+              'functional_stability_audited':stability,
               'model_summary':pd.DataFrame(summary),'probe_records':probes,
               'probe_summary':pd.DataFrame(probe_summary)}
+    model_table=[]
+    for label,prefix in [('STEH with Q','steh_with_q'),('STEH no Q','steh_no_q'),
+                         ('LSTM','lstm'),('Persistence','persistence'),('AR','ar')]:
+        for metric in ['nse','kge']:
+            values=paired[prefix+'_'+metric]
+            model_table.append({'Model':label,'Metric':metric.upper(),'Defined':int(values.notna().sum()),
+                                'Mean':values.mean(),'SD':values.std(),'Median':values.median()})
+    tables['publication_model_table']=pd.DataFrame(model_table)
+    circuit_table=[]
+    for q in [True,False]:
+        group=primary[primary.with_q==q]
+        circuit_table.append({'Input':'With Q' if q else 'No Q','Basins':len(group),
+                              'Criterion passes':int(group.criterion_pass.sum()),
+                              'Median core loss':group.core_delta_nse.median(),
+                              'Median removal loss':group.remove_delta_nse.median(),
+                              'Undefined control win':int(group.random_win_fraction.isna().sum())})
+    tables['publication_circuit_table']=pd.DataFrame(circuit_table)
     for name,frame in tables.items():frame.to_csv(out/(name+'.csv'),index=False)
+    for name in ['publication_model_table','publication_circuit_table']:
+        tables[name].to_latex(out/(name+'.tex'),index=False,float_format=lambda value:f'{value:.3f}',
+                             escape=True,caption=('Descriptive results under the frozen protocol. All basins retained; '
+                                                  'SD is between basins. Q-history references apply to with-Q forecasts.'
+                                                  if name=='publication_model_table' else
+                                                  'Original nearest-degree control criterion. Draws excluding the core may repeat.'),
+                             label='tab:'+name)
     dump(out/'audit.json',quality);dump(out/'source_manifest.json',sources)
     plt.rcParams.update({'font.family':'DejaVu Sans','font.size':8.5,'axes.labelsize':9,
                          'legend.fontsize':8,'xtick.labelsize':8,'ytick.labelsize':8,
@@ -309,7 +372,8 @@ def main():
         for ext in ['png','pdf','svg']:fig.savefig(out/(ident+'.'+ext),dpi=600)
         plt.close(fig)
         traces.append({'artifact_id':ident,'source_data':[{'path':name,'sha256':sha(out/name)} for name in files],
-                       'transformation':{'script':'experiments/report_steh_population.py','sha256':sha(Path(__file__))},
+                       'transformation':{'script':'experiments/report_steh_population.py','sha256':sha(Path(__file__)),
+                                         'numerical_helper_sha256':sha(ROOT/'experiments/stability_numerics.py')},
                        'caption_claim':claim,'supported_manuscript_claims':[claim], 'limitations':limits})
 
     fig,axes = plt.subplots(1,2,figsize=(175/25.4,73/25.4))
@@ -342,9 +406,10 @@ def main():
         axes[1].plot(v,np.arange(1,len(v)+1)/len(v),color=color,ls='-' if q else '--')
     axes[0].set_xlabel('Mean input-effect rank correlation');axes[0].set_ylabel('Mean hidden linear CKA');axes[0].legend(loc='best')
     axes[1].set_xlabel('Gate churn: final three mask epochs');axes[1].set_ylabel('Fraction of primary basins')
-    save(fig,'fig3_functional_stability',['stability_basin.csv','convergence_diagnostics.csv'],
+    save(fig,'fig3_functional_stability',['stability_basin.csv','functional_stability_audited.csv','convergence_diagnostics.csv'],
          'Initialization sensitivity is assessed within basins using function-level evidence; epoch churn reports finite-budget stability.',
-         ['12 prespecified new basins, three fixed seeds; sample size is 12, not 36.',quality['limits'][6]])
+         ['12 prespecified new basins, three fixed seeds; sample size is 12, not 36.',quality['limits'][6],
+          'CKA centered in FP64 after first-row translation; undefined constant representations are excluded from plotting and counted explicitly.'])
     training=tables['phase_training_curves'];training=training[training.seed==42]
     fig,axes=plt.subplots(1,3,figsize=(175/25.4,66/25.4))
     for ax,phase,title in zip(axes,['dense','sparse','mask'],['I: dense','II: dynamic sparsity','III: learned gates']):
@@ -426,6 +491,7 @@ def main():
         '不能以隐藏神经元编号重叠、少量随机对照胜率或计算核验 PASS 单独证明普遍存在唯一、闭合、因果回路。',
         '若固定判据通过率有限，应将论文结论限定为局部可提取的忠实回路，报告失败机制；不按测试结果反复调整阈值。',
         '门控近阈值比例和末期翻转比例单独报告。有限轮次的损失下降不等于结构已经收敛。',
+        '跨种子输入作用排序和原始CKA独立重算；另保留双精度中心化的CKA及完整/核心预测相关性。常数表示的CKA保持未定义，不当作稳定证据。',
         '主预测采用原生直通门控，回路干预采用精确二值门控；两种前向的逐日差异和NSE差异单独核验并保留。',
         '物理探测完整保留负R²、未定义及失败记录，并以输入历史为参考。CUM/API/CHG由降雨输入构造，只能支持可解码性，不能证明独立物理状态或因果回路。',
         '探测汇总核查记录数量、状态和来源；未保存的隐藏表示及探测预测无法独立重算R²，该限制明确保留。',

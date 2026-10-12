@@ -66,8 +66,9 @@ sheetTable('Convergence',data.convergence_diagnostics,[
  'Finite 10-epoch mask budget. Gate churn and threshold proximity do not prove convergence.');
 sheetTable('Seed stability',data.stability_basin,[
  ['station','Basin ID'],['with_q','Q history'],['input_rank_mean','Mean rank correlation'],
- ['input_rank_min','Min rank correlation'],['hidden_cka_mean','Mean linear CKA'],['hidden_cka_min','Min linear CKA']],
- '12 prespecified new basins; three fixed seeds; three seed-pair scores averaged within basin.');
+ ['input_rank_min','Min rank correlation'],['hidden_cka_mean','Mean linear CKA'],['hidden_cka_min','Min linear CKA'],
+ ['full_prediction_correlation_mean','Full forecast correlation'],['core_prediction_correlation_mean','Core forecast correlation']],
+ '12 new basins; three fixed seeds; three pairs averaged per basin. CKA centered in FP64; constants undefined.');
 sheetTable('Confirmation',data.confirmation_basin,[
  ['station','Basin ID'],['with_q','Q history'],['all_three_seeds_pass','All 3 pass'],
  ['seeds_passing','Seeds passing','0'],['nse_mean','3-seed mean NSE'],
@@ -110,7 +111,7 @@ const previews=[
  ['Population summary','A1:I18','summary'],['Paired primary','A1:H12','paired'],
  ['Circuits','A1:G12','circuits'],['Circuits','H3:N12','criteria'],
  ['Convergence','A1:F12','convergence'],['Convergence','G3:M12','timing'],
- ['Seed stability','A1:F12','stability'],['Confirmation','A1:G12','confirmation'],
+ ['Seed stability','A1:H12','stability'],['Confirmation','A1:G12','confirmation'],
  ['Confirmation interval','A1:F6','interval'],['Proxy probes','A1:I15','probes']];
 if(caliperData)previews.push(['Control sensitivity','A1:I8','caliper'],
  ['Caliper confirmation','A1:G8','caliper_interval']);
