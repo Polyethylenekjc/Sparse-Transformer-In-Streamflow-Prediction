@@ -137,6 +137,12 @@ This page can:
 - It auto-detects station ID keys (for example `gauge_id`/`gage_id`) and merges on `gauge_id`
 - If the path is unavailable, the page falls back to in-repo station and explanation features only
 
+## Shared-parameter LSTM baseline
+
+For a single-seed, station-by-station performance baseline with one Bayesian-tuned
+configuration shared across all stations, see
+[the protocol and reproduction commands](experiments/LSTM_SHARED_BASELINE.md).
+
 ## Input-Mask Sparsification Tips
 
 Input features can also be sparsified via learnable masks:

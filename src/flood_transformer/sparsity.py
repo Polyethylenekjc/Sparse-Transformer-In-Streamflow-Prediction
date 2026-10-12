@@ -130,29 +130,20 @@ def apply_topk_sparsity_neuronwise(
     keep_total = max(1, int((1.0 - sparsity_ratio) * total))
 
     flat = weight.abs().flatten()
-    forced_keep_mask = torch.zeros_like(flat, dtype=torch.bool)
-
+    forced_count = 0
     if minimum_alive_per_neuron > 0:
-        if neuron_dim == 0:
-            n_neurons = weight.shape[0]
-            per_len = weight.shape[1]
-            max_alive = min(per_len, minimum_alive_per_neuron)
-            for r in range(n_neurons):
-                row = weight[r].abs()
-                _, idx = torch.topk(row, k=max_alive, largest=True, sorted=False)
-                flat_idx = r * per_len + idx
-                forced_keep_mask[flat_idx] = True
-        else:
-            n_neurons = weight.shape[1]
-            per_len = weight.shape[0]
-            max_alive = min(per_len, minimum_alive_per_neuron)
-            for c in range(n_neurons):
-                col = weight[:, c].abs()
-                _, idx = torch.topk(col, k=max_alive, largest=True, sorted=False)
-                flat_idx = idx * weight.shape[1] + c
-                forced_keep_mask[flat_idx] = True
-
-    forced_count = int(forced_keep_mask.sum().item())
+        # One batched selection replaces one CUDA launch per neuron. Each
+        # neuron selects distinct connections, so the count is known on CPU.
+        connection_dim = 1 if neuron_dim == 0 else 0
+        max_alive = min(weight.shape[connection_dim], minimum_alive_per_neuron)
+        idx = torch.topk(weight.abs(), k=max_alive, dim=connection_dim,
+                         largest=True, sorted=False).indices
+        forced_keep_mask = torch.zeros_like(weight, dtype=torch.bool)
+        forced_keep_mask.scatter_(connection_dim, idx, True)
+        forced_keep_mask = forced_keep_mask.flatten()
+        forced_count = idx.numel()
+    else:
+        forced_keep_mask = torch.zeros_like(flat, dtype=torch.bool)
     remaining = max(0, keep_total - forced_count)
 
     score = flat.clone()

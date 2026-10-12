@@ -7,6 +7,7 @@ import platform
 from pathlib import Path
 import sys
 import traceback
+import time
 import numpy as np
 import pandas as pd
 from .common import digest, metrics, wilson, finite_population_interval, write_json
@@ -68,10 +69,12 @@ def prepare(cfg):
                 "criteria": {k:cfg[k] for k in ("core_max_delta_nse","remove_min_delta_nse","random_min_win_fraction")},
                 "scope": "Eligible local paired CSV population, not automatically all 521 CAMELS basins"}
     path = out/"manifest.json"
-    if path.exists() and json.loads(path.read_text(encoding="utf-8")) != manifest:
-        raise ValueError("Existing manifest differs in config, code or data. Use a new output_root to preserve frozen results.")
-    write_json(path, manifest)
-    write_json(out/"config_resolved.json", cfg)
+    if path.exists():
+        if json.loads(path.read_text(encoding="utf-8")) != manifest:
+            raise ValueError("Existing manifest differs in config, code or data. Use a new output_root to preserve frozen results.")
+    else:
+        write_json(path, manifest)
+        write_json(out/"config_resolved.json", cfg)
     print(f"PLAN ONLY: {len(population)} eligible basins; selected {selected}; {len(jobs)} jobs, {len(cfg['lstm_trials'])} validation trials per LSTM job. No training started.")
     return manifest
 
@@ -114,6 +117,8 @@ def run(cfg, manifest, args):
             and (not args.only or j["model"] == args.only)]
     if args.max_jobs is not None:
         jobs = jobs[:args.max_jobs]
+    if getattr(args, "job_index", None) is not None:
+        jobs = [manifest["jobs"][args.job_index]]
     if not jobs:
         raise ValueError("No jobs match requested filters")
     errors = []
@@ -129,13 +134,20 @@ def run(cfg, manifest, args):
             print(f"SKIP completed {folder}", flush=True)
             continue
         try:
+            started = time.perf_counter()
             print(f"RUN {j}", flush=True)
             local = {**cfg, **j, "device": device}
             seed_all(j["seed"])
+            if device.startswith("cuda"):
+                torch.cuda.reset_peak_memory_stats()
             versions={"python": platform.python_version(), "torch": torch.__version__,
-                      "cuda": torch.version.cuda, "device": device}
+                      "cuda": torch.version.cuda, "device": device,
+                      "gpu": torch.cuda.get_device_name() if device.startswith("cuda") else None,
+                      "deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
+                      "float32_matmul_precision": torch.get_float32_matmul_precision()}
             training_versions=versions
             splits, meta = load_basin(cfg["data_root"], j["station"], local)
+            data_seconds = time.perf_counter() - started
             write_json(folder/"preprocessing.json", meta)
             write_json(folder/"run_config.json", local)
             baselines(splits, meta, local, folder)
@@ -187,12 +199,20 @@ def run(cfg, manifest, args):
                 pd.DataFrame(log).to_csv(folder/"training_log.csv", index=False)
                 if tuning:
                     write_json(folder/"lstm_tuning.json", tuning)
+            trained_at = time.perf_counter()
             p = predict(model, splits["test"], local)*meta["q_std"]+meta["q_mean"]
             y = splits["test"]["y"]*meta["q_std"]+meta["q_mean"]
             pd.DataFrame({"target_date": splits["test"]["dates"], "observed": y, "predicted": p}).to_csv(folder/"predictions.csv", index=False)
             if j["model"] == "steh":
                 write_json(folder/"interpretation.json", interpret(model, splits, meta, local))
                 write_json(folder/"probes.json", probes(model, splits, meta, local))
+            write_json(folder/"performance.json", {
+                "total_seconds": time.perf_counter()-started,
+                "data_seconds": data_seconds,
+                "training_and_checkpoint_seconds": trained_at-started-data_seconds,
+                "prediction_and_analysis_seconds": time.perf_counter()-trained_at,
+                "gpu_peak_allocated_mb": torch.cuda.max_memory_allocated()/2**20 if device.startswith("cuda") else None,
+                "pid": os.getpid()})
             write_json(summary_path, {"job": j, "run_sha256": stamp, "metrics": metrics(p,y),
                        "target_status": meta["target_status"], "training_versions": training_versions, "inference_versions": versions,
                        "lstm_trial": trial, "test_dates_sha256": digest(splits["test"]["dates"].tolist())})
@@ -203,7 +223,8 @@ def run(cfg, manifest, args):
             print(f"FAILED {j}: {e}", file=sys.stderr, flush=True)
             if args.fail_fast:
                 raise
-    summarize(cfg, manifest)
+    if not getattr(args, "no_summary", False):
+        summarize(cfg, manifest)
     if errors:
         raise RuntimeError(f"{len(errors)} job(s) failed. They remain in the sample; see failure.json. Re-run to retry.")
 
@@ -286,13 +307,22 @@ def main(argv=None):
     parser.add_argument("--only", choices=["steh","lstm"])
     parser.add_argument("--max-jobs", type=int)
     parser.add_argument("--fail-fast", action="store_true")
+    parser.add_argument("--workers", type=int, default=1, help="Independent concurrent jobs; preserves batch size and seeds")
+    parser.add_argument("--job-index", type=int, help=argparse.SUPPRESS)
+    parser.add_argument("--no-summary", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
     if args.max_jobs is not None and args.max_jobs < 1:
         parser.error("--max-jobs must be positive")
+    if args.workers < 1:
+        parser.error("--workers must be positive")
     cfg = config(args.config,args.data_root,args.output_root)
     manifest = prepare(cfg)
     if args.command == "run":
-        run(cfg, manifest, args)
+        if args.workers > 1:
+            from .parallel import run_parallel
+            run_parallel(cfg, manifest, args)
+        else:
+            run(cfg, manifest, args)
     elif args.command == "summarize":
         summarize(cfg,manifest)
 

@@ -8,7 +8,7 @@ from .models import predict
 
 def subset(split, maximum, seed):
     ids = np.sort(np.random.default_rng(seed).choice(len(split["y"]), min(maximum, len(split["y"])), replace=False))
-    return {k: v[ids] for k, v in split.items()}
+    return {k: v[ids] for k, v in split.items() if not k.startswith("_")}
 
 
 def binary_overrides(model, device):
@@ -71,10 +71,12 @@ def interpret(model, splits, meta, cfg):
     for key in ("head_mask_overrides", "neuron_mask_overrides"):
         for layer, flags in base[key].items():
             module = model.layers[layer]
+            flag_values = flags.detach().cpu().tolist()
             if key.startswith("neuron"):
                 incoming, outgoing = module.mlp.fc1.weight, module.mlp.fc2.weight.T
-                strengths = (incoming.norm(dim=1)*outgoing.norm(dim=1)).detach()
-                degrees = [(int((incoming[i]!=0).sum()), int((outgoing[i]!=0).sum())) for i in range(len(flags))]
+                strengths = (incoming.norm(dim=1)*outgoing.norm(dim=1)).detach().cpu().tolist()
+                degree_values = torch.stack(((incoming!=0).sum(dim=1), (outgoing!=0).sum(dim=1)),dim=1).cpu().tolist()
+                degrees = [tuple(pair) for pair in degree_values]
             else:
                 att = module.attn
                 strengths, degrees = [], []
@@ -84,7 +86,7 @@ def interpret(model, splits, meta, cfg):
                     a, b = att.qkv.weight[rows], att.out_proj.weight[:, ids]
                     strengths.append(float((a.norm()*b.norm()).detach()))
                     degrees.append((int((a!=0).sum()), int((b!=0).sum())))
-            pool = [i for i in range(len(flags)) if flags[i] > 0 and min(degrees[i]) > 0]
+            pool = [i for i in range(len(flags)) if flag_values[i] > 0 and min(degrees[i]) > 0]
             group = (key, layer)
             pools[group] = (pool, degrees)
             cap = cfg["max_neuron_candidates_per_layer"] if key.startswith("neuron") else 0
@@ -98,7 +100,7 @@ def interpret(model, splits, meta, cfg):
                 delta = bv-nse(predict(model, val, cfg, masks), val["y"])
                 ranking.append((delta, i))
             rankings[group] = sorted(ranking, key=lambda v: (-v[0], v[1]))
-            coverage.append({"kind": key, "layer": layer, "trained_active": int(flags.sum()),
+            coverage.append({"kind": key, "layer": layer, "trained_active": int(sum(flag_values)),
                              "with_nonzero_weight_paths": len(pool), "validation_ranked": len(candidates)})
     core = clone_masks(base)
     selected = {}

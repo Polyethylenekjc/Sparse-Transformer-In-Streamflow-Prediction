@@ -54,8 +54,9 @@ class SparseMultiHeadSelfAttention(nn.Module):
         attn = self.dropout(attn)
 
         context = torch.matmul(attn, v)  # [B, H, L, Dh]
-        head_gate = self._get_head_gate(head_mask_override).view(1, self.n_heads, 1, 1)
-        context = context * head_gate
+        if head_mask_override is not None or self.enable_learnable_masks:
+            head_gate = self._get_head_gate(head_mask_override).view(1, self.n_heads, 1, 1)
+            context = context * head_gate
 
         context = context.transpose(1, 2).contiguous().view(bsz, seq_len, self.d_model)
         out = self.out_proj(context)
@@ -94,8 +95,9 @@ class SparseMLP(nn.Module):
 
     def forward(self, x: torch.Tensor, neuron_mask_override: Optional[torch.Tensor] = None) -> torch.Tensor:
         hidden = F.gelu(self.fc1(x))
-        neuron_gate = self._get_neuron_gate(neuron_mask_override).view(1, 1, -1)
-        hidden = hidden * neuron_gate
+        if neuron_mask_override is not None or self.enable_learnable_masks:
+            neuron_gate = self._get_neuron_gate(neuron_mask_override).view(1, 1, -1)
+            hidden = hidden * neuron_gate
 
         out = self.fc2(hidden)
         out = self.dropout(out)
@@ -219,8 +221,9 @@ class ExplainableSparseTransformer(nn.Module):
         return_intermediates: bool = True,
     ) -> ModelOutputs:
         seq_len = x.shape[1]
-        input_gate = self._get_input_gate(input_mask_override).view(1, 1, -1)
-        x = x * input_gate
+        if input_mask_override is not None or self.enable_learnable_masks:
+            input_gate = self._get_input_gate(input_mask_override).view(1, 1, -1)
+            x = x * input_gate
         x = self.input_proj(x) + self.pos_embed[:, :seq_len, :]
 
         attention_maps: List[torch.Tensor] = []

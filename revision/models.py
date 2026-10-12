@@ -1,5 +1,6 @@
 import copy
 import random
+import time
 import numpy as np
 import torch
 from torch import nn
@@ -50,7 +51,39 @@ def phase_switch(model, phase, activation_ratio=0.):
             param.requires_grad_(masks)
 
 
+class ResidentLoader:
+    """Keep small basin arrays on GPU, with the original CPU sampling order."""
+
+    def __init__(self, split, cfg, shuffle):
+        device = cfg["device"]
+        cache = split.setdefault("_device_arrays", {})
+        if device not in cache:
+            cache[device] = (torch.from_numpy(split["x"]).to(device),
+                             torch.from_numpy(split["y"]).to(device))
+        self.x, self.y = cache[device]
+        self.batch_size = cfg["batch_size"]
+        self.shuffle = shuffle
+        self.indices = DataLoader(range(len(self.y)), batch_size=self.batch_size,
+                                  shuffle=shuffle, num_workers=0,
+                                  collate_fn=torch.as_tensor,
+                                  generator=torch.Generator().manual_seed(cfg["seed"]))
+
+    def __len__(self):
+        return len(self.indices)
+
+    def __iter__(self):
+        if not self.shuffle:
+            for start in range(0, len(self.y), self.batch_size):
+                yield self.x[start:start+self.batch_size], self.y[start:start+self.batch_size]
+        else:
+            for indices in self.indices:
+                indices = indices.to(self.x.device)
+                yield self.x.index_select(0, indices), self.y.index_select(0, indices)
+
+
 def loader(split, cfg, shuffle=False):
+    if cfg.get("gpu_resident_data", False) and cfg["device"].startswith("cuda"):
+        return ResidentLoader(split, cfg, shuffle)
     return DataLoader(TensorDataset(torch.from_numpy(split["x"]), torch.from_numpy(split["y"])),
                       batch_size=cfg["batch_size"], shuffle=shuffle,
                       num_workers=cfg["num_workers"], generator=torch.Generator().manual_seed(cfg["seed"]))
@@ -68,10 +101,10 @@ def predict(model, split, cfg, overrides=None, hidden=False):
             result = model(x, return_intermediates=hidden, **(overrides or {}))
             output = result.pred
             if hidden:
-                states.append(result.hidden_states[-1][:, -1].cpu().numpy())
-        preds.append(output.cpu().numpy())
-    pred = np.concatenate(preds)
-    return (pred, np.concatenate(states)) if hidden else pred
+                states.append(result.hidden_states[-1][:, -1])
+        preds.append(output)
+    pred = torch.cat(preds).cpu().numpy()
+    return (pred, torch.cat(states).cpu().numpy()) if hidden else pred
 
 
 def fit(model, splits, cfg, kind="steh", trial=None):
@@ -87,11 +120,13 @@ def fit(model, splits, cfg, kind="steh", trial=None):
             phase_switch(model, phase, 0. if phase == "dense" else cfg["target_activation_sparsity"])
         optim = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()),
                                  lr=(trial or {}).get("learning_rate", cfg["learning_rate"]),
-                                 weight_decay=cfg["weight_decay"])
+                                 weight_decay=cfg["weight_decay"],
+                                 fused=cfg.get("adamw_fused", False) and cfg["device"].startswith("cuda"))
         best_loss, best = float("inf"), None
         for epoch in range(epochs):
+            epoch_started = time.perf_counter()
             model.train()
-            squared, count = 0., 0
+            squared, count = torch.zeros((), device=cfg["device"]), 0
             for batch, (x, y) in enumerate(train):
                 x, y = x.to(cfg["device"]), y.to(cfg["device"])
                 sparse = kind == "steh" and phase != "dense"
@@ -99,7 +134,8 @@ def fit(model, splits, cfg, kind="steh", trial=None):
                     step = epoch * len(train) + batch + 1
                     ratio = update_sparsity(step, epochs * len(train), cfg["target_weight_sparsity"]) if phase == "sparse" else cfg["target_weight_sparsity"]
                     act = update_sparsity(step, epochs * len(train), cfg["target_activation_sparsity"]) if phase == "sparse" else cfg["target_activation_sparsity"]
-                    phase_switch(model, phase, act)
+                    for layer in model.layers:
+                        layer.mlp.activation_sparsity_ratio = act
                     model.apply_global_weight_sparsity(ratio, "neuronwise", cfg["minimum_alive_per_neuron"])
                 optim.zero_grad(set_to_none=True)
                 pred = model(x) if kind == "lstm" else model(x, return_intermediates=False).pred
@@ -116,7 +152,7 @@ def fit(model, splits, cfg, kind="steh", trial=None):
                 # permanently frozen edges.
                 if sparse:
                     model.apply_global_weight_sparsity(ratio, "neuronwise", cfg["minimum_alive_per_neuron"])
-                squared += float(mse.detach()) * len(y)
+                squared += mse.detach() * len(y)
                 count += len(y)
             # Every Stage-II candidate is evaluated at the FINAL sparsity budget.
             # Its saved weights and activation flags therefore agree on restore.
@@ -126,7 +162,8 @@ def fit(model, splits, cfg, kind="steh", trial=None):
                 phase_switch(evaluated, phase, cfg["target_activation_sparsity"])
                 evaluated.apply_global_weight_sparsity(cfg["target_weight_sparsity"], "neuronwise", cfg["minimum_alive_per_neuron"])
             val_loss = float(np.mean((predict(evaluated, splits["val"], cfg)-splits["val"]["y"])**2))
-            log.append({"phase": phase, "epoch": epoch+1, "train_mse": squared/count, "val_mse": val_loss})
+            log.append({"phase": phase, "epoch": epoch+1, "train_mse": float(squared/count), "val_mse": val_loss,
+                        "seconds": time.perf_counter()-epoch_started, "training_samples": count})
             print(f"  {phase} {epoch+1}/{epochs} val_mse={val_loss:.6g}", flush=True)
             if np.isfinite(val_loss) and val_loss < best_loss:
                 best_loss, best = val_loss, copy.deepcopy(evaluated.state_dict())
