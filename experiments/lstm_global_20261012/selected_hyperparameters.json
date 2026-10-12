@@ -1,0 +1,15 @@
+{
+  "selected_trial": 17,
+  "hyperparameters": {
+    "hidden_size": 256,
+    "num_layers": 2,
+    "learning_rate": 0.002713975339231919,
+    "weight_decay": 0.0001,
+    "dropout": 0.0
+  },
+  "mean_validation_nse": 0.6156201090315632,
+  "completed_trials": 24,
+  "selection_data": "validation only",
+  "test_evaluated_for_selection": false,
+  "protocol_sha256": "0830c96aeb52700f673d7d243e88592b50c67744617e21c97c1806370b97f5ac"
+}

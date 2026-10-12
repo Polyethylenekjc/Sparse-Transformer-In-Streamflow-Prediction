@@ -12,7 +12,19 @@ import matplotlib.pyplot as plt
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from revision.common import metrics,digest,clean
-from experiments.global_lstm import choose_global
+
+def choose_global(rows, stations):
+    """Independently reconstruct the complete validation-only candidate ranking."""
+    panels = {}
+    for row in rows:
+        panel = panels.setdefault(row['trial'], {})
+        assert row['station'] not in panel
+        panel[row['station']] = row['validation_metrics']['nse']
+    assert panels and all(set(panel) == set(stations) for panel in panels.values())
+    scores = {trial: float(np.mean([panel[s] for s in stations]))
+              for trial, panel in panels.items()}
+    assert np.isfinite(list(scores.values())).all()
+    return max(scores, key=lambda trial: (scores[trial], -trial)), scores
 
 M=['nse','kge','rmse','mae','bias']
 PALETTE=['#0077BB','#EE7733','#009988']
@@ -129,10 +141,13 @@ def main():
             values=np.sort(raw.loc[raw.model==model,m].dropna().to_numpy());quantile=np.arange(1,len(values)+1)/len(values)
             ax.step(values,quantile,where='post',color=PALETTE[i],ls=['-','--',':'][i],lw=1.3,label=LABELS[model]+f' (n={len(values)})')
         if raw[m].min() < -3:ax.set_xscale('asinh',linear_width=1);nonlinear=True
+        if raw[m].min() < -3:
+            ax.set_xticks([-100,-10,-1,0,1],labels=['-100','-10','-1','0','1'])
+            ax.minorticks_off()
         ax.set(xlabel='Test '+m.upper()+' (dimensionless'+('; asinh scale' if raw[m].min() < -3 else '')+')',
                ylabel='Cumulative fraction of defined station scores',ylim=(0,1.02),title=f'{n} station models; seed {protocol["seed"]}')
         ax.grid(color='#dddddd',lw=.5)
-    axes[1].legend(frameon=False,loc='lower right')
+    axes[1].legend(frameon=False,loc='upper left')
     save(fig,'fig01_test_distribution',['per_basin.csv','seed_metrics.csv','model_summary.csv'],
          f'Empirical distributions of test NSE and KGE across all {n} stations. Each station contributes one freshly trained, seed-{protocol["seed"]} LSTM with the same globally selected parameters. Q-history references use identical target dates. All negative results are included.'+(' An asinh horizontal scale preserves extreme negative tails.' if nonlinear else ''),
          ['One seed per station; training-seed sensitivity is not estimated.','Baselines use only Q history, whereas LSTM also uses meteorological inputs.','Undefined scores remain in station tables; each CDF denominator counts only its defined scores.'])
@@ -162,7 +177,7 @@ def main():
     save(fig,'fig03_final_learning',['final_training_log.csv','learning_curve_envelope.csv'],
          f'Final fresh-model learning curves for {n} stations sharing one configuration and seed {protocol["seed"]}. Lines show the median and shading the interquartile range across stations. Q scaling uses each station\'s training period only.',
          ['The band is descriptive between-station spread, not a confidence interval.','Validation curves condition on the preceding global parameter search.'])
-    summary[['model','basins','nse_mean','nse_sd','kge_mean','kge_sd']].to_latex(out/'table01_summary.tex',index=False,
+    summary[['model','basins','nse_mean','nse_sd','nse_median','kge_mean','kge_sd','kge_median']].to_latex(out/'table01_summary.tex',index=False,
                 float_format='%.3f',caption=f'Descriptive mean and sample SD across {n} stations, one seed each.',label='tab:global-lstm',position='tb')
     if reference_ids:
         matched[['station','nse','kge','persistence_nse','ar_nse']].to_latex(out/'table02_steh_subset.tex',index=False,float_format='%.3f',
@@ -189,8 +204,8 @@ def main():
            f"贝叶斯优化评估了 {len(candidate)} 套共享配置。固定调参站点由 521 个合格站点以采样种子 {protocol['sampling_seed']} 随机抽取：{', '.join(protocol['tuning_stations'])}。目标为这 {len(protocol['tuning_stations'])} 站点的平均验证 NSE，每个站点等权；测试集不参与任何选参。",'',
            f"最佳候选索引（从 0 开始）：{winner}；平均验证 NSE：{scores[winner]:.6f}。参数：`{json.dumps(hp)}`。这是给定搜索预算内的验证集最优结果，不能保证全局最优。",'',
            f"训练和选参总耗时 {audit['timing']['total_seconds']/60:.1f} 分钟。所有候选每站点训练 30 轮，按最低验证 MSE 保存轮次；最终模型亦训练 30 轮。数据顺序划分 70%/15%/15%，标准化仅拟合训练期；批量大小 128，AdamW、梯度裁剪 1，FP32 和确定性算法。LSTM 的架构、学习率、层间 dropout、weight decay 参与搜索，数据协议与 STEH 一致。",'',
-           '| 模型 | NSE 均值 ± SD | KGE 均值 ± SD | 站点数 |','|---|---:|---:|---:|']
-    for r in summaries:lines.append(f"| {r['model']} | {r['nse_mean']:.3f} ± {r['nse_sd']:.3f} | {r['kge_mean']:.3f} ± {r['kge_sd']:.3f} | {n} |")
+           '| 模型 | NSE 均值 ± SD | NSE 中位数 | KGE 均值 ± SD | KGE 中位数 | 站点数 |','|---|---:|---:|---:|---:|---:|']
+    for r in summaries:lines.append(f"| {r['model']} | {r['nse_mean']:.3f} ± {r['nse_sd']:.3f} | {r['nse_median']:.3f} | {r['kge_mean']:.3f} ± {r['kge_sd']:.3f} | {r['kge_median']:.3f} | {n} |")
     lines += ['',f"LSTM 在 {win_p}/{n} 个站点的 NSE 高于持续性基线，在 {win_ar}/{n} 个站点高于 AR；负 NSE 站点 {audit['negative_test_nse_stations']} 个，全部保留。SD 是站点间散布，不是多种子误差或置信区间。",'',
               '全部指标已从原始逐日 CSV 独立重算，并核对候选的完整调参站点面板、共享参数、种子和预测日期。RMSE、MAE、bias 单位为 cfs（ft³/s），bias 为预测减观测。', '']
     for t in traces[:3]:lines += [f"![{t['artifact_id']}]({t['artifact_id']}.png)",'',t['caption_claim'],'']
@@ -198,7 +213,7 @@ def main():
               '原始数据位于仓库 data/Forcing 和 data/Streamflow；raw/ 保存全部候选的验证预测、训练曲线、模型配置和最终逐日预测。最终模型检查点单独归档；SHA256 和来源索引随结果保存。', '',
               '复现：`python experiments/global_lstm.py --scope all --workers 14`；绘图：`python experiments/report_global_lstm.py --input experiments/lstm_global_20261012/raw --output experiments/lstm_global_20261012/report --reference experiments/lstm_global_20261012/reference_manifest.json`。', '',
               '按照 [academic-research-skills visualization_agent](https://github.com/Imbad0202/academic-research-skills/blob/main/academic-paper/agents/visualization_agent.md) 生成色盲友好配色、600 dpi PNG 与矢量 PDF/SVG，并记录图表六项来源追踪；skill 版本 d1e51716e53fc371727ea6164dd709fc8ea28c97。', '',
-              'TPE 搜索参考 [Optuna 官方文档](https://optuna.readthedocs.io/en/v4.5.0/reference/samplers/generated/optuna.samplers.TPESampler.html)。']
+              'TPE 搜索参考 [Optuna 4.9.0 官方文档](https://optuna.readthedocs.io/en/v4.9.0/reference/samplers/generated/optuna.samplers.TPESampler.html)。']
     lines += ['', '当目标方差或相关性无法定义时，NSE/KGE 按未定义保留为空值；汇总均值和 CDF 仅使用对应指标有定义的站点，model_summary.csv 记录其数量。不将未定义值替换成 0，也不删除对应站点记录。']
     (out/'实验报告.md').write_text('\n'.join(lines),encoding='utf-8')
     (out/'figures.tex').write_text('\n'.join('\\begin{figure}[tb]\n\\centering\n\\includegraphics[width=\\textwidth]{'+t['artifact_id']+'.pdf}\n\\caption{'+t['caption_claim']+'}\n\\end{figure}' for t in traces[:3]),encoding='utf-8')

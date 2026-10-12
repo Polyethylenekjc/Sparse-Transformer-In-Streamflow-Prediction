@@ -45,9 +45,12 @@ Repository `data/Forcing` and `data/Streamflow` contain the original supplied
 CSV inputs. Experiment raw records contain every tuning station's validation
 predictions and training curves, the full trial ranking, shared selection,
 per-station metadata, final daily predictions and same-date persistence/AR
-references. Model weights are losslessly archived as GitHub release assets to
-keep binary checkpoints out of normal Git history. SHA256 manifests accompany
-the archives. No SSH password or GitHub credential is included.
+references. The numeric records are archived as `raw-records.tar.gz`; extract
+them into the `raw/` directory before running the report command. All 665 final
+and search checkpoints have separate lossless local/server backups, indexed by
+SHA256. GitHub upload of large checkpoint binaries is recorded separately from
+the numeric-result upload and must not be assumed complete. No SSH password or
+GitHub credential is included.
 
 Scientific graphics follow the user-specified
 [academic-research-skills visualization agent](https://github.com/Imbad0202/academic-research-skills/blob/main/academic-paper/agents/visualization_agent.md),

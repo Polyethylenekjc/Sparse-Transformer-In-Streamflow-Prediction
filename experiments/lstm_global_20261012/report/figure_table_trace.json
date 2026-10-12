@@ -1,0 +1,134 @@
+[
+  {
+    "artifact_id": "fig01_test_distribution",
+    "source_data": [
+      {
+        "path": "per_basin.csv",
+        "sha256": "40cc90010c46086d32cd2ca88fbbb535ccd018648bde8885758f20b59058df61"
+      },
+      {
+        "path": "seed_metrics.csv",
+        "sha256": "27da30fb5bfbea0e122e6834c44e76d4f4ff07a582539639819fe7f916c91761"
+      },
+      {
+        "path": "model_summary.csv",
+        "sha256": "2bd3146cb13e2dd7106ad436937c4b66fed017d912be76397ad785e042c7688f"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_global_lstm.py",
+      "sha256": "543420e9a86aa7e52167324b5c226f64e29f9ad11ed93bd0762b4ed61c23fe4c"
+    },
+    "caption_claim": "Empirical distributions of test NSE and KGE across all 521 stations. Each station contributes one freshly trained, seed-42 LSTM with the same globally selected parameters. Q-history references use identical target dates. All negative results are included. An asinh horizontal scale preserves extreme negative tails.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "One seed per station; training-seed sensitivity is not estimated.",
+      "Baselines use only Q history, whereas LSTM also uses meteorological inputs.",
+      "Undefined scores remain in station tables; each CDF denominator counts only its defined scores."
+    ]
+  },
+  {
+    "artifact_id": "fig02_bayesian_search",
+    "source_data": [
+      {
+        "path": "global_candidates.csv",
+        "sha256": "103c70cbc57bad90093288d31a3ac7e75a3643da1c0d4892e65c2d575852fb85"
+      },
+      {
+        "path": "candidate_trials.csv",
+        "sha256": "c3ae0b7e05529cbc82f446721461bbc6df5564015044d78bd7bdb729b728fae8"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_global_lstm.py",
+      "sha256": "543420e9a86aa7e52167324b5c226f64e29f9ad11ed93bd0762b4ed61c23fe4c"
+    },
+    "caption_claim": "24 global configurations evaluated by the unweighted mean validation NSE on the same 6 randomly sampled stations. The first four candidates reproduce the initial grid; subsequent candidates use the seeded TPE sampler. The selected star marks the best observed validation configuration.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Best within the evaluated search budget, not a guaranteed global optimum.",
+      "Two candidates are proposed per batch before either batch score is returned.",
+      "No test result enters this search."
+    ]
+  },
+  {
+    "artifact_id": "fig03_final_learning",
+    "source_data": [
+      {
+        "path": "final_training_log.csv",
+        "sha256": "9dfc2bddc71bf67eae0ac755672aea1444a1a062895daf3a693960079b383f16"
+      },
+      {
+        "path": "learning_curve_envelope.csv",
+        "sha256": "ffe8b77e3c7719487c1ab5ef9b91255cbfb927a6d118d691095460fb8f4d4801"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_global_lstm.py",
+      "sha256": "543420e9a86aa7e52167324b5c226f64e29f9ad11ed93bd0762b4ed61c23fe4c"
+    },
+    "caption_claim": "Final fresh-model learning curves for 521 stations sharing one configuration and seed 42. Lines show the median and shading the interquartile range across stations. Q scaling uses each station's training period only.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "The band is descriptive between-station spread, not a confidence interval.",
+      "Validation curves condition on the preceding global parameter search."
+    ]
+  },
+  {
+    "artifact_id": "tables",
+    "source_data": [
+      {
+        "path": "model_summary.csv",
+        "sha256": "2bd3146cb13e2dd7106ad436937c4b66fed017d912be76397ad785e042c7688f"
+      },
+      {
+        "path": "per_basin.csv",
+        "sha256": "40cc90010c46086d32cd2ca88fbbb535ccd018648bde8885758f20b59058df61"
+      },
+      {
+        "path": "global_candidates.csv",
+        "sha256": "103c70cbc57bad90093288d31a3ac7e75a3643da1c0d4892e65c2d575852fb85"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_global_lstm.py",
+      "sha256": "543420e9a86aa7e52167324b5c226f64e29f9ad11ed93bd0762b4ed61c23fe4c"
+    },
+    "caption_claim": "Complete station results and validation-only global parameter selection.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Raw cfs errors combine stations with different discharge scales."
+    ]
+  },
+  {
+    "artifact_id": "LSTM共享参数基线.xlsx",
+    "source_data": [
+      {
+        "path": "model_summary.csv",
+        "sha256": "2bd3146cb13e2dd7106ad436937c4b66fed017d912be76397ad785e042c7688f"
+      },
+      {
+        "path": "seed_metrics.csv",
+        "sha256": "27da30fb5bfbea0e122e6834c44e76d4f4ff07a582539639819fe7f916c91761"
+      },
+      {
+        "path": "candidate_trials.csv",
+        "sha256": "c3ae0b7e05529cbc82f446721461bbc6df5564015044d78bd7bdb729b728fae8"
+      },
+      {
+        "path": "global_candidates.csv",
+        "sha256": "103c70cbc57bad90093288d31a3ac7e75a3643da1c0d4892e65c2d575852fb85"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/build_global_workbook.mjs",
+      "sha256": "a5f72fb5ba42b3eacaaf13e8f9c30c393789e0f11a9eb8cd3d72bad5d7d8a027"
+    },
+    "caption_claim": "Complete 521 single-seed station results and validation-only shared parameter selection.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Descriptive spread across stations, not seed uncertainty.",
+      "Extreme negative station retained."
+    ]
+  }
+]

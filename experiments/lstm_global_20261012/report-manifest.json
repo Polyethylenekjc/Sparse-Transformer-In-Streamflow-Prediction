@@ -1,0 +1,137 @@
+[
+  {
+    "path": "report/audit.json",
+    "bytes": 2556,
+    "sha256": "062bf31544c58166b4c106b518a2caa2f2b9ea9ca15ba0a2ca4d082ba4dd2134"
+  },
+  {
+    "path": "report/candidate_trials.csv",
+    "bytes": 19616,
+    "sha256": "c3ae0b7e05529cbc82f446721461bbc6df5564015044d78bd7bdb729b728fae8"
+  },
+  {
+    "path": "report/fig01_test_distribution.pdf",
+    "bytes": 31004,
+    "sha256": "af64000b66e1d5a8849170ef800826afbf712bf0d05fa2f307aef438bbb2a55c"
+  },
+  {
+    "path": "report/fig01_test_distribution.png",
+    "bytes": 339167,
+    "sha256": "bc19706040a0bd61d4b2eefd18bbe8e4dad2c66816db01a066fbab6e68b3c1c3"
+  },
+  {
+    "path": "report/fig01_test_distribution.svg",
+    "bytes": 68914,
+    "sha256": "f4022e72fedbab8b997d1c9a41dee344c04191bec79b3051cdb6b786a38b4eba"
+  },
+  {
+    "path": "report/fig02_bayesian_search.pdf",
+    "bytes": 17258,
+    "sha256": "0fd8498ada568f641e1a941e3793c29ada74017f553e31359db84c6436f14cfe"
+  },
+  {
+    "path": "report/fig02_bayesian_search.png",
+    "bytes": 213220,
+    "sha256": "3384bec50c0cee981ad769739e593a977502fb6207177925843d6404d35f435f"
+  },
+  {
+    "path": "report/fig02_bayesian_search.svg",
+    "bytes": 16590,
+    "sha256": "650d20f7bc61a8328c8a6243a61de8536c85672277dd74eb9faf1cbb44495bb5"
+  },
+  {
+    "path": "report/fig03_final_learning.pdf",
+    "bytes": 14149,
+    "sha256": "d79f9bcb1f3b4c0ca98f30068dc3f52c0fa6f906a6abcf6addd0b5c095415073"
+  },
+  {
+    "path": "report/fig03_final_learning.png",
+    "bytes": 357981,
+    "sha256": "56126c2b8360d955946c57f59e1f9aefca560d45ce17dfce599422ec83f9f7ea"
+  },
+  {
+    "path": "report/fig03_final_learning.svg",
+    "bytes": 28423,
+    "sha256": "72c89bb3adc925b7cc8d86a1c61b2760b2324f71f712360fb216f954373c8b7e"
+  },
+  {
+    "path": "report/figure_table_trace.json",
+    "bytes": 5720,
+    "sha256": "c95e90181b06396b6f54fdc383f04e6cba5df677ed273d7d0669a25c863a45b3"
+  },
+  {
+    "path": "report/figures.tex",
+    "bytes": 1178,
+    "sha256": "6077584d39e13a34aa3eac4906dc7113a9780492a7d88cb551f2a5e614c88200"
+  },
+  {
+    "path": "report/final_training_log.csv",
+    "bytes": 1236597,
+    "sha256": "9dfc2bddc71bf67eae0ac755672aea1444a1a062895daf3a693960079b383f16"
+  },
+  {
+    "path": "report/global_candidates.csv",
+    "bytes": 1620,
+    "sha256": "103c70cbc57bad90093288d31a3ac7e75a3643da1c0d4892e65c2d575852fb85"
+  },
+  {
+    "path": "report/learning_curve_envelope.csv",
+    "bytes": 3603,
+    "sha256": "ffe8b77e3c7719487c1ab5ef9b91255cbfb927a6d118d691095460fb8f4d4801"
+  },
+  {
+    "path": "report/LSTM共享参数基线.xlsx",
+    "bytes": 99644,
+    "sha256": "b6b42e98334ce8abb41a08491b032b9e775267a307087a6de389af0fad3c4d4f"
+  },
+  {
+    "path": "report/model_summary.csv",
+    "bytes": 889,
+    "sha256": "2bd3146cb13e2dd7106ad436937c4b66fed017d912be76397ad785e042c7688f"
+  },
+  {
+    "path": "report/per_basin.csv",
+    "bytes": 77012,
+    "sha256": "40cc90010c46086d32cd2ca88fbbb535ccd018648bde8885758f20b59058df61"
+  },
+  {
+    "path": "report/qa.json",
+    "bytes": 472,
+    "sha256": "d89beef9e896e10abfc4e0d50e62e23b0bb7bb442e030e09e7d2cf1c02c7a1db"
+  },
+  {
+    "path": "report/seed_metrics.csv",
+    "bytes": 120308,
+    "sha256": "27da30fb5bfbea0e122e6834c44e76d4f4ff07a582539639819fe7f916c91761"
+  },
+  {
+    "path": "report/source_manifest.json",
+    "bytes": 723031,
+    "sha256": "db0073e61e215b5b3b1c463ab08c619175f279fe871df60de71a53eb4cadd36f"
+  },
+  {
+    "path": "report/steh_comparison_basins.csv",
+    "bytes": 1827,
+    "sha256": "1b2a9d9017f8b6a9ae39525208dffb7ecf10f675e4d5f8370d8dd22d5fa8fcc3"
+  },
+  {
+    "path": "report/table01_summary.tex",
+    "bytes": 482,
+    "sha256": "36c463a249abef1d1d72439e007f91564cd6f740041e85868a137c8c0c996400"
+  },
+  {
+    "path": "report/table02_steh_subset.tex",
+    "bytes": 800,
+    "sha256": "8810e779418fbe39e79b7bdc0487303e0b0b7c496d07addec0c47d1405613594"
+  },
+  {
+    "path": "report/workbook_data.json",
+    "bytes": 582437,
+    "sha256": "4677292f7a2512384c2a0ab93f5164a33dbf12353a4c77c6db5d082f573719b0"
+  },
+  {
+    "path": "report/实验报告.md",
+    "bytes": 4467,
+    "sha256": "8b12672c9cbd6cafbf29865efde4a463c0d77e644b2ee984063b0ddb74e6c301"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "independent_metric_audit": "audit.json",
+  "stations": 521,
+  "tuning_panel_fits": 144,
+  "candidate_configurations": 24,
+  "all_3_figures_visually_inspected": true,
+  "all_6_workbook_views_visually_inspected": true,
+  "leading_zero_station_ids_preserved": true,
+  "no_xlsx_cell_errors": true,
+  "reporting_mean_median_and_extreme_negative_tail": true,
+  "fig01_refinement": "fixed readable asinh ticks and legend; all data retained"
+}

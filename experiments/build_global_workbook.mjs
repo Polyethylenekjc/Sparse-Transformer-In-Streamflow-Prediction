@@ -26,8 +26,9 @@ function table(sheet,row,headers,matrix){
 note(results,'A2',`LSTM baseline | ${data.runs.length} stations; shared parameters; seed ${data.seed}`,true);
 results.getRange('A2').format.font={name:'Arial',size:14,bold:true,color};
 note(results,'A3','One fresh model per station. SD describes between-station variation, not seed uncertainty.');
-table(results,5,['Model','Stations','NSE mean','NSE SD','KGE mean','KGE SD','NSE defined','KGE defined'],data.summary.map(r=>[r.model,r.basins,r.nse_mean,r.nse_sd,r.kge_mean,r.kge_sd,r.nse_defined,r.kge_defined]));
-for(const c of ['B','G','H'])results.getRange(`${c}6:${c}8`).setNumberFormat('0');
+table(results,5,['Model','Stations','NSE mean','NSE SD','NSE median','KGE mean','KGE SD','KGE median'],data.summary.map(r=>[r.model,r.basins,r.nse_mean,r.nse_sd,r.nse_median,r.kge_mean,r.kge_sd,r.kge_median]));
+results.getRange('B6:B8').setNumberFormat('0');
+note(results,'A9','All 521 NSE/KGE scores defined. Extreme station 08190500 retained; 13 LSTM NSE scores < 0.');
 note(results,'A10','Selected shared hyperparameters | validation-only Bayesian optimization',true);
 const selected=data.candidates.find(r=>r.selected);
 table(results,12,['Hidden size','Layers','Learning rate','Dropout','Weight decay','Trial index'],[[data.hyperparameters.hidden_size,data.hyperparameters.num_layers,data.hyperparameters.learning_rate,data.hyperparameters.dropout,data.hyperparameters.weight_decay,selected.trial]]);

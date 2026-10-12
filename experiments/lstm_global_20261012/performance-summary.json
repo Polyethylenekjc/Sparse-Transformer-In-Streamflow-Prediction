@@ -1,0 +1,37 @@
+{
+  "gpu_samples": 2145,
+  "cpu_samples": 430,
+  "total_seconds": 2149.709475040436,
+  "tuning_seconds": 363.447340965271,
+  "final_training_seconds": 1786.2621340751648,
+  "utilization.gpu [%]": {
+    "mean": 92.11095571095571,
+    "median": 93.0,
+    "max": 98.0
+  },
+  "memory.used [MiB]": {
+    "mean": 7357.191142191142,
+    "median": 7413.0,
+    "max": 7439.0
+  },
+  "power.draw [W]": {
+    "mean": 275.88135664335664,
+    "median": 282.51,
+    "max": 284.63
+  },
+  "cpu_cores_used": {
+    "mean": 13.42643484356445,
+    "median": 13.971553312973867,
+    "max": 14.026357908359184
+  },
+  "cpu_quota_percent": {
+    "mean": 95.90310602546035,
+    "median": 99.79680937838475,
+    "max": 100.18827077399418
+  },
+  "memory_mib": {
+    "mean": 22458.87320130814,
+    "median": 22662.87109375,
+    "max": 23729.921875
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "final_models": 521,
+  "completed_candidates": 24,
+  "single_shared_hyperparameters": true,
+  "single_seed": 42,
+  "total_seconds": 2149.709475040436
+}
