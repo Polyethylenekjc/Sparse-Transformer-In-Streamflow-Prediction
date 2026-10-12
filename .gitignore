@@ -20,9 +20,6 @@ __pycache__/
 *.npz
 *.tmp
 .DS_Store
-paper/revision_figures/*.png
-paper/revision_figures/*.svg
-paper/revision_figures/*.csv
 
 # Double-blind review private metadata files
 paper/v1/sections/author_info.tex

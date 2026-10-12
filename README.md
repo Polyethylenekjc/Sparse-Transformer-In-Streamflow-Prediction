@@ -5,8 +5,8 @@
 Use `python run_revision.py prepare` to freeze the random basin sample without
 starting training. Use `python run_revision.py run` on your prepared server to run
 the with-Q/no-Q STEH, persistence/AR references, LSTM and bounded circuit checks.
-See [deployment and experimental protocol](docs/REVISION_DEPLOYMENT.md) and
-[figure corrections](docs/FIGURE_CHANGES.md). Linux/WSL and Windows launchers are
+See [deployment and experimental protocol](docs/REVISION_DEPLOYMENT.md).
+Linux/WSL and Windows launchers are
 included. Defaults do not train on all basins or run long-window experiments.
 
 The revision loader removes duplicate historical Q, fits scalers on training data

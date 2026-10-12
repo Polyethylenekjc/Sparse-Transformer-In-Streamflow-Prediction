@@ -5,9 +5,10 @@
 - 合成检查：`python -m unittest discover -s tests -v`，3 项均通过；140 天合成序列、8 维网络，每阶段 1 epoch，2 个小 LSTM 候选。覆盖训练期缩放、无 Q、日历缺口、配对日期、prepare 不训练、续跑和检查点预测一致性、NSE/KGE、有限总体区间。
 - 实际数据审核：仅加载冻结抽样的 12 个流域，含 Q/无 Q 的 train/val/test 日期和目标一致；各站 Forcing 中的 streamflow_cfs 与 Streamflow 来源的对应 Q 在共同有限值日期完全相同，最大绝对差均为 0。详见 revision_data_audit.json。这支持重复历史 Q 的诊断，不是模型性能结果。
 - 总体与预览抽样：结构合格的本地 CSV 总体 521 个流域；种子 20261011；无放回抽样 12 个：01134500、02011460、03346000、03460000、04196800、05399500、05495500、05507600、06339100、08082700、08164600、08380500。新服务器会根据实际数据重建并冻结 manifest；缺少文件时总体改变，不能冒称同一总体。
-- 图形：读取已有 521 流域结果与已有扰动/RF 表，导出 11 张 PDF/SVG/600 dpi PNG。字体为 Times New Roman；宽度 170 mm；正文 9 pt、刻度 8 pt。执行文字画布边界检查，并目视核查方法图、性能/地理分布、示例、探测、交互、扰动和 RF 版式。新图不是新增实验结果，原流程问题没有因重绘而消失。
-- Shell：`bash -n start_revision.sh` 通过。Windows 入口按 PowerShell 参数规则实现；Windows 本机未装训练依赖，本轮合成测试与出图使用已有 WSL pytorch 环境。未验证新的服务器 GPU 驱动或 CUDA 训练。
+- Shell：`bash -n start_revision.sh` 通过。Windows 入口按 PowerShell 参数规则实现；Windows 本机未装训练依赖，本轮合成测试使用已有 WSL pytorch 环境。未验证新的服务器 GPU 驱动或 CUDA 训练。
 
 环境：Python 3.13.0；PyTorch 2.12.0+cu130（小测试使用 CPU）；NumPy 2.4.6；Pandas 3.0.3；scikit-learn 1.9.0；Matplotlib 3.10.9；SciPy 1.17.1。
 
 仍待验证：逐日原始观测标记与插值来源、真实流域实验、随机回路近似结构匹配的适用性、RF 327 流域子集身份、最终稿件图注与编号。代码完成与论文实验完成分开勾选。
+
+2026年10月12日：按作者要求回滚全部新增图片和绘图代码更新，保留实验准备与数据审核代码。原 Word 图片未替换。

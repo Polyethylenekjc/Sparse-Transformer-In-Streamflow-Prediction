@@ -1,6 +1,6 @@
 # 最小修改实验：部署与执行
 
-本分支只准备代码、配置和已有结果重绘图；**未运行真实流域训练**。论文目标是水文相关表征的存在性和模型内计算作用，不增加精度排行榜。D 盘原工作区及 Word 文件没有在本轮改动。
+本分支只准备实验代码和配置；**未运行真实流域训练**。论文目标是水文相关表征的存在性和模型内计算作用，不增加精度排行榜。D 盘原工作区及 Word 文件没有在本轮源码任务中改动。
 
 ## 新服务器部署
 
@@ -52,7 +52,7 @@ Windows：`./start_revision.ps1` 只准备；`./start_revision.ps1 -Action run` 
 |E06 种子稳定性|同名输入、交互类别和功能差异；不匹配神经元编号|seed_stability.csv|
 |E07 LSTM|同日期/含 Q 输入，4 个候选仅按验证 MSE 选择|lstm_tuning.json、summary.csv|
 |A01/A04|未过滤探测 R²、测试原单位 NSE/KGE/RMSE/MAE/bias|probe_summary_unfiltered.csv、summary.csv|
-|A02/A03/A07|读取已有结果重绘、导出对应 CSV|revision.figures|
+|A02/A03/A07|图片排版由作者自行处理，新增重绘代码已回滚|沿用原图与原绘图脚本|
 |C06 条件窗口|`optional_window_lengths` 默认为空，可显式改为 `[7]`|独立 L7/ 输出；不默认开展|
 
 无 Q 模型从头训练，不能由含 Q 检查点删列替代。持续性/AR 仍需要 Q，属于竞争解释参照，不能作为输入公平的无 Q 基线。不同模型都使用共同的有效目标日期；样本需具有完整历史 Q，Q 仅用于配对日期资格和有 Q 基线，不会进入无 Q 网络。长窗口/泛化/RF 扩展不默认执行。
@@ -77,20 +77,9 @@ Windows：`./start_revision.ps1` 只准备；`./start_revision.ps1 -Action run` 
 
 同一流域所有预设种子均通过才记一次流域通过。全部样本完成后才输出流域比例与通过反演超几何分布计算的精确有限总体 95% 区间；附描述性 Wilson 二项近似作为参照。它只适用于本次无放回简单随机抽样、已冻结判据及合格数据总体。多个种子/日期/重复抽样均不能增加独立流域数，也不能据此断言整个模型、全部流域或真实水文机制成立。未完成或失败必须报告，不能只统计成功任务。
 
-## 图形重绘
+## 图片处理
 
-```bash
-# 只画新的方法示意图；不训练、不推理
-python -m revision.figures
-# 重绘已有输出；输入路径按服务器位置设置
-python -m revision.figures --legacy-root /srv/legacy_outputs \
-  --stations-csv data/stations.csv \
-  --sensitivity-csv /srv/legacy_outputs/physical_sensitivity_station_table.csv \
-  --rf-csv /srv/legacy_outputs/random_forest_model_performance.csv \
-  --out outputs/revision_figures
-```
-
-统一宽度 170 mm、正文 9 pt、刻度至少 8 pt，适合 A4 约 20 mm 页边距；若期刊实际栏宽不同，需要重新按实际宽度出图，不能缩小图后仍声称字号达标。矢量 PDF/SVG、600 dpi PNG。Times New Roman 可用时优先使用，服务器回退 DejaVu Serif；字体记录在 figure_manifest.json。原密集图拆分为独立图，正文以 PDF 导入并同步图注编号。详细映射见 FIGURE_CHANGES.md。本分支提交方法示意 PDF 和已有数据重绘 PDF，PNG/SVG/逐站输出保留本地或服务器生成，避免仓库变大。
+2026年10月12日按作者要求撤回全部新增图片及绘图样式更新。保留原图片和原绘图脚本；作者自行处理图片字号和排版。本分支仅提供实验准备代码，不提供替代论文原图的重绘结果。
 
 ## 验证
 
