@@ -1,0 +1,124 @@
+{
+  "status": "PASS",
+  "models": 1090,
+  "stored_control_forecasts": 43600,
+  "checkpoint_hashes_checked": 1090,
+  "protocol_sha256": "0bea43f73f5459da91c065f2725ae129c617ce2d69f5e9adfd63e18ac1659bfb",
+  "frozen_method_script_sha256": "cfb73238f4b8f9cd4725d141deca7ccc931bc430e452a81ef62374e41f3bca12",
+  "population_summary": [
+    {
+      "with_q": false,
+      "caliper": 1.0,
+      "basins": 521,
+      "nearest_degree_passes": 167,
+      "caliper_passes": 246,
+      "undefined_control_win": 0,
+      "median_unique_control_masks": 20.0,
+      "median_core_overlap": 0.6645161290322581
+    },
+    {
+      "with_q": false,
+      "caliper": 2.0,
+      "basins": 521,
+      "nearest_degree_passes": 167,
+      "caliper_passes": 264,
+      "undefined_control_win": 0,
+      "median_unique_control_masks": 20.0,
+      "median_core_overlap": 0.5576923076923077
+    },
+    {
+      "with_q": true,
+      "caliper": 1.0,
+      "basins": 521,
+      "nearest_degree_passes": 203,
+      "caliper_passes": 291,
+      "undefined_control_win": 2,
+      "median_unique_control_masks": 20.0,
+      "median_core_overlap": 0.7180000000000001
+    },
+    {
+      "with_q": true,
+      "caliper": 2.0,
+      "basins": 521,
+      "nearest_degree_passes": 203,
+      "caliper_passes": 310,
+      "undefined_control_win": 0,
+      "median_unique_control_masks": 20.0,
+      "median_core_overlap": 0.5944444444444444
+    }
+  ],
+  "confirmation": [
+    {
+      "with_q": false,
+      "caliper": 1.0,
+      "sample_successes": 3,
+      "sample_basins": 12,
+      "population": 492,
+      "confidence": 0.9875,
+      "success_count_bounds": [
+        18,
+        315
+      ],
+      "success_fraction_bounds": [
+        0.036585365853658534,
+        0.6402439024390244
+      ]
+    },
+    {
+      "with_q": false,
+      "caliper": 2.0,
+      "sample_successes": 4,
+      "sample_basins": 12,
+      "population": 492,
+      "confidence": 0.9875,
+      "success_count_bounds": [
+        34,
+        351
+      ],
+      "success_fraction_bounds": [
+        0.06910569105691057,
+        0.7134146341463414
+      ]
+    },
+    {
+      "with_q": true,
+      "caliper": 1.0,
+      "sample_successes": 3,
+      "sample_basins": 12,
+      "population": 492,
+      "confidence": 0.9875,
+      "success_count_bounds": [
+        18,
+        315
+      ],
+      "success_fraction_bounds": [
+        0.036585365853658534,
+        0.6402439024390244
+      ]
+    },
+    {
+      "with_q": true,
+      "caliper": 2.0,
+      "sample_successes": 3,
+      "sample_basins": 12,
+      "population": 492,
+      "confidence": 0.9875,
+      "success_count_bounds": [
+        18,
+        315
+      ],
+      "success_fraction_bounds": [
+        0.036585365853658534,
+        0.6402439024390244
+      ]
+    }
+  ],
+  "limits": [
+    "Sensitivity analysis developed on the fixed first12 early-review basins; original protocol retained.",
+    "Both calipers reported; no selection based on test results.",
+    "Conditional SRS confirmation targets 492 eligible basins and three fixed seeds, not all initializations.",
+    "Four Bonferroni-adjusted marginal 98.75% intervals have at least 95% joint coverage.",
+    "Control membership, overlaps, duplicates and standardized degree distances are disclosed.",
+    "Matching is approximate; residual/input/readout pathways remain. No causal or unique closed-circuit proof."
+  ]
+}

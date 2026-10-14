@@ -1,0 +1,6 @@
+{
+  "representative_basin": "14185000",
+  "rule": "closest to median primary with-Q STEH NSE; lexicographic basin-ID tie break",
+  "preidentified_lstm_extreme": "08190500",
+  "selection_role": "descriptive illustrations only"
+}

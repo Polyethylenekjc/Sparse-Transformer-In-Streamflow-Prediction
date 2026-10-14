@@ -1,0 +1,5 @@
+with_q,caliper,basins,nearest_degree_passes,caliper_passes,undefined_control_win,median_unique_control_masks,median_core_overlap
+False,1.0,521,167,246,0,20.0,0.6645161290322581
+False,2.0,521,167,264,0,20.0,0.5576923076923077
+True,1.0,521,203,291,2,20.0,0.7180000000000001
+True,2.0,521,203,310,0,20.0,0.5944444444444444

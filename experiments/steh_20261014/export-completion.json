@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "population_models": 1090,
+  "all_checkpoint_members": 1342,
+  "numerical_files": 30994,
+  "numerical_parts": 92,
+  "numerical_archive_sha256": "e84d85fa4c8ac9891b7e35d4bd40d473f454e5d4b76ae874d3aa7c179dfe7ae9",
+  "checkpoint_archive_sha256": "c51105712f3bb592196cb91cd62bd8c82d6e11745459c37f0d38e19376177fc9",
+  "performance_archive_sha256": "edec43c66c289e636e4240106fadf013927d44b7dac6647bb14c64a96d2d1a16",
+  "seconds": 115.08048892021179,
+  "limits": "Export integrity only. Public model-weight upload requires its separate user authorization."
+}

@@ -1,0 +1,3 @@
+with_q,basins,circuit_passes,passes_with_negative_native_nse,passes_with_native_nse_above_half,all_native_nse_above_half,scope
+True,521,203,2,152,338,Post-hoc descriptive predictive-skill context only; does not redefine the frozen criterion or add confirmation inference.
+False,521,167,8,72,180,Post-hoc descriptive predictive-skill context only; does not redefine the frozen criterion or add confirmation inference.

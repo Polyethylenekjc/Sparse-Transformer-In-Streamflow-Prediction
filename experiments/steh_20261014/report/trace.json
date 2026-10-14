@@ -1,0 +1,495 @@
+[
+  {
+    "artifact_id": "fig1_paired_prediction",
+    "source_data": [
+      {
+        "path": "paired_primary.csv",
+        "sha256": "a556977a7f311185e4c3ebf316691f9d1e7fa40691cfa563a144c111574fd497"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8",
+      "numerical_helper_sha256": "f3d89b7b1587924bd135ebe89ab4f95a775123889c58abd560fb53279705c30a"
+    },
+    "caption_claim": "Complete basin distributions and within-basin test differences under the frozen protocol.",
+    "supported_manuscript_claims": [
+      "Complete basin distributions and within-basin test differences under the frozen protocol."
+    ],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs."
+    ]
+  },
+  {
+    "artifact_id": "fig2_circuit_validity",
+    "source_data": [
+      {
+        "path": "all_runs.csv",
+        "sha256": "b41d21d199118d53b024dfd2242241affac7c1d0439cf22866db275bc0673372"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8",
+      "numerical_helper_sha256": "f3d89b7b1587924bd135ebe89ab4f95a775123889c58abd560fb53279705c30a"
+    },
+    "caption_claim": "Separate sufficiency, necessity and structural-control evidence; failures retained.",
+    "supported_manuscript_claims": [
+      "Separate sufficiency, necessity and structural-control evidence; failures retained."
+    ],
+    "limitations": [
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level."
+    ]
+  },
+  {
+    "artifact_id": "fig3_functional_stability",
+    "source_data": [
+      {
+        "path": "stability_basin.csv",
+        "sha256": "4b9927640b2450ba12aa50be255f8ba414a90859843f3311a8d307756d25a51a"
+      },
+      {
+        "path": "functional_stability_audited.csv",
+        "sha256": "4ea6337026d07a03f04d03329a8dc025feca3f5a08bfab948e6ac50fd4412e04"
+      },
+      {
+        "path": "convergence_diagnostics.csv",
+        "sha256": "11162bc7a46f17e6efeb1321a758a24cf7bc2e0a4063bb9d0faa0181a750cd9f"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8",
+      "numerical_helper_sha256": "f3d89b7b1587924bd135ebe89ab4f95a775123889c58abd560fb53279705c30a"
+    },
+    "caption_claim": "Initialization sensitivity is assessed within basins using function-level evidence; epoch churn reports finite-budget stability.",
+    "supported_manuscript_claims": [
+      "Initialization sensitivity is assessed within basins using function-level evidence; epoch churn reports finite-budget stability."
+    ],
+    "limitations": [
+      "12 prespecified new basins, three fixed seeds; sample size is 12, not 36.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "CKA centered in FP64 after first-row translation; undefined constant representations are excluded from plotting and counted explicitly."
+    ]
+  },
+  {
+    "artifact_id": "fig5_phase_training",
+    "source_data": [
+      {
+        "path": "phase_training_curves.csv",
+        "sha256": "82d237294732bfe9a76a980157cc096291efe75c9826f943cca092e1f5509422"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8",
+      "numerical_helper_sha256": "f3d89b7b1587924bd135ebe89ab4f95a775123889c58abd560fb53279705c30a"
+    },
+    "caption_claim": "Median and interquartile training/validation loss across 521 primary basins under the fixed three-phase budget.",
+    "supported_manuscript_claims": [
+      "Median and interquartile training/validation loss across 521 primary basins under the fixed three-phase budget."
+    ],
+    "limitations": [
+      "Bands are between-basin IQR, not confidence intervals.",
+      "Stage-II training uses dynamic sparsity; validation evaluates the final sparsity budget.",
+      "Finite loss curves do not prove structural convergence."
+    ]
+  },
+  {
+    "artifact_id": "fig6_illustrative_hydrographs",
+    "source_data": [
+      {
+        "path": "illustrative_hydrographs.csv",
+        "sha256": "ae9b2f3d2317536af24260b47f63d6401da3b4c04a6434dcc38f2a5e5dcc51b8"
+      },
+      {
+        "path": "paired_primary.csv",
+        "sha256": "a556977a7f311185e4c3ebf316691f9d1e7fa40691cfa563a144c111574fd497"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8",
+      "numerical_helper_sha256": "f3d89b7b1587924bd135ebe89ab4f95a775123889c58abd560fb53279705c30a"
+    },
+    "caption_claim": "Full test hydrographs at a disclosed median-performance example and the retained LSTM extreme case.",
+    "supported_manuscript_claims": [
+      "Full test hydrographs at a disclosed median-performance example and the retained LSTM extreme case."
+    ],
+    "limitations": [
+      "Illustrations are descriptive, not a random sample or evidence of universal superiority.",
+      "Median example selected after performance aggregation; tie broken by basin ID.",
+      "Station08190500 was identified before final STEH analysis; no test-driven retraining or clipping."
+    ]
+  },
+  {
+    "artifact_id": "fig7_proxy_decodability",
+    "source_data": [
+      {
+        "path": "probe_records.csv",
+        "sha256": "3957b9b2df17771d48ecd11d744b7f823c70066002916e53f9ec3317f966b01e"
+      },
+      {
+        "path": "probe_summary.csv",
+        "sha256": "ff9f6b08c35992d9593d6d7ba3a3a7ba22a11d1e1e8585d5b6597eeb9ff86931"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8",
+      "numerical_helper_sha256": "f3d89b7b1587924bd135ebe89ab4f95a775123889c58abd560fb53279705c30a"
+    },
+    "caption_claim": "Unfiltered input-derived proxy decodability compared between trained hidden states and input history.",
+    "supported_manuscript_claims": [
+      "Unfiltered input-derived proxy decodability compared between trained hidden states and input history."
+    ],
+    "limitations": [
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained.",
+      "Frozen unfiltered probe scores imported and count/status/source checked; hidden/sample forecasts not saved, so R2 was not independently recomputed.",
+      "Probes fit on a fixed training subset and evaluate a fixed held-out test subset; not all daily forecasts."
+    ]
+  },
+  {
+    "artifact_id": "fig8_structure_performance",
+    "source_data": [
+      {
+        "path": "all_runs.csv",
+        "sha256": "b41d21d199118d53b024dfd2242241affac7c1d0439cf22866db275bc0673372"
+      },
+      {
+        "path": "node_count_associations.csv",
+        "sha256": "954571990687129d846fde1d5d3732b47ccab33ae18fb9835ea731de3724bcee"
+      }
+    ],
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8",
+      "numerical_helper_sha256": "f3d89b7b1587924bd135ebe89ab4f95a775123889c58abd560fb53279705c30a"
+    },
+    "caption_claim": "Continuous descriptive associations of retained unit counts with skill across all 521 basins per setting.",
+    "supported_manuscript_claims": [
+      "Continuous descriptive associations of retained unit counts with skill across all 521 basins per setting."
+    ],
+    "limitations": [
+      "No causal effect of compactness is established.",
+      "Validation-based core selection can mechanically couple core size and performance.",
+      "All negative and extreme NSE values retained; no NSE=0.5 grouping or outlier exclusion."
+    ]
+  },
+  {
+    "artifact_id": "all_runs",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited all_runs records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "paired_primary",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited paired_primary records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "convergence_diagnostics",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited convergence_diagnostics records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "phase_training_curves",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited phase_training_curves records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "stability_basin",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited stability_basin records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "confirmation_basin",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited confirmation_basin records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "functional_stability_audited",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited functional_stability_audited records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "model_summary",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited model_summary records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "probe_records",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited probe_records records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "probe_summary",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited probe_summary records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "node_count_associations",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited node_count_associations records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "publication_model_table",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited publication_model_table records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  },
+  {
+    "artifact_id": "publication_circuit_table",
+    "source_data": "source_manifest.json",
+    "transformation": {
+      "script": "experiments/report_steh_population.py",
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    "caption_claim": "Audited publication_circuit_table records under the frozen protocol.",
+    "supported_manuscript_claims": [],
+    "limitations": [
+      "Computational integrity PASS does not establish scientific validity.",
+      "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+      "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+      "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+      "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+      "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+      "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+      "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+      "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+      "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+      "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+      "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+    ]
+  }
+]

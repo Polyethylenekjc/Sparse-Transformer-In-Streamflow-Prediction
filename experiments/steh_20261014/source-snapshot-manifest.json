@@ -1,0 +1,168 @@
+{
+  "archive": "source-snapshot.tar.gz",
+  "bytes": 95226,
+  "sha256": "c5751e1c58804e97d0dc7bb5c75d64b5e66261a04680781202809b70c04ae4f7",
+  "frozen_training_sources_checked": 14,
+  "members": [
+    {
+      "path": "experiments/assess_steh_paper_readiness.py",
+      "bytes": 18704,
+      "sha256": "05b4cd4d206b3169f7c8612706a6bf8b36b8ead61bd45379f8d1978cd0eed699"
+    },
+    {
+      "path": "experiments/audit_steh_controls.py",
+      "bytes": 11250,
+      "sha256": "49529f4902fe8e26599ed4ff7ae4d6cc643482ef57f9b90320ace01ff394266c"
+    },
+    {
+      "path": "experiments/backup_steh_results.py",
+      "bytes": 6092,
+      "sha256": "0e77b3e3a7b557b82c02f4e1b95ca434806a35d942d7522cc8d24d2047d9388f"
+    },
+    {
+      "path": "experiments/build_steh_workbook.mjs",
+      "bytes": 8470,
+      "sha256": "61d3bd1c7ccf33911de8f15825cbb788e170b1e6735e35e438185d63f3a6a3ee"
+    },
+    {
+      "path": "experiments/qa_steh_artifacts.py",
+      "bytes": 3019,
+      "sha256": "e9d95c4c3adaa0ecbcd7280f4a99ab449cb70b83858454100d6901ebe4bdab18"
+    },
+    {
+      "path": "experiments/recover_steh_numerical_reference.py",
+      "bytes": 7134,
+      "sha256": "c0bf1a0569ad98fba89fcc26f2baf0c95b4e0b949b73d6b02ed57b592795e2d2"
+    },
+    {
+      "path": "experiments/refine_steh.py",
+      "bytes": 15325,
+      "sha256": "f223130a1aba93e5500b0c92e4e9ea5e15d9254767ccfb715b120e77b81522cc"
+    },
+    {
+      "path": "experiments/report_steh_population.py",
+      "bytes": 40185,
+      "sha256": "dfe0113b6cdbc2a59e6bc3280030c0b3079f4558ed02376b906599232d8428e8"
+    },
+    {
+      "path": "experiments/run_steh_population.py",
+      "bytes": 10827,
+      "sha256": "88ac6d0c4b844659bcf051dc043539e94db834d165201462c01e64b287a3b33b"
+    },
+    {
+      "path": "experiments/stability_numerics.py",
+      "bytes": 1089,
+      "sha256": "f3d89b7b1587924bd135ebe89ab4f95a775123889c58abd560fb53279705c30a"
+    },
+    {
+      "path": "experiments/steh_control_sensitivity_sequential.py",
+      "bytes": 15182,
+      "sha256": "cfb73238f4b8f9cd4725d141deca7ccc931bc430e452a81ef62374e41f3bca12"
+    },
+    {
+      "path": "experiments/tune_steh.py",
+      "bytes": 8762,
+      "sha256": "6dcf7e926d5cd583aa651a534c1979760ca84b908e62c102e5cea37d682eeeee"
+    },
+    {
+      "path": "experiments/verify_steh_saved_backups.py",
+      "bytes": 3388,
+      "sha256": "9dfa5db4b1743a177a36ba2df806ac571dd86c86ed694b553e483ef125f67d67"
+    },
+    {
+      "path": "revision/__init__.py",
+      "bytes": 82,
+      "sha256": "e77a6692915918f5387603acb78a2b79b9db59d6c9ded50aec905a837abdc8bb"
+    },
+    {
+      "path": "revision/analysis.py",
+      "bytes": 11235,
+      "sha256": "e7bd7219ff6caac67543aba4f0f1e429b7295f5b477937cf3482a05a941d403a"
+    },
+    {
+      "path": "revision/audit.py",
+      "bytes": 2220,
+      "sha256": "1c41051078197e094d72e3d4d9e86db16070edbcd66d8ee062f637ac9b113c4e"
+    },
+    {
+      "path": "revision/common.py",
+      "bytes": 3485,
+      "sha256": "ee4a050705490769eff3acb9dda451f272e3879c64f2d345f521289928a05484"
+    },
+    {
+      "path": "revision/data.py",
+      "bytes": 6314,
+      "sha256": "e27bce4095e8337e79a53ded6cbd5cf7ee94bd8979860665d1f24b4a10f064f3"
+    },
+    {
+      "path": "revision/figures.py",
+      "bytes": 16079,
+      "sha256": "bf458578dd32ba8cc7ad37123ba1a2d1e6d6f6f18f1ad2ccab6d57157871da51"
+    },
+    {
+      "path": "revision/models.py",
+      "bytes": 10237,
+      "sha256": "eb2f3d3342377628337b601a4c467fae754632ea9ce6c6bf059f17c17fd598b1"
+    },
+    {
+      "path": "revision/parallel.py",
+      "bytes": 3564,
+      "sha256": "8583f133e42ff95bbaac5b797544c78354f1774423ee5a4d629bfcaea4c4baf3"
+    },
+    {
+      "path": "revision/plot_style.py",
+      "bytes": 3151,
+      "sha256": "0a22fb4678eab3fa50a9a0422f5e7bbdf091eaaec7d4cb03a257ae28042789c5"
+    },
+    {
+      "path": "revision/runner.py",
+      "bytes": 19610,
+      "sha256": "c41afc2dbc0e89adcbc260770c8ca3e7c5f88199012d35403e667fa412dee171"
+    },
+    {
+      "path": "src/flood_transformer/__init__.py",
+      "bytes": 310,
+      "sha256": "b4c6adc24c54e6733615b97fbab2a84b2d4df62d38f75339d4e37cb7c669c1cd"
+    },
+    {
+      "path": "src/flood_transformer/config.py",
+      "bytes": 2765,
+      "sha256": "af0b0b7857f392f55016e2698a3ef223e2d87901701a989a8f22f70a044eebc4"
+    },
+    {
+      "path": "src/flood_transformer/data.py",
+      "bytes": 9272,
+      "sha256": "806717adb5b71364375888a1df7367282dc95b4f7cd3cdc5ecdbab0187ab8f89"
+    },
+    {
+      "path": "src/flood_transformer/explain.py",
+      "bytes": 29581,
+      "sha256": "ac13c0a89bc8e34a2373730d8a62ab0148946e2032bbcfc3a4f45793abc0d921"
+    },
+    {
+      "path": "src/flood_transformer/map_analysis.py",
+      "bytes": 14389,
+      "sha256": "608c3eea907b68d33786df0e98fa634852e590400b5a51da514622992d47cf08"
+    },
+    {
+      "path": "src/flood_transformer/model.py",
+      "bytes": 12384,
+      "sha256": "121a81670a3e7f10e45351dbb32a5c34da807db3bc9936b20aa5a851cb01f78d"
+    },
+    {
+      "path": "src/flood_transformer/sparsity.py",
+      "bytes": 5146,
+      "sha256": "64f85270f1e1adb5a637256ca38fb5b23c81d493c2e43ab2ef66873dfd54dacc"
+    },
+    {
+      "path": "src/flood_transformer/train.py",
+      "bytes": 31221,
+      "sha256": "e2ff52efbba367b3cbefe2ca6cb2a69d8499c0add8dfeeda9ee0368279cb8cbe"
+    },
+    {
+      "path": "src/flood_transformer/visualize.py",
+      "bytes": 4817,
+      "sha256": "037b46cc39002a30d1e1fafdfaa77d9d5e9ee4923c79cf0d797b3c387f348962"
+    }
+  ]
+}

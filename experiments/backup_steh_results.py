@@ -48,10 +48,11 @@ def main():
         assert all((f/name).exists() for name in ['trained.pt','summary.json','validation_selection.json'])
     roots=[population,circuits,Path('outputs/revision_3090'),Path('outputs/steh_population_early_review'),
            Path('outputs/steh_tuning_20261012'),Path('outputs/steh_refined_20261012'),
-           Path('outputs/steh_control_sensitivity_20261012_v2')]
+           Path('outputs/steh_control_sensitivity_20261014_sequential')]
     caliper_completion=json.loads((roots[-1]/'completion.json').read_text())
     assert caliper_completion['status']=='PASS' and caliper_completion['completed']==len(plan['jobs'])
-    roots.extend([Path('outputs/steh_control_sensitivity_20261012'),
+    roots.extend([Path('outputs/steh_control_sensitivity_20261012_v2'),
+                  Path('outputs/steh_control_sensitivity_20261012'),
                   Path('outputs/steh_control_caliper_smoke'),Path('outputs/steh_control_caliper_v2_smoke')])
     numerical=[]
     for root in roots:
@@ -60,7 +61,7 @@ def main():
     allowed_telemetry={'steh-gpu-telemetry.csv','steh-cpu-memory-telemetry.csv',
                        'vmap-benchmark.json','vmap-benchmark.log','benchmark_vmap.py',
                        'early-review.log','population.log','control-smoke.log','control-v2-smoke.log',
-                       'control-sensitivity.log','refine_steh_v1.py','monitor_steh_system.py'}
+                       'control-sensitivity.log','control-sequential.log','refine_steh_v1.py','monitor_steh_system.py'}
     allowed_telemetry.update({'ste-roundoff-diagnostic.json','ste-roundoff-diagnostic-confirmed.json','architecture-counts.json'})
     numerical.extend(p for p in Path('/root/autodl-tmp/steh-performance').iterdir() if p.name in allowed_telemetry)
     # Absolute monitoring paths get a relative reproducible archive name.

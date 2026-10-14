@@ -1,0 +1,445 @@
+{
+  "status": "PASS",
+  "trained_models": 1090,
+  "population_basins": 521,
+  "confirmation_basins": 12,
+  "primary_passes": {
+    "True": 203,
+    "False": 167
+  },
+  "primary_with_q_beats_lstm": 223,
+  "primary_with_q_beats_persistence": 472,
+  "primary_with_q_beats_ar": 399,
+  "probe_summary": [
+    {
+      "with_q": false,
+      "target": "API",
+      "representation": "input_history",
+      "basins": 521,
+      "negative_r2": 0,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.9999998359204463,
+      "median": 0.99999984106808,
+      "sd_between_basins": 7.510983061512989e-08,
+      "q25": 0.9999997872374707,
+      "q75": 0.9999998913443308,
+      "min": 0.9999995794190671,
+      "max": 0.9999999773169008
+    },
+    {
+      "with_q": false,
+      "target": "API",
+      "representation": "trained_hidden",
+      "basins": 521,
+      "negative_r2": 0,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.8485204357804574,
+      "median": 0.8692721681506344,
+      "sd_between_basins": 0.09436687578679478,
+      "q25": 0.82077906970829,
+      "q75": 0.9034357610709841,
+      "min": 0.14749997510493518,
+      "max": 0.975205477330861
+    },
+    {
+      "with_q": false,
+      "target": "CHG",
+      "representation": "input_history",
+      "basins": 521,
+      "negative_r2": 6,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.49597669711726183,
+      "median": 0.5245956182479858,
+      "sd_between_basins": 0.14036594480946346,
+      "q25": 0.42561662197113037,
+      "q75": 0.5836458206176758,
+      "min": -0.4619714021682739,
+      "max": 0.7468322515487671
+    },
+    {
+      "with_q": false,
+      "target": "CHG",
+      "representation": "trained_hidden",
+      "basins": 521,
+      "negative_r2": 16,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.3666505490978483,
+      "median": 0.39264100790023804,
+      "sd_between_basins": 0.19331343583775523,
+      "q25": 0.2570546269416809,
+      "q75": 0.4979996085166931,
+      "min": -0.8326385021209717,
+      "max": 0.7443087100982666
+    },
+    {
+      "with_q": false,
+      "target": "CUM",
+      "representation": "input_history",
+      "basins": 521,
+      "negative_r2": 0,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.9999998544777194,
+      "median": 0.9999998807907104,
+      "sd_between_basins": 6.79830953491001e-08,
+      "q25": 0.9999998211860657,
+      "q75": 0.9999998807907104,
+      "min": 0.9999996423721313,
+      "max": 1.0
+    },
+    {
+      "with_q": false,
+      "target": "CUM",
+      "representation": "trained_hidden",
+      "basins": 521,
+      "negative_r2": 0,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.8401748015189583,
+      "median": 0.8571083545684814,
+      "sd_between_basins": 0.09476998237262478,
+      "q25": 0.810848593711853,
+      "q75": 0.9010883569717407,
+      "min": 0.14294546842575073,
+      "max": 0.9689173698425293
+    },
+    {
+      "with_q": true,
+      "target": "API",
+      "representation": "input_history",
+      "basins": 521,
+      "negative_r2": 0,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.9999996959240308,
+      "median": 0.9999997381187582,
+      "sd_between_basins": 1.7911289611449748e-07,
+      "q25": 0.9999995908844612,
+      "q75": 0.9999998286531316,
+      "min": 0.9999989870824836,
+      "max": 0.9999999724421819
+    },
+    {
+      "with_q": true,
+      "target": "API",
+      "representation": "trained_hidden",
+      "basins": 521,
+      "negative_r2": 0,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.7692238799930634,
+      "median": 0.7816290210314922,
+      "sd_between_basins": 0.10042784038486528,
+      "q25": 0.7347231568439059,
+      "q75": 0.8295742086754074,
+      "min": 0.2865209257399668,
+      "max": 0.9529407494680646
+    },
+    {
+      "with_q": true,
+      "target": "CHG",
+      "representation": "input_history",
+      "basins": 521,
+      "negative_r2": 8,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.48987593611920405,
+      "median": 0.5161092281341553,
+      "sd_between_basins": 0.1606966605996309,
+      "q25": 0.4202563762664795,
+      "q75": 0.584595799446106,
+      "min": -0.6626886129379272,
+      "max": 0.7475321292877197
+    },
+    {
+      "with_q": true,
+      "target": "CHG",
+      "representation": "trained_hidden",
+      "basins": 521,
+      "negative_r2": 16,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.38980103248369213,
+      "median": 0.42233771085739136,
+      "sd_between_basins": 0.20833114286053614,
+      "q25": 0.2955736517906189,
+      "q75": 0.5252598524093628,
+      "min": -1.4551713466644287,
+      "max": 0.7378181219100952
+    },
+    {
+      "with_q": true,
+      "target": "CUM",
+      "representation": "input_history",
+      "basins": 521,
+      "negative_r2": 0,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.9999997189086138,
+      "median": 0.9999997615814209,
+      "sd_between_basins": 1.7754777740179853e-07,
+      "q25": 0.9999996423721313,
+      "q75": 0.9999998807907104,
+      "min": 0.9999990463256836,
+      "max": 1.0
+    },
+    {
+      "with_q": true,
+      "target": "CUM",
+      "representation": "trained_hidden",
+      "basins": 521,
+      "negative_r2": 0,
+      "failed_or_undefined": 0,
+      "defined": 521,
+      "mean": 0.7440419268013191,
+      "median": 0.7564723491668701,
+      "sd_between_basins": 0.11196173185597595,
+      "q25": 0.6949337720870972,
+      "q75": 0.8188936114311218,
+      "min": 0.24014419317245483,
+      "max": 0.9749834537506104
+    }
+  ],
+  "probe_audit_scope": "Frozen unfiltered probe scores imported and count/status/source checked; hidden/sample forecasts not saved, so R2 was not independently recomputed.",
+  "stability_numeric_audit": {
+    "pairs_checked": 72,
+    "robust_cka_undefined": 0,
+    "max_fp32_fp64_cka_difference": 1.918231415931615e-07,
+    "numerical_helper_sha256": "f3d89b7b1587924bd135ebe89ab4f95a775123889c58abd560fb53279705c30a",
+    "method": "Recompute original FP32 CKA and input ranks; center FP64 after first-row translation for robust CKA; constant representations remain undefined."
+  },
+  "native_binary_forward_difference": {
+    "models_exceeding_pointwise_tolerance": 51,
+    "maximum_train_scaled_prediction_difference": 0.006122695985326332,
+    "maximum_absolute_nse_difference": 1.0699516053591651e-05,
+    "pointwise_reference_tolerance": "3e-6 + 3e-5*abs(train-scaled binary prediction); differences disclosed, not removed",
+    "metric_audit": "Native and binary predictions audited against their own saved metrics; full NSE agreement checked separately."
+  },
+  "primary_failure_components": {
+    "True": {
+      "core_loss_above_005": 136,
+      "removal_loss_below_002": 50,
+      "win_below_08": 147,
+      "undefined_control_win": 84
+    },
+    "False": {
+      "core_loss_above_005": 163,
+      "removal_loss_below_002": 28,
+      "win_below_08": 245,
+      "undefined_control_win": 28
+    }
+  },
+  "summary": [
+    {
+      "measure": "steh_with_q_nse",
+      "defined": 521,
+      "mean": 0.4866207488886464,
+      "median": 0.6383646607273343,
+      "sd_between_basins": 2.8782655769039733,
+      "q25": 0.39731276203212684,
+      "q75": 0.8664912345374087,
+      "min": -64.76679842663758,
+      "max": 0.9959957062529589
+    },
+    {
+      "measure": "steh_no_q_nse",
+      "defined": 521,
+      "mean": 0.0030764961980159307,
+      "median": 0.3838811298871292,
+      "sd_between_basins": 7.458582877941457,
+      "q25": 0.1803831206975708,
+      "q75": 0.5810685190004663,
+      "min": -169.54855378550386,
+      "max": 0.866739293141789
+    },
+    {
+      "measure": "lstm_nse",
+      "defined": 521,
+      "mean": 0.19035072459680902,
+      "median": 0.6432552386876698,
+      "sd_between_basins": 9.271674661726255,
+      "q25": 0.3878996975044715,
+      "q75": 0.8698127803525318,
+      "min": -210.88521508273357,
+      "max": 0.9976257090191776
+    },
+    {
+      "measure": "with_q_minus_lstm",
+      "defined": 521,
+      "mean": 0.2962700242918374,
+      "median": -0.0016300027662187189,
+      "sd_between_basins": 6.402516673517809,
+      "q25": -0.019923688368311154,
+      "q75": 0.019029004254893178,
+      "min": -0.28548158328552686,
+      "max": 146.11841665609597
+    },
+    {
+      "measure": "with_q_minus_no_q",
+      "defined": 521,
+      "mean": 0.48354425269063056,
+      "median": 0.19884053217815068,
+      "sd_between_basins": 4.597037329891839,
+      "q25": 0.12217280969561994,
+      "q75": 0.31308453742226616,
+      "min": -0.08131779790288296,
+      "max": 104.78175535886628
+    },
+    {
+      "measure": "steh_with_q_kge",
+      "defined": 521,
+      "mean": 0.5963496995948623,
+      "median": 0.7004127132334627,
+      "sd_between_basins": 1.012481404818413,
+      "q25": 0.4579958278496523,
+      "q75": 0.8755264222355703,
+      "min": -20.823620241257167,
+      "max": 0.9956354259721961
+    },
+    {
+      "measure": "steh_no_q_kge",
+      "defined": 521,
+      "mean": 0.33113290334937456,
+      "median": 0.46396500967987675,
+      "sd_between_basins": 1.402216457705687,
+      "q25": 0.20986526924346105,
+      "q75": 0.6752255491484694,
+      "min": -30.260294573507103,
+      "max": 0.9162566747647012
+    },
+    {
+      "measure": "lstm_kge",
+      "defined": 521,
+      "mean": 0.48585728748693524,
+      "median": 0.7173377707582584,
+      "sd_between_basins": 3.7861342825458872,
+      "q25": 0.4732246685866933,
+      "q75": 0.8772365447673656,
+      "min": -85.50448560664348,
+      "max": 0.9938578233941031
+    },
+    {
+      "measure": "persistence_nse",
+      "defined": 521,
+      "mean": 0.46835125779341874,
+      "median": 0.5277351374217382,
+      "sd_between_basins": 0.39880650116463434,
+      "q25": 0.20869298043303297,
+      "q75": 0.799075212559584,
+      "min": -0.9109040259269858,
+      "max": 0.9945762764165073
+    },
+    {
+      "measure": "ar_nse",
+      "defined": 521,
+      "mean": 0.500523343825612,
+      "median": 0.5951387613416469,
+      "sd_between_basins": 1.8559357631377693,
+      "q25": 0.3651265295738485,
+      "q75": 0.8418678270746461,
+      "min": -41.240071307344834,
+      "max": 0.9975136586693845
+    },
+    {
+      "measure": "persistence_kge",
+      "defined": 521,
+      "mean": 0.7341781016449874,
+      "median": 0.7638756484556193,
+      "sd_between_basins": 0.19940055879356477,
+      "q25": 0.6043566879582365,
+      "q75": 0.8995481963880987,
+      "min": 0.04454804493841946,
+      "max": 0.9972852512508511
+    },
+    {
+      "measure": "ar_kge",
+      "defined": 521,
+      "mean": 0.5137838398670851,
+      "median": 0.6688129790020381,
+      "sd_between_basins": 2.0101532821005668,
+      "q25": 0.4236107563936815,
+      "q75": 0.8674355396922264,
+      "min": -44.47462058755748,
+      "max": 0.997744847533458
+    },
+    {
+      "measure": "core_True_loss",
+      "defined": 521,
+      "mean": 1.267006735419201,
+      "median": 0.019105483133249113,
+      "sd_between_basins": 27.34790492153807,
+      "q25": 0.006288119341705256,
+      "q75": 0.05246479478738175,
+      "min": -0.10756566072970242,
+      "max": 624.2330052839303
+    },
+    {
+      "measure": "core_False_loss",
+      "defined": 521,
+      "mean": 2.21552756759949,
+      "median": 0.02205060765024558,
+      "sd_between_basins": 46.52403596358071,
+      "q25": -0.004162541223495797,
+      "q75": 0.07235744735651739,
+      "min": -1.895131627173598,
+      "max": 1061.2409428645194
+    }
+  ],
+  "confirmation": [
+    {
+      "with_q": true,
+      "basins": 12,
+      "all_three_seeds_pass": 2,
+      "finite_population_interval": {
+        "confidence": 0.95,
+        "success_count_bounds": [
+          11,
+          241
+        ],
+        "success_fraction_bounds": [
+          0.02186878727634195,
+          0.47912524850894633
+        ]
+      },
+      "population": 503,
+      "outcome": "all three prespecified seed circuits satisfy fixed criterion"
+    },
+    {
+      "with_q": false,
+      "basins": 12,
+      "all_three_seeds_pass": 2,
+      "finite_population_interval": {
+        "confidence": 0.95,
+        "success_count_bounds": [
+          11,
+          241
+        ],
+        "success_fraction_bounds": [
+          0.02186878727634195,
+          0.47912524850894633
+        ]
+      },
+      "population": 503,
+      "outcome": "all three prespecified seed circuits satisfy fixed criterion"
+    }
+  ],
+  "scope": "Census descriptions of these 521 basins; no sampling confidence interval for the census. SRS confirmation interval targets the 503 eligible basins and three fixed seeds only.",
+  "limits": [
+    "Computational integrity PASS does not establish scientific validity.",
+    "LSTM has one seed and receives Q history; no-Q STEH is an input ablation.",
+    "Original-observation flags are unavailable; supplied CSV targets may contain imputation.",
+    "Core retains embedding, residuals, biases, input gates and readout; not an isolated closed graph.",
+    "Control draws exclude the core itself but may repeat each other; neither overlap nor win fraction establishes a significance level.",
+    "Individual control forecasts were not stored; audit reconstructs wins from saved control NSE scores.",
+    "Near-threshold gates and churn describe finite-epoch sensitivity; not proof of convergence.",
+    "Persistence and AR use Q history and are references for with-Q models; not input-matched competitors for no-Q.",
+    "Per-basin single-seed LSTM is the requested matched local baseline; this comparison does not establish superiority over pooled regional or ensemble LSTMs.",
+    "KGE=0 is not an inherent skill threshold; interpret KGE with explicit reference models.",
+    "Primary forecasts use native STE gates; interventions use exact binary overrides. FP32 gate arithmetic and Top-K can produce small differences; all are disclosed separately.",
+    "CUM/API/CHG are input-derived rainfall proxies. Probe R2 measures decodability; not evidence of independent physical states or causality. Negative values, undefined scores and failures retained."
+  ]
+}

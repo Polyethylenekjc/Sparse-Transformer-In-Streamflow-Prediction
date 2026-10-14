@@ -1,0 +1,177 @@
+{
+  "status": "PASS",
+  "figures": [
+    {
+      "path": "fig1_paired_prediction.pdf",
+      "width_mm": 174.9999986436632,
+      "minimum_font_pt": 8.0,
+      "raster_size": [
+        4133,
+        1724
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "text_clipping": []
+    },
+    {
+      "path": "fig2_circuit_validity.pdf",
+      "width_mm": 174.9999986436632,
+      "minimum_font_pt": 8.0,
+      "raster_size": [
+        4133,
+        1559
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "text_clipping": []
+    },
+    {
+      "path": "fig3_functional_stability.pdf",
+      "width_mm": 174.9999986436632,
+      "minimum_font_pt": 8.0,
+      "raster_size": [
+        4133,
+        1535
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "text_clipping": []
+    },
+    {
+      "path": "fig4_control_sensitivity.pdf",
+      "width_mm": 174.9999986436632,
+      "minimum_font_pt": 8.0,
+      "raster_size": [
+        4133,
+        1653
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "text_clipping": []
+    },
+    {
+      "path": "fig5_phase_training.pdf",
+      "width_mm": 174.9999986436632,
+      "minimum_font_pt": 8.0,
+      "raster_size": [
+        4133,
+        1559
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "text_clipping": []
+    },
+    {
+      "path": "fig6_illustrative_hydrographs.pdf",
+      "width_mm": 174.9999986436632,
+      "minimum_font_pt": 8.0,
+      "raster_size": [
+        4133,
+        2362
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "text_clipping": []
+    },
+    {
+      "path": "fig7_proxy_decodability.pdf",
+      "width_mm": 174.9999986436632,
+      "minimum_font_pt": 8.0,
+      "raster_size": [
+        4133,
+        1606
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "text_clipping": []
+    },
+    {
+      "path": "fig8_structure_performance.pdf",
+      "width_mm": 174.9999986436632,
+      "minimum_font_pt": 8.0,
+      "raster_size": [
+        4133,
+        1700
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "text_clipping": []
+    }
+  ],
+  "workbook": [
+    {
+      "name": "Population summary",
+      "rows": 17,
+      "cell_errors": []
+    },
+    {
+      "name": "Paired primary",
+      "rows": 524,
+      "cell_errors": []
+    },
+    {
+      "name": "Circuits",
+      "rows": 1093,
+      "cell_errors": []
+    },
+    {
+      "name": "Convergence",
+      "rows": 1093,
+      "cell_errors": []
+    },
+    {
+      "name": "Seed stability",
+      "rows": 27,
+      "cell_errors": []
+    },
+    {
+      "name": "Confirmation",
+      "rows": 27,
+      "cell_errors": []
+    },
+    {
+      "name": "Proxy probes",
+      "rows": 15,
+      "cell_errors": []
+    },
+    {
+      "name": "Confirmation interval",
+      "rows": 5,
+      "cell_errors": []
+    },
+    {
+      "name": "Control sensitivity",
+      "rows": 7,
+      "cell_errors": []
+    },
+    {
+      "name": "Caliper confirmation",
+      "rows": 7,
+      "cell_errors": []
+    }
+  ],
+  "workbook_previews": 12,
+  "scope": "Programmatic PDF/dpi/XLSX integrity and visual review of eight figure renderings and twelve workbook previews.",
+  "visual_inspection": {
+    "status": "PASS",
+    "figures_inspected": 8,
+    "workbook_previews_inspected": 12,
+    "corrections": "Plain asinh ticks, readable tick spacing, shortened probe axis label; no remaining clipping/overlap seen."
+  }
+}

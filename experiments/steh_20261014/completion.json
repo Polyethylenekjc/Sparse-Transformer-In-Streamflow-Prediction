@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "training_models": 1090,
+  "population_basins": 521,
+  "confirmation_basins": 12,
+  "controls_scored": 43600,
+  "local_backups_verified": true,
+  "visual_qa": "PASS",
+  "public_weights": "Not uploaded: separate authorization remains pending.",
+  "scientific_readiness": "Supports decodability and a subset of functional subcircuits; does not establish universal convergence or unique causal physical circuits."
+}

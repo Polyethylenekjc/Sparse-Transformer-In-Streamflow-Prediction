@@ -1,0 +1,48 @@
+{
+  "assessment_scope": "Experiment evidence review of actual Word snapshots; no manuscript editing or formal reviewer panel.",
+  "sources": [
+    {
+      "path": "work\\paper_readiness_20261014\\Manuscript_1st.txt",
+      "sha256": "51e4f5d689288623898508984b5ad7ddadc65e5628e6c552d4bddb74be0a3190"
+    },
+    {
+      "path": "work\\paper_readiness_20261014\\Supplementary Information_1st.txt",
+      "sha256": "e245b328769f56df51e87259012cf7d5b38ce6a560852167d524051276053ffa"
+    },
+    {
+      "path": "outputs\\steh_population_20261014\\audit.json",
+      "sha256": "7d9c7ee7a6e70136156cfec330d2a574b1792d925301d4625dd1887419eb2423"
+    },
+    {
+      "path": "outputs\\steh_population_20261014\\caliper-audit.json",
+      "sha256": "82dbff790506374c55d7f28d2aee112a6a68c745a820b6f5cd72121f970383a8"
+    },
+    {
+      "path": "outputs\\steh_population_20261014\\paired_primary.csv",
+      "sha256": "a556977a7f311185e4c3ebf316691f9d1e7fa40691cfa563a144c111574fd497"
+    },
+    {
+      "path": "outputs\\steh_population_20261014\\all_runs.csv",
+      "sha256": "b41d21d199118d53b024dfd2242241affac7c1d0439cf22866db275bc0673372"
+    },
+    {
+      "path": "outputs\\steh_population_20261014\\confirmation_basin.csv",
+      "sha256": "f499e528ca6d7ea5ad513fda102a025f88dc6984f99624c1dd9a4413f9cd21a4"
+    },
+    {
+      "path": "outputs\\steh_population_20261014\\convergence_diagnostics.csv",
+      "sha256": "11162bc7a46f17e6efeb1321a758a24cf7bc2e0a4063bb9d0faa0181a750cd9f"
+    },
+    {
+      "path": "outputs\\steh_population_20261014\\stability_basin.csv",
+      "sha256": "4b9927640b2450ba12aa50be255f8ba414a90859843f3311a8d307756d25a51a"
+    },
+    {
+      "path": "outputs\\steh_population_20261014\\node_count_associations.csv",
+      "sha256": "954571990687129d846fde1d5d3732b47ccab33ae18fb9835ea731de3724bcee"
+    }
+  ],
+  "script_sha256": "05b4cd4d206b3169f7c8612706a6bf8b36b8ead61bd45379f8d1978cd0eed699",
+  "output": "实验完成情况与论文写作证据评估_2026-10-14.md",
+  "output_sha256": "c688047ca2666797da13646a915ade129f5d6a8cdfc4985a3940128f59cf3837"
+}

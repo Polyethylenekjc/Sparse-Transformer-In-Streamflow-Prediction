@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "population_models": 1090,
+  "archives": [
+    {
+      "kind": "numerical",
+      "archive": "numerical-records.tar.gz",
+      "sha256": "e84d85fa4c8ac9891b7e35d4bd40d473f454e5d4b76ae874d3aa7c179dfe7ae9",
+      "members_verified": 30994,
+      "uncompressed_bytes": 1346352045
+    },
+    {
+      "kind": "checkpoint",
+      "archive": "checkpoint-backup.tar.gz",
+      "sha256": "c51105712f3bb592196cb91cd62bd8c82d6e11745459c37f0d38e19376177fc9",
+      "members_verified": 1342,
+      "uncompressed_bytes": 1437497238
+    },
+    {
+      "kind": "performance",
+      "archive": "performance-records.tar.gz",
+      "sha256": "edec43c66c289e636e4240106fadf013927d44b7dac6647bb14c64a96d2d1a16",
+      "members_verified": 15,
+      "uncompressed_bytes": 1441528
+    }
+  ],
+  "seconds": 119.75214791297913,
+  "scope": "Compressed and every member SHA256; no model deserialization or public weight upload."
+}

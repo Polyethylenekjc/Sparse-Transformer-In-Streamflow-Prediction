@@ -1,0 +1,12 @@
+{
+  "models_checked": 1090,
+  "classification_changes_when_native_full_nse_is_reference": 0,
+  "native_binary_forward_difference": {
+    "models_exceeding_pointwise_tolerance": 51,
+    "maximum_train_scaled_prediction_difference": 0.006122695985326332,
+    "maximum_absolute_nse_difference": 1.0699516053591651e-05,
+    "pointwise_reference_tolerance": "3e-6 + 3e-5*abs(train-scaled binary prediction); differences disclosed, not removed",
+    "metric_audit": "Native and binary predictions audited against their own saved metrics; full NSE agreement checked separately."
+  },
+  "scope": "Sensitivity only; original binary intervention criterion remains primary."
+}

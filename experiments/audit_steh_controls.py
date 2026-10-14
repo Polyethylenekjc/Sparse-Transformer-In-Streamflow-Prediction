@@ -26,7 +26,9 @@ def main():
     protocol=read(root/'protocol.json');completion=read(root/'completion.json')
     assert completion['status']=='PASS' and completion['completed']==len(protocol['jobs'])
     assert protocol['calipers']==[1.,2.] and protocol['controls_per_caliper']==20
-    assert sha(ROOT/'experiments/steh_control_sensitivity.py')==protocol['script_sha256']
+    method_path=Path(protocol.get('method_source','experiments/steh_control_sensitivity.py'))
+    assert not method_path.is_absolute() and '..' not in method_path.parts
+    assert sha(ROOT/method_path)==protocol['script_sha256']
     checkpoint_hashes={}
     if args.checkpoint_manifest:
         checkpoint_hashes={r['path']:r['sha256'] for r in read(args.checkpoint_manifest)['members']}
@@ -54,9 +56,11 @@ def main():
             assert len(bank)==20;frozen=design['banks'][index]
             for old,new in zip(frozen,bank):
                 assert old['members']==new['members'] and old['mask_sha256']==new['mask_sha256']==digest(new['members'])
+                assert set(new['members'])<=set(design['core_source'])
                 for group,core_ids in design['core_source'].items():
-                    assert len(new['members'][group])==len(core_ids)
-                    assert len(set(new['members'][group]))==len(core_ids)
+                    selected=new['members'].get(group,[])
+                    assert len(selected)==len(core_ids)
+                    assert len(set(selected))==len(core_ids)
                 overlap=sum(len(set(v)&set(design['core_source'][k])) for k,v in new['members'].items())
                 size=sum(len(v) for v in design['core_source'].values())
                 assert new['identical_core']==(overlap==size)

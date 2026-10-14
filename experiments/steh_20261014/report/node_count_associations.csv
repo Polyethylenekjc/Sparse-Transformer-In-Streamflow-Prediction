@@ -1,0 +1,5 @@
+with_q,unit_measure,basins,spearman_with_nse,scope
+True,active_units,521,-0.18757792811828414,Descriptive census association; validation-based selection can mechanically couple core size and skill.
+True,core_units,521,-0.16585265345257164,Descriptive census association; validation-based selection can mechanically couple core size and skill.
+False,active_units,521,0.36642179906540256,Descriptive census association; validation-based selection can mechanically couple core size and skill.
+False,core_units,521,0.3618735499272814,Descriptive census association; validation-based selection can mechanically couple core size and skill.

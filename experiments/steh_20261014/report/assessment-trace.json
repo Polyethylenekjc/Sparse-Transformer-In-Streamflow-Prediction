@@ -1,0 +1,20 @@
+{
+  "artifact_id": "circuit_predictive_skill_context",
+  "source_data": [
+    {
+      "path": "all_runs.csv",
+      "sha256": "b41d21d199118d53b024dfd2242241affac7c1d0439cf22866db275bc0673372"
+    }
+  ],
+  "transformation": {
+    "script": "experiments/assess_steh_paper_readiness.py",
+    "sha256": "05b4cd4d206b3169f7c8612706a6bf8b36b8ead61bd45379f8d1978cd0eed699"
+  },
+  "caption_claim": "Relative circuit criterion passes are disclosed alongside full-model predictive skill.",
+  "supported_manuscript_claims": [
+    "Circuit fidelity does not imply good predictive skill."
+  ],
+  "limitations": [
+    "Post-hoc descriptive NSE strata; frozen criterion unchanged; no added confirmation inference."
+  ]
+}

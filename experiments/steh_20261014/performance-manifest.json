@@ -1,0 +1,82 @@
+{
+  "archive": "performance-records.tar.gz",
+  "bytes": 219861,
+  "sha256": "edec43c66c289e636e4240106fadf013927d44b7dac6647bb14c64a96d2d1a16",
+  "members": [
+    {
+      "path": "architecture-counts.json",
+      "bytes": 713,
+      "sha256": "808aa2a694f34eaea33a330695017a3c5edb466228f0643183b911332b562d46"
+    },
+    {
+      "path": "benchmark_vmap.py",
+      "bytes": 2589,
+      "sha256": "4819ea2f021ea471d279a333c0344bb1c7faad44faaaa1e01a26736f0a79ff9c"
+    },
+    {
+      "path": "control-sensitivity.log",
+      "bytes": 55700,
+      "sha256": "5b7eecbb66571a57a20d443233487f47452e4958a441bcadc0e48cf7ab69258b"
+    },
+    {
+      "path": "control-sequential.log",
+      "bytes": 55233,
+      "sha256": "0da3b3b41ceffe6e8e6cca4b292dc97e9df56583d57eb50e174f46ab8b2d82d0"
+    },
+    {
+      "path": "control-smoke.log",
+      "bytes": 383,
+      "sha256": "c621bc780b3a1ea69625b738596ccb601f35bbf51d371725d0b13e20de8fdd59"
+    },
+    {
+      "path": "control-v2-smoke.log",
+      "bytes": 382,
+      "sha256": "17c336352a558ab722b83440c5a8616dc54cbab2a17f679f7a636b942560caac"
+    },
+    {
+      "path": "early-review.log",
+      "bytes": 1424,
+      "sha256": "46a9f8fe8ae30388ae06201f4d2a09debb28884a8ec2a35e89f4030ba7961a48"
+    },
+    {
+      "path": "monitor_steh_system.py",
+      "bytes": 721,
+      "sha256": "3b1e5ec6bc9416928aab5b059480e6df8e2faf3c326990d6a39ae63d8e391693"
+    },
+    {
+      "path": "population.log",
+      "bytes": 183948,
+      "sha256": "e6aab7dcdd742a411b45b314b7484542aaa4720c5427ddb54ec403edfb6ca630"
+    },
+    {
+      "path": "ste-roundoff-diagnostic-confirmed.json",
+      "bytes": 803,
+      "sha256": "2c45e5a1e43c182af3690bd39f9224f4b386ceacdc4497f2156549c6f2cee849"
+    },
+    {
+      "path": "ste-roundoff-diagnostic.json",
+      "bytes": 554,
+      "sha256": "1fd5e4b4c0ad92cf73f13382edc9ca6d220db2dfa493b2820162316c521adec4"
+    },
+    {
+      "path": "steh-cpu-memory-telemetry.csv",
+      "bytes": 203776,
+      "sha256": "dbe5194a15fbdab4c819a07158343fa92d3e76aa4792573aaa0b3967cb6ce8af"
+    },
+    {
+      "path": "steh-gpu-telemetry.csv",
+      "bytes": 933941,
+      "sha256": "5158d37ee9c7d5307de1e5c4dbb2c8f9bc75788692721552c3189ee91b740d26"
+    },
+    {
+      "path": "vmap-benchmark.json",
+      "bytes": 878,
+      "sha256": "164fd6b4d87a129471ec3b3cab9ed59703cbd52aa6993662917767088e3bcc71"
+    },
+    {
+      "path": "vmap-benchmark.log",
+      "bytes": 483,
+      "sha256": "fdedb0ee54b90ca99c3a2709a010d5e9a5f85925c6a5d6e2040ad66974fcecb9"
+    }
+  ]
+}

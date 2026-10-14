@@ -1,0 +1,29 @@
+{
+  "artifact_id": "fig4_control_sensitivity",
+  "source_data": [
+    {
+      "path": "caliper_audited_runs.csv",
+      "sha256": "fcd966a3579b415905c20d9c75176b72768f5e0a1b10d185799fa1dc92766fc6"
+    },
+    {
+      "path": "caliper-audit.json",
+      "sha256": "82dbff790506374c55d7f28d2aee112a6a68c745a820b6f5cd72121f970383a8"
+    }
+  ],
+  "transformation": {
+    "script": "experiments/audit_steh_controls.py",
+    "sha256": "49529f4902fe8e26599ed4ff7ae4d6cc643482ef57f9b90320ace01ff394266c"
+  },
+  "caption_claim": "Control conclusions are assessed under both fixed structural calipers with basin-level seed confirmation.",
+  "supported_manuscript_claims": [
+    "Disclose sensitivity to structural-control matching."
+  ],
+  "limitations": [
+    "Sensitivity analysis developed on the fixed first12 early-review basins; original protocol retained.",
+    "Both calipers reported; no selection based on test results.",
+    "Conditional SRS confirmation targets 492 eligible basins and three fixed seeds, not all initializations.",
+    "Four Bonferroni-adjusted marginal 98.75% intervals have at least 95% joint coverage.",
+    "Control membership, overlaps, duplicates and standardized degree distances are disclosed.",
+    "Matching is approximate; residual/input/readout pathways remain. No causal or unique closed-circuit proof."
+  ]
+}

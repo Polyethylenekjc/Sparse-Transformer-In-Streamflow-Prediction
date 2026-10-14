@@ -1,0 +1,3 @@
+Input,Basins,Criterion passes,Median core loss,Median removal loss,Undefined control win
+With Q,521,203,0.019105483133249113,0.17395489460782754,84
+No Q,521,167,0.02205060765024558,0.45033002503966735,28

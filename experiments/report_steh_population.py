@@ -328,6 +328,14 @@ def main():
               'functional_stability_audited':stability,
               'model_summary':pd.DataFrame(summary),'probe_records':probes,
               'probe_summary':pd.DataFrame(probe_summary)}
+    associations=[]
+    for q in [True,False]:
+        group=primary[primary.with_q==q]
+        for units in ['active_units','core_units']:
+            associations.append({'with_q':q,'unit_measure':units,'basins':len(group),
+                'spearman_with_nse':group[units].corr(group.nse,method='spearman'),
+                'scope':'Descriptive census association; validation-based selection can mechanically couple core size and skill.'})
+    tables['node_count_associations']=pd.DataFrame(associations)
     model_table=[]
     for label,prefix in [('STEH with Q','steh_with_q'),('STEH no Q','steh_no_q'),
                          ('LSTM','lstm'),('Persistence','persistence'),('AR','ar')]:
@@ -363,9 +371,15 @@ def main():
     def plain_ticks(ax, small=False):
         lo,hi=ax.get_xlim()
         ticks=[-1000000,-100000,-10000,-1000,-100,-10,-1,0,1,10,100,1000,10000,100000,1000000]
-        if small:ticks.extend([-.1,.1])
+        if small:ticks=[-1000000,-10000,-100,-1,0,1,100,10000,1000000]
         ticks=sorted(t for t in ticks if lo<=t<=hi)
         ax.set_xticks(ticks,[f'{t:g}' for t in ticks])
+
+    def plain_y_ticks(ax):
+        lo,hi=ax.get_ylim()
+        ticks=[-1000000,-100000,-10000,-1000,-100,-10,-1,0,1,10,100,1000,10000,100000,1000000]
+        ticks=[t for t in ticks if lo<=t<=hi]
+        ax.set_yticks(ticks,[f'{t:g}' for t in ticks])
 
     def save(fig, ident, files, claim, limits):
         fig.tight_layout(pad=.9)
@@ -444,7 +458,7 @@ def main():
         for col,color,style,label in [('observed','#222222','-','Observed'),('steh_with_q',COLORS[0],'-','STEH with Q'),
                                      ('lstm',COLORS[1],'--','LSTM'),('steh_no_q',COLORS[2],':','STEH no Q')]:
             ax.plot(dates,table[col],color=color,ls=style,lw=.65,label=label)
-        ax.set_yscale('asinh',linear_width=1);ax.set_ylabel('Discharge (cfs; asinh scale)')
+        ax.set_yscale('asinh',linear_width=1);plain_y_ticks(ax);ax.set_ylabel('Discharge (cfs; asinh scale)')
         ax.set_title(f"{station}: {'closest to median primary STEH NSE' if station==representative else 'previously identified LSTM extreme'}")
     axes[0].legend(loc='upper right',ncols=4,fontsize=8);axes[1].set_xlabel('Test target date')
     pd.concat(hydrographs,ignore_index=True).to_csv(out/'illustrative_hydrographs.csv',index=False)
@@ -464,13 +478,29 @@ def main():
                 values=np.sort(group.r2.dropna());ax.plot(values,np.arange(1,len(values)+1)/len(values),
                     color=color,ls=style,label=f"{'With Q' if q else 'No Q'} {label}")
         ax.set_xscale('asinh',linear_width=1);plain_ticks(ax)
-        ax.set_title(target);ax.set_xlabel('Held-out proxy R2 (asinh scale)');ax.set_ylabel('Fraction of defined basins')
+        ax.set_title(target);ax.set_xlabel('Test proxy R² (asinh scale)');ax.set_ylabel('Fraction of defined basins')
         ax.axvline(0,color='#666666',ls=':',lw=.8)
     axes[0].legend(loc='best',fontsize=8)
     save(fig,'fig7_proxy_decodability',['probe_records.csv','probe_summary.csv'],
          'Unfiltered input-derived proxy decodability compared between trained hidden states and input history.',
          [quality['limits'][-1],quality['probe_audit_scope'],
           'Probes fit on a fixed training subset and evaluate a fixed held-out test subset; not all daily forecasts.'])
+    fig,axes=plt.subplots(1,2,figsize=(175/25.4,72/25.4))
+    for ax,units,title in zip(axes,['active_units','core_units'],['Active gated units','Validation-selected core units']):
+        for q,color,marker in [(True,COLORS[0],'o'),(False,COLORS[1],'^')]:
+            group=primary[primary.with_q==q]
+            rho=group[units].corr(group.nse,method='spearman')
+            ax.scatter(group[units],group.nse,color=color,marker=marker,s=9,alpha=.32,
+                       label=f"{'With Q' if q else 'No Q'}: rank r={rho:.3f}",rasterized=True)
+        ax.set_xlabel(title);ax.set_ylabel('Native test NSE (asinh scale)')
+        ax.set_yscale('asinh',linear_width=1)
+        plain_y_ticks(ax)
+        ax.legend(loc='lower left',fontsize=8)
+    save(fig,'fig8_structure_performance',['all_runs.csv','node_count_associations.csv'],
+         'Continuous descriptive associations of retained unit counts with skill across all 521 basins per setting.',
+         ['No causal effect of compactness is established.',
+          'Validation-based core selection can mechanically couple core size and performance.',
+          'All negative and extreme NSE values retained; no NSE=0.5 grouping or outlier exclusion.'])
     for name in tables:
         traces.append({'artifact_id':name,'source_data':'source_manifest.json',
                        'transformation':{'script':'experiments/report_steh_population.py','sha256':sha(Path(__file__))},
